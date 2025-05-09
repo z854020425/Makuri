@@ -573,7 +573,7 @@ class Drawers{
 			this.timeout_highlight = null;
 			this.song = null;
 		}
-		let songs = document.querySelectorAll('.song_tr:not(.tr_hidden) td.song_title');
+		let songs = document.querySelectorAll('.song_tr:not(.tr_hidden) td.song_title:not(.td_hidden)');
 		let idx = Math.floor(Math.random() * songs.length);
 		this.song = songs[idx];
 		this.song.classList.add('highlighted');
