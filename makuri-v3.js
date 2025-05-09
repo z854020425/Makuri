@@ -6,7 +6,7 @@ console.log = DEBUG_MODE ? console.log : ()=>{};
 console.time = DEBUG_MODE ? console.time : ()=>{};
 console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
 
-// TODO：Keep-Alive
+// TODO: Keep-Alive
 setInterval(()=>{console.info(1);}, 500);
 
 
@@ -573,7 +573,7 @@ class Drawers{
 			this.timeout_highlight = null;
 			this.song = null;
 		}
-		let songs = document.querySelectorAll('.song_tr td.song_title');
+		let songs = document.querySelectorAll('.song_tr:not(.tr_hidden) td.song_title');
 		let idx = Math.floor(Math.random() * songs.length);
 		this.song = songs[idx];
 		this.song.classList.add('highlighted');
@@ -592,7 +592,7 @@ class Drawers{
 			this.timeout_highlight = null;
 			this.clip = null;
 		}
-		let clips = document.querySelectorAll('.song_tr td.song_date a.song_href');
+		let clips = document.querySelectorAll('.song_tr:not(.tr_hidden) td.song_date a.song_href');
 		let idx = Math.floor(Math.random() * clips.length);
 		this.clip = clips[idx];
 		this.clip.classList.add('highlighted');
@@ -611,7 +611,7 @@ class Drawers{
 			this.timeout_highlight = null;
 			this.clip = null;
 		}
-		let trs = document.querySelectorAll('.song_tr');
+		let trs = document.querySelectorAll('.song_tr:not(.tr_hidden)');
 		let idx = Math.floor(Math.random() * trs.length);
 		let tr = trs[idx];
 		this.clip = tr.querySelectorAll('td.song_date a.song_href')[0];
