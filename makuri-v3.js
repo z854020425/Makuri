@@ -1,3 +1,4 @@
+
 const PLAY_BACKSTAGE = false;
 
 const DEBUG_MODE = false;
@@ -6,7 +7,9 @@ console.time = DEBUG_MODE ? console.time : ()=>{};
 console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
 
 // Keep-Alive
-setInterval(()=>{console.log(1);}, 5000);
+setInterval(()=>{console.info(1);}, 5000);
+
+
 
 class Utils{
 	constructor(){}
