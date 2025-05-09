@@ -1,6 +1,6 @@
 const PLAY_BACKSTAGE = false;
 
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 console.log = DEBUG_MODE ? console.log : ()=>{};
 console.time = DEBUG_MODE ? console.time : ()=>{};
 console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
