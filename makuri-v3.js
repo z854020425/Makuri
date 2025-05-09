@@ -519,7 +519,7 @@ class Drawers{
 			this.clip = null;
 		}, 5000);
 		this.clip.scrollIntoView();
-		console.log(this.clip.getAttribute('date-title'), clip.innerText);
+		console.log(this.clip.getAttribute('date-title'), this.clip.innerText);
 	}
 	draw_clip_once(){
 		if (this.clip && this.timeout_highlight) {
