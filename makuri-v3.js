@@ -6,7 +6,7 @@ console.log = DEBUG_MODE ? console.log : ()=>{};
 console.time = DEBUG_MODE ? console.time : ()=>{};
 console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
 
-// Keep-Alive
+// TODO：Keep-Alive
 setInterval(()=>{console.info(1);}, 500);
 
 
@@ -89,7 +89,7 @@ class DataLoader{
 	get length(){
 		let cnt = 0;
 		Object.keys(this.songs).forEach(title => {
-			cnt += this.songs[title]['items'].length;
+			cnt += this.songs[title].length;
 		});
 		return cnt;
 	}
@@ -185,6 +185,8 @@ class DataLoader{
 			title = item[5];
 			tags = item[6];
 
+			if (title == '唯一'){console.log(in_pt, out_pt, Utils.sec2str(out_pt - in_pt))}
+
 			href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt + '&p=' + page.substring(1);
 			this.add_song({
 				'title': title,
@@ -211,8 +213,7 @@ class DataLoader{
 		author = song?.author;
 		is_clip = song?.is_clip;
 		if (!(title in this.songs)){
-			this.songs[title] = {};
-			this.songs[title]['items'] = [];
+			this.songs[title] = [];
 		}
 		Object.keys(this.TAGS).forEach(TAG => {
 			if (this.TAGS[TAG].includes(title)){
@@ -229,15 +230,15 @@ class DataLoader{
 			}
 		}
 		if (tags.includes('follow')){
-			item = this.songs[title]['items'].pop();
+			item = this.songs[title].pop();
 			item['length'] = Utils.sec2str(Utils.str2sec(item['length']) + Utils.str2sec(length));
 			item['tags'] = item['tags'].concat(tags.filter(x => x != 'follow'));
 			item['tags'] = item['tags'].filter((tag, idx) => item['tags'].indexOf(tag) == idx);
 			item['tag'] = item['tags'].join(' ').toLowerCase();
-			this.songs[title]['items'].push(item);
+			this.songs[title].push(item);
 			return;
 		}
-		this.songs[title]['items'] .push({
+		this.songs[title] .push({
 			'title': title.toLowerCase(),
 			'date': Utils.pretty_date(date),
 			'href': href,
@@ -249,6 +250,20 @@ class DataLoader{
 			'author': author,
 			'is_clip': is_clip
 		});
+	}
+	sort_songs(){
+		let new_songs = {};
+		Object.keys(this.songs)
+		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.forEach(title => {
+			new_songs[title] = [];
+			this.songs[title]
+			.sort((x1, x2) => -x1['date'].localeCompare(x2['date'], 'zh-Hans-CN'))
+			.forEach(item => {
+				new_songs[title].push(item);
+			});
+		});
+		this.songs = new_songs;
 	}
 }
 
@@ -315,6 +330,7 @@ class Table{
 			tr.appendChild(th);
 		}
 		this.table = table;
+		this.songs = null;
 		this.add_styles();
 	}
 	add_styles(){
@@ -341,20 +357,20 @@ class Table{
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 			'span.真栗{color:chocolate;text-shadow:0 0 2px orange}',
 			'span.BAN{color:red}',
-			'h2{color:DeepSkyBlue;display:flex;justify-content:center;margin:0;text-shadow:0 0 5px DarkTurquoise;text-align:center}'
+			'h2{color:DeepSkyBlue;display:flex;justify-content:center;margin:0;text-shadow:0 0 5px DarkTurquoise;text-align:center}',
+			'.td_hidden, .tr_hidden{display:none}'
 		]);
 	}
 	create_trs(songs, new_win){
 		Object.keys(songs)
-		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
-			let items = songs[title]['items'];
-			let td_title = Utils.create('td', ['song_title'], {});
-			td_title.innerText = Utils.pretty_str(title);
-			songs[title]['td_title'] = td_title;
+			let items = songs[title];
+			// let td_title = Utils.create('td', ['song_title'], {});
+			// td_title.innerText = Utils.pretty_str(title);
+			// songs[title]['td_title'] = td_title;
 
-			items.sort((x1, x2) => -x1['date'].localeCompare(x2['date']))
-			.forEach((item, idx) => {
+			items.forEach((item, idx) => {
 				let tr, href, date, length, singer, lang, tags, author, td, link, span;
 				tr = Utils.create('tr', ['song_tr'], {'title': title});
 
@@ -365,6 +381,10 @@ class Table{
 				lang = item?.['lang'];
 				tags = item?.['tags'];
 				author = item?.['author'];
+
+				td = Utils.create('td', ['song_title', 'td_hidden'], {});
+				td.innerText = Utils.pretty_str(title);
+				tr.appendChild(td);
 
 				td = Utils.create('td', ['song_date']);
 				link = Utils.create('a', ['song_href'], {
@@ -416,28 +436,28 @@ class Table{
 		});
 		console.log(songs);
 	}
-	update_table(songs){
-		console.time('update');
-		let ret = this.update_table_inner(songs);
-		console.timeEnd('update');
+	init_table(songs){
+		console.time('init table');
+		let ret = this.init_table_inner(songs);
+		console.timeEnd('init table');
 		return ret;
 	}
-	update_table_inner(songs) {
+	init_table_inner(songs) {
+		this.songs = songs;
 		let cnt_songs = 0, cnt_clips = 0;
 		Object.keys(songs)
-		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
-			let td_title = songs[title]['td_title'];
-			songs[title]['items'].forEach((item, idx) => {
+			songs[title].forEach((item, idx) => {
 				let tr = item['tr'];
-				let song_td_title = tr.querySelectorAll('td.song_title');
-				if (song_td_title.length != 0){
-					tr.removeChild(song_td_title[0]);
-				}
+				let td_title = tr.childNodes[0];
+
 				if (idx == 0){
-					td_title.setAttribute('rowspan', String(songs[title]['items'].length));
-					tr.childNodes[0].insertAdjacentElement('beforeBegin', td_title);
+					td_title.classList.remove('td_hidden');
+					td_title.setAttribute('rowspan', String(songs[title].length));
 					cnt_songs += 1;
+				} else {
+					td_title.classList.add('td_hidden');
 				}
 				cnt_clips += 1;
 				if (idx == 0){
@@ -445,7 +465,7 @@ class Table{
 				} else {
 					tr.classList.remove('song_tr_first');
 				}
-				if (idx + 1 == songs[title]['items'].length){
+				if (idx + 1 == songs[title].length){
 					tr.classList.add('song_tr_last');
 				} else {
 					tr.classList.remove('song_tr_last');
@@ -462,6 +482,69 @@ class Table{
 		}
 		h2.innerHTML += '已收录歌曲 ' + cnt_songs + ' 首<br />';
 		h2.innerHTML += '已收录切片 ' + cnt_clips + ' 枚 ';	
+	}
+	update_table(songs){
+		console.time('update table');
+		let ret = this.update_table_inner(songs);
+		console.timeEnd('update table');
+		return ret;
+	}
+	update_table_inner(new_songs){
+		let old_songs = this.songs;
+		let cnt_songs = 0, cnt_clips = 0;
+		Object.keys(old_songs)
+		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.forEach(title => {
+			if (!(title in new_songs)){
+				old_songs[title].forEach((item, idx) => {
+					item['tr'].classList.add('tr_hidden');
+				});
+				return;
+			}
+			cnt_songs += 1;
+			let new_trs = []
+			old_songs[title].forEach(old_item => {
+				if (new_songs[title].some(new_item => new_item['tr'] == old_item['tr'])){
+					old_item['tr'].classList.remove('tr_hidden');
+					cnt_clips += 1;
+					new_trs.push(old_item['tr']);
+				} else {
+					old_item['tr'].classList.add('tr_hidden');
+				}
+			})
+			new_trs.forEach((tr, idx) => {
+				if (idx == 0){
+					tr.childNodes[0].setAttribute('rowspan', new_trs.length);
+					tr.childNodes[0].classList.remove('td_hidden');
+				} else {
+					tr.childNodes[0].classList.add('td_hidden');
+				}
+
+				if (idx == 0 && idx + 1 == new_trs.length) {
+					tr.classList.add('song_tr_first');
+					tr.classList.add('song_tr_last');
+				} else if (idx == 0){
+					tr.classList.add('song_tr_first');					
+					tr.classList.remove('song_tr_last');
+				} else if (idx + 1 == new_trs.length) {			
+					tr.classList.remove('song_tr_first');
+					tr.classList.add('song_tr_last');
+				} else {
+					tr.classList.remove('song_tr_first');			
+					tr.classList.remove('song_tr_last');
+				}
+			})
+		});
+		let h2 = document.querySelector('h2');
+		if (!h2) {
+			h2 = Utils.create('h2', [], {});
+			document.body.querySelector('div#intro').insertAdjacentElement('afterend', h2);
+		} else {
+			h2.innerHTML = '';
+		}
+		h2.innerHTML += '已收录歌曲 ' + cnt_songs + ' 首<br />';
+		h2.innerHTML += '已收录切片 ' + cnt_clips + ' 枚 ';	
+
 	}
 	clear_table(){
 		document.querySelectorAll('.song_tr')
@@ -689,7 +772,7 @@ class SearchBox{
 			return;
 		}
 		this.prev_values = values;
-		this.table.clear_table()
+		// this.table.clear_table()
 
 		let vals = values.toLowerCase().split(' ')
 		.filter(val => val != '');
@@ -699,18 +782,17 @@ class SearchBox{
 			return;
 		}
 		let new_songs = Object.keys(this.songs).reduce((new_songs, title) => {
-			this.songs[title]['items'].forEach(item => {
+			this.songs[title].forEach(item => {
 				if (vals.length == 1 && title.indexOf(vals[0]) != -1){
 					new_songs[title] = this.songs[title];
 					return;
 				}
 				if (this.is_filtered(item, vals)){
 					if (!(title in new_songs)){
-						new_songs[title] = {};
-						new_songs[title]['items'] = [];
+						new_songs[title] = [];
 						new_songs[title]['td_title'] = this.songs[title]['td_title']
 					}
-					new_songs[title]['items'].push(item);
+					new_songs[title].push(item);
 				}
 			});
 			return new_songs;
@@ -848,13 +930,14 @@ function main(){
 	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
+	loader.sort_songs();
 	console.log(loader.length);
 	console.log(Object.keys(loader.songs).length);
 
 	let new_win = new NewWin();
 	let table = new Table(['Title', 'Date', 'Dur.', 'O.S.', 'Lang.', 'Tags']);
 	table.create_trs(loader.songs, new_win);
-	table.update_table(loader.songs);
+	table.init_table(loader.songs);
 
 	let drawers = new Drawers(new_win);
 	let search_box = new SearchBox(table, loader.songs);
