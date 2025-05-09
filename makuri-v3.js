@@ -7,7 +7,7 @@ console.time = DEBUG_MODE ? console.time : ()=>{};
 console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
 
 // Keep-Alive
-setInterval(()=>{console.info(1);}, 5000);
+setInterval(()=>{console.info(1);}, 500);
 
 
 
@@ -284,6 +284,7 @@ class NewWin{
 			clearTimeout(this.timeout_close);
 			this.timeout_close = null;
 		}
+		this.close();
 		this.new_win = window.open(url);
 		if (is_clip && duration != null) {
 			this.timeout_close = setTimeout(()=>{
@@ -374,6 +375,10 @@ class Table{
 				link.innerText = date;
 				link.addEventListener('click', function(e){
 					e.preventDefault();
+					let btn_cycle = document.querySelectorAll('#btn_drawClipCycle.btn_active');
+					if (btn_cycle.length != 0) {
+						btn_cycle[0].click();
+					}
 					document.title = '『' + this.getAttribute('data-title') + '』';
 					new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), this.getAttribute('data-isClip'));
 				});
@@ -538,16 +543,19 @@ class Drawers{
 
 		}, 5000);
 		this.clip.scrollIntoView();
-		console.log(this.clip.getAttribute('data-title'), this.clip.innerText);	
-		this.clip.click();
+		console.log(this.clip.getAttribute('data-title'), this.clip.innerText, this.dur.innerText, Utils.str2sec(this.dur.innerText));	
+		document.title = '『' + this.clip.getAttribute('data-title') + '』';
+		this.new_win.open(this.clip.getAttribute('data-href'), this.clip.getAttribute('data-length'), this.clip.getAttribute('data-isClip'));
 	}
 	draw_clip_cycle(){
 		window.focus();
 		this.draw_clip_once();
+		console.log(this.new_win.new_win)
 		this.timeout_cycle = setTimeout(()=>{
 			this.new_win.close();
 			this.draw_clip_cycle();
 		}, (Utils.str2sec(this.dur.innerText) + this.INTERVAL_CLIPS) * 1000);
+		console.log(this.timeout_cycle)
 	}
 	reset(){
 		if (this.timeout_cycle){
