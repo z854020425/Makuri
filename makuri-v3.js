@@ -1,7 +1,7 @@
 
-const PLAY_BACKSTAGE = false;
+const PLAY_FORESTAGE = false;
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 console.log = DEBUG_MODE ? console.log : ()=>{};
 console.time = DEBUG_MODE ? console.time : ()=>{};
 console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
@@ -269,23 +269,26 @@ class DataLoader{
 
 
 class NewWin{
-	constructor(play_backstage=PLAY_BACKSTAGE){
+	constructor(play_forestage=PLAY_FORESTAGE){
 		this.new_win = null;
 		this.timeout_close = null;
-		this.open = play_backstage ? this.change_url : this.open_url;
+		this.play_forestage = play_forestage;
 	}
 	get isAvailable(){
-		return this.new_win && !this.new_win.closed;
+		return this.new_win != null && !this.new_win.closed;
 	}
-	close(){
-		if (this.isAvailable){
+	close(force=false){
+		if ((force || this.play_forestage) && this.isAvailable){
 			this.new_win.close();
 			this.new_win = null;
 		}
 	}
+	get open(){
+		return this.play_forestage ? this.open_url : this.change_url;
+	}
 	change_url(url, duration=null, is_clip=false){
 		if (!this.isAvailable){
-			this.open_url(url, duration);
+			this.open_url(url, duration, is_clip);
 			return;
 		}
 		if (this.timeout_close){
@@ -306,6 +309,9 @@ class NewWin{
 				this.close();
 			}, (str2sec(duration) + 0.5) * 1000);
 		}
+	}
+	set_forestage(flag) {	
+		this.play_forestage = flag;
 	}
 }
 
@@ -602,7 +608,7 @@ class Drawers{
 			this.clip = null;
 		}, 5000);
 		this.clip.scrollIntoView();
-		console.log(this.clip.getAttribute('date-title'), this.clip.innerText);
+		console.log(this.clip.getAttribute('data-title'), this.clip.innerText);
 	}
 	draw_clip_once(){
 		if (this.clip && this.timeout_highlight) {
@@ -652,7 +658,7 @@ class Drawers{
 		this.song = null;
 		this.clip = null;
 		this.dur = null;
-		this.new_win.close();
+		this.new_win.close(true);
 	}
 	mount(){
 		Utils.add_styles([
@@ -661,10 +667,13 @@ class Drawers{
 			'.highlighted{font-weight:bolder; animation:highlight 3s infinite;}',
 			'@keyframes highlight{0%{color:red;} 14%{color:orange} 29%{color:yellow} 43%{color:green} 57%{color:cyan} 71%{color:blue} 86%{color:purple} 100%{color:red}}',
 
-			'#div_btn_lb button{cursor:pointer; opacity:0.5; font-size:1rem;}',
-			'#div_btn_lb button:hover{opacity:1}',
+			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:1px solid black;height:3rem; width:3rem; background:lightgrey;}',
+			'#div_btn_lb div:hover{opacity:1}',
 			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column;}',
-			'#div_btn_lb button.btn_active{color:green; opacity:1; font-weight:bolder;}'
+			'#div_btn_lb .btn_active{color:green; opacity:1; font-weight:bolder;}',
+			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch{z-index:10; border-radius:50%; height:1.5rem; width:1.5rem; padding:0; cursor:pointer}',
+			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_fore{background:white; color:black}',
+			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_back{background:grey; color:white}'
 		]);
 		let div_drawer = Utils.create('div', ['div_drawer'], {});
 		document.querySelector('h2').insertAdjacentElement('afterend', div_drawer);
@@ -683,20 +692,38 @@ class Drawers{
 		let div_lb = Utils.create('div', [], {'id': 'div_btn_lb'})
 		document.body.appendChild(div_lb);
 
-		let btn;
-		btn = Utils.create('button', [], {'id': 'btn_drawSong'});
-		btn.innerHTML = '♪<br />歌曲';
-		btn.addEventListener('click', this.draw_song);
-		div_lb.appendChild(btn);
+		let div, btn, div_text;
+		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawSong'});
+		div.innerHTML = '♪<br />歌曲';
+		div.addEventListener('click', this.draw_song);
+		div_lb.appendChild(div);
 
-		btn = Utils.create('button', [], {'id': 'btn_drawClip'});
-		btn.innerHTML = '✄<br />切片';
-		btn.addEventListener('click', this.draw_clip);
-		div_lb.appendChild(btn);
+		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawClip'});
+		div.innerHTML = '✄<br />切片';
+		div.addEventListener('click', this.draw_clip);
+		div_lb.appendChild(div);
 
-		btn = Utils.create('button', [], {'id': 'btn_drawClipCycle'});
-		btn.innerHTML = '◎<br />循环';
-		btn.addEventListener('click', (e) => {
+		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawClipCycle'});
+		btn = Utils.create('button', ['btn_fb_switch', 'btn_back'], {'id': 'btn_fbSwitch'});
+		btn.innerText = 'B';
+		btn.title = 'F: 切片视频前台切换\nB: 切片视频后台切换'
+		div.appendChild(btn);
+		div.innerHTML += '<br />循环';
+		div.addEventListener('click', (e) => {
+			if (e.target.id == 'btn_fbSwitch'){
+				if (e.target.innerText == 'F'){
+					e.target.innerText = 'B';
+					e.target.classList.add('btn_back');
+					e.target.classList.remove('btn_fore');
+					this.new_win.set_forestage(false);
+				} else {
+					e.target.innerText = 'F';
+					e.target.classList.add('btn_fore');
+					e.target.classList.remove('btn_back');
+					this.new_win.set_forestage(true);
+				}
+				return;
+			}
 			if (e.target.classList.contains('btn_active')){
 				e.target.classList.remove('btn_active');
 				this.reset();
@@ -706,11 +733,11 @@ class Drawers{
 				this.draw_clip_cycle();
 			}
 		});
-		div_lb.appendChild(btn);
+		div_lb.appendChild(div);
 
-		btn = Utils.create('button', [], {'id': 'btn_backToTop'});;
-		btn.innerHTML = '▲<br />顶部';
-		btn.addEventListener('click', function(e){
+		div = Utils.create('div', ['div_btn'], {'id': 'btn_backToTop'});;
+		div.innerHTML = '▲<br />顶部';
+		div.addEventListener('click', function(e){
 			let video = document.querySelector('video.video_snow');
 			if (video) {
 				video.currentTime = 0;
@@ -718,7 +745,7 @@ class Drawers{
 			}
 			window.scrollTo(0, 0);
 		})
-		div_lb.appendChild(btn);
+		div_lb.appendChild(div);
 	}
 }
 
@@ -782,6 +809,9 @@ class SearchBox{
 			return;
 		}
 		let new_songs = Object.keys(this.songs).reduce((new_songs, title) => {
+			if (e.target.value != values) {
+				return;
+			}
 			this.songs[title].forEach(item => {
 				if (vals.length == 1 && title.indexOf(vals[0]) != -1){
 					new_songs[title] = this.songs[title];
