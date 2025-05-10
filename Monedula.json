@@ -1868,7 +1868,7 @@
             },
             "p11": {
                 "part": 11,
-                "title": "Letter Song",
+                "title": "letter song",
                 "length": "05:15"
             },
             "p12": {
@@ -11502,7 +11502,7 @@
             },
             "p21": {
                 "part": 21,
-                "title": "Letter Song",
+                "title": "letter song",
                 "length": "05:29"
             },
             "p22": {
@@ -11683,7 +11683,10 @@
             "p3": {
                 "part": 3,
                 "title": "晴天",
-                "length": "04:17"
+                "length": "04:17",
+                "tags": [
+                    "战损版"
+                ]
             },
             "p4": {
                 "part": 4,

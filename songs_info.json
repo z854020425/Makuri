@@ -6213,7 +6213,7 @@
             "lang": "日语"
         }
     ],
-    "Letter Song": [
+    "letter song": [
         {
             "title": "Letter Song",
             "singer": "初音ミク",
@@ -8313,6 +8313,20 @@
             "title": "First Love",
             "singer": "宇多田光",
             "lang": "日语"
+        }
+    ],
+    "For Fruits Basket": [
+        {
+            "title": "For Fruits Basket",
+            "singer": "岡崎律子",
+            "lang": "日语"
+        }
+    ],
+    "第57次取消发送": [
+        {
+            "title": "第57次取消发送",
+            "singer": "菲菲公主",
+            "lang": "国语"
         }
     ]
 }
