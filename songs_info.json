@@ -6535,9 +6535,9 @@
             "lang": "日语"
         }
     ],
-    "Silky Heart": [
+    "silky heart": [
         {
-            "title": "Silky Heart",
+            "title": "silky heart",
             "singer": "堀江由衣",
             "lang": "日语"
         }
@@ -7088,9 +7088,9 @@
             "lang": "日语"
         }
     ],
-    "バイ・マイ・サイド": [
+    "バイ・マイ・サイ": [
         {
-            "title": "バイ・マイ・サイド",
+            "title": "バイ・マイ・サイ",
             "singer": "RADWIMPS",
             "lang": "日语"
         }
@@ -8327,6 +8327,34 @@
             "title": "第57次取消发送",
             "singer": "菲菲公主",
             "lang": "国语"
+        }
+    ],
+    "5:20AM": [
+        {
+            "title": "5:20AM",
+            "singer": "soldier",
+            "lang": "国语"
+        }
+    ],
+    "成仙": [
+        {
+            "title": "成仙",
+            "singer": "王朝1982",
+            "lang": "国语"
+        }
+    ],
+    "キリトリセン": [
+        {
+            "title": "キリトリセン",
+            "singer": "GUMI",
+            "lang": "日语"
+        }
+    ],
+    "ダイアモンド クレバス": [
+        {
+            "title": "ダイアモンド クレバス",
+            "singer": "May'n",
+            "lang": "日语"
         }
     ]
 }
