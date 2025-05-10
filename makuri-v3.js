@@ -704,8 +704,8 @@ class Drawers{
 		div_lb.appendChild(div);
 
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawClipCycle'});
-		btn = Utils.create('button', ['btn_fb_switch', 'btn_back'], {'id': 'btn_fbSwitch'});
-		btn.innerText = 'B';
+		btn = Utils.create('button', ['btn_fb_switch', PLAY_FORESTAGE ? 'btn_fore' : 'btn_back'], {'id': 'btn_fbSwitch'});
+		btn.innerText = PLAY_FORESTAGE ? 'F' : 'B';
 		btn.title = 'F: 切片视频前台切换\nB: 切片视频后台切换'
 		div.appendChild(btn);
 		div.innerHTML += '<br />循环';
