@@ -1,10 +1,6 @@
 
-const PLAY_FORESTAGE = false;
+// const PLAY_FORESTAGE = false;
 
-const DEBUG_MODE = true;
-console.log = DEBUG_MODE ? console.log : ()=>{};
-console.time = DEBUG_MODE ? console.time : ()=>{};
-console.timeEnd = DEBUG_MODE ? console.timeEnd : ()=>{};
 
 // TODO: Keep-Alive
 setInterval(()=>{console.info(1);}, 500);
@@ -77,7 +73,38 @@ class Utils{
 		})
 		return ret;
 	}
+	static get_cookie(name){
+		let cookies = document.cookie.split(';');
+		let ret = null;
+		cookies.forEach(cookie => {
+			cookie = cookie.split('=');
+			if (cookie[0].trim() == name) {
+				ret = cookie.length > 1 ? unescape(cookie[1].trim()) : null;
+				return;
+			}
+		});
+		return ret;
+	}
+	static set_cookie(key, value){
+		let cookies = document.cookie.split(';');
+		let cookies_dic = {};
+		cookies.forEach(cookie => {
+			cookie = cookie.split('=');
+			if(cookie.length != 2){
+				return;
+			}
+			cookies_dic[cookie[0].trim()] = cookie[1].trim();
+		});
+		cookies_dic[String(key)] = String(value);
+		let cookies_str = '';
+		Object.keys(cookies_dic).forEach(key => {
+			cookies_str += key + '=' + cookies_dic[key] + ';';
+		});
+		document.cookie = cookies_str;
+	}
 }
+
+const PLAY_FORESTAGE = Utils.get_cookie('play_forestage') == 'true' ? true : false;
 
 
 class DataLoader{
@@ -85,6 +112,7 @@ class DataLoader{
 		this.songs = {};
 		this.songs_info = JSON.parse(this.load_data('./songs_info.json'));
 		this.TAGS = TAGS
+		this.titles = [];
 	}
 	get length(){
 		let cnt = 0;
@@ -252,18 +280,7 @@ class DataLoader{
 		});
 	}
 	sort_songs(){
-		let new_songs = {};
-		Object.keys(this.songs)
-		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
-		.forEach(title => {
-			new_songs[title] = [];
-			this.songs[title]
-			.sort((x1, x2) => -x1['date'].localeCompare(x2['date'], 'zh-Hans-CN'))
-			.forEach(item => {
-				new_songs[title].push(item);
-			});
-		});
-		this.songs = new_songs;
+		this.titles = Object.keys(this.songs).sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'));
 	}
 }
 
@@ -312,6 +329,7 @@ class NewWin{
 	}
 	set_forestage(flag) {	
 		this.play_forestage = flag;
+		Utils.set_cookie('play_forestage', flag);
 	}
 }
 
@@ -369,7 +387,7 @@ class Table{
 	}
 	create_trs(songs, new_win){
 		Object.keys(songs)
-		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
 			let items = songs[title];
 			// let td_title = Utils.create('td', ['song_title'], {});
@@ -452,7 +470,7 @@ class Table{
 		this.songs = songs;
 		let cnt_songs = 0, cnt_clips = 0;
 		Object.keys(songs)
-		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
 			songs[title].forEach((item, idx) => {
 				let tr = item['tr'];
@@ -499,7 +517,7 @@ class Table{
 		let old_songs = this.songs;
 		let cnt_songs = 0, cnt_clips = 0;
 		Object.keys(old_songs)
-		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
 			if (!(title in new_songs)){
 				old_songs[title].forEach((item, idx) => {
@@ -960,7 +978,6 @@ function main(){
 	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
-	loader.sort_songs();
 	console.log(loader.length);
 	console.log(Object.keys(loader.songs).length);
 
