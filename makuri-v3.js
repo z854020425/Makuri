@@ -809,7 +809,7 @@ class SearchBox{
 				}
 			}
 			attrs = attrs.map(attr => attr.toLowerCase());
-			if (val.length == 1 && val[0] == '-'){
+			if (val.length != 1 && val[0] == '-'){
 				return attrs.every(attr => {
 					return attr.indexOf(val.substring(1)) == -1;
 				})
