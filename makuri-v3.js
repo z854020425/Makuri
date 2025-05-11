@@ -1,7 +1,3 @@
-
-// const PLAY_FORESTAGE = false;
-
-
 // TODO: Keep-Alive
 setInterval(()=>{console.info(1);}, 500);
 
@@ -213,8 +209,6 @@ class DataLoader{
 			title = item[5];
 			tags = item[6];
 
-			if (title == '唯一'){console.log(in_pt, out_pt, Utils.sec2str(out_pt - in_pt))}
-
 			href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt + '&p=' + page.substring(1);
 			this.add_song({
 				'title': title,
@@ -387,7 +381,7 @@ class Table{
 	}
 	create_trs(songs, new_win){
 		Object.keys(songs)
-		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
 			let items = songs[title];
 			// let td_title = Utils.create('td', ['song_title'], {});
@@ -470,9 +464,10 @@ class Table{
 		this.songs = songs;
 		let cnt_songs = 0, cnt_clips = 0;
 		Object.keys(songs)
-		.sort((x1, x2) => {x1.localeCompare(x2, 'zh-Hans-CN')})
+		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
-			songs[title].sort((x1, x2) => -x1['date'].localeCompare(x2['date'], 'zh-Hans-CN'))
+			songs[title]
+			.sort((x1, x2) => -x1['date'].localeCompare(x2['date'], 'zh-Hans-CN'))
 			.forEach((item, idx) => {
 				let tr = item['tr'];
 				let td_title = tr.childNodes[0];
@@ -658,12 +653,10 @@ class Drawers{
 	draw_clip_cycle(){
 		window.focus();
 		this.draw_clip_once();
-		console.log(this.new_win.new_win)
 		this.timeout_cycle = setTimeout(()=>{
 			this.new_win.close();
 			this.draw_clip_cycle();
 		}, (Utils.str2sec(this.dur.innerText) + this.INTERVAL_CLIPS) * 1000);
-		console.log(this.timeout_cycle)
 	}
 	reset(){
 		if (this.timeout_cycle){
