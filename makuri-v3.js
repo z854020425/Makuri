@@ -470,9 +470,10 @@ class Table{
 		this.songs = songs;
 		let cnt_songs = 0, cnt_clips = 0;
 		Object.keys(songs)
-		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.sort((x1, x2) => {x1.localeCompare(x2, 'zh-Hans-CN')})
 		.forEach(title => {
-			songs[title].forEach((item, idx) => {
+			songs[title].sort((x1, x2) => -x1['date'].localeCompare(x2['date'], 'zh-Hans-CN'))
+			.forEach((item, idx) => {
 				let tr = item['tr'];
 				let td_title = tr.childNodes[0];
 
@@ -517,7 +518,7 @@ class Table{
 		let old_songs = this.songs;
 		let cnt_songs = 0, cnt_clips = 0;
 		Object.keys(old_songs)
-		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		// .sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
 			if (!(title in new_songs)){
 				old_songs[title].forEach((item, idx) => {
@@ -799,9 +800,24 @@ class SearchBox{
 
 		let attrs = [title, singer, author, tag, date, lang];
 		return vals.every(val => {
-			return attrs.some(attr => {
-				return attr.indexOf(val) != -1;
-			})
+			for (let key of ['title', 'date', 'tag', 'singer', 'lang', 'author']){
+				let n = key.length;
+				if (val.substring(0, n + 1).toLowerCase() == key + ':'){
+					attrs = [item?.[key] ?? ''];
+					val = val.substring(n + 1);
+					break;
+				}
+			}
+			attrs = attrs.map(attr => attr.toLowerCase());
+			if (val.length == 1 && val[0] == '-'){
+				return attrs.every(attr => {
+					return attr.indexOf(val.substring(1)) == -1;
+				})
+			} else {
+				return attrs.some(attr => {
+					return attr.indexOf(val) != -1;
+				})				
+			}
 		})
 	}
 	search_timer(e){
