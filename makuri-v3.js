@@ -224,7 +224,7 @@ class DataLoader{
 		}
 	}
 	add_song(song){
-		let title, date, href, length, singer, lang, tags, author, is_clip, item;
+		let title, date, href, length, singer, lang, tags, author, is_clip, item, chs;
 		title = song?.title;
 		date = song?.date;
 		href = song?.href;
@@ -242,6 +242,11 @@ class DataLoader{
 				tags.unshift(TAG);
 			}
 		});
+		if ((this.songs_info?.[title]??[]).length == 1 && 'chs' in this.songs_info[title][0]){
+			chs = this.songs_info[title][0]['chs'];
+		} else {
+			chs = '';
+		}
 		if ((!singer || !lang) && (title in this.songs_info)){
 			if (this.songs_info[title].length == 1){
 				singer = singer === '' ? this.songs_info[title][0].singer : singer;
@@ -260,8 +265,8 @@ class DataLoader{
 			this.songs[title].push(item);
 			return;
 		}
-		this.songs[title] .push({
-			'title': title.toLowerCase(),
+		this.songs[title].push({
+			'title': title.toLowerCase() + '|' + chs.toLowerCase(),
 			'date': Utils.pretty_date(date),
 			'href': href,
 			'length': length,
@@ -270,7 +275,8 @@ class DataLoader{
 			'tags': tags,
 			'tag': tags.join(' ').toLowerCase(),
 			'author': author,
-			'is_clip': is_clip
+			'is_clip': is_clip,
+			'chs': chs
 		});
 	}
 	sort_songs(){
@@ -372,6 +378,7 @@ class Table{
 			'span.面白い{color:purple}',
 			'span.儿歌{color:green}',
 			'span.薯片水獭{color:Turquoise;background:gray}',
+			'span.蝴蝶谷逸_{color:lightyellow;background:darkgray}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 			'span.真栗{color:chocolate;text-shadow:0 0 2px orange}',
 			'span.BAN{color:red}',
@@ -389,7 +396,7 @@ class Table{
 			// songs[title]['td_title'] = td_title;
 
 			items.forEach((item, idx) => {
-				let tr, href, date, length, singer, lang, tags, author, td, link, span;
+				let tr, href, date, length, singer, lang, tags, author, td, link, span, chs;
 				tr = Utils.create('tr', ['song_tr'], {'title': title});
 
 				href = item?.['href'];
@@ -399,9 +406,20 @@ class Table{
 				lang = item?.['lang'];
 				tags = item?.['tags'];
 				author = item?.['author'];
+				chs = item?.['chs'];
 
 				td = Utils.create('td', ['song_title', 'td_hidden'], {});
-				td.innerText = Utils.pretty_str(title);
+				let title_pretty = Utils.pretty_str(title);
+				td.innerText = title_pretty;
+				if (chs != '') {
+					let title_chs_pretty = Utils.pretty_str(chs);
+					td.addEventListener('mouseover', function(e){
+						this.innerText = title_chs_pretty;
+					})
+					td.addEventListener('mouseout', function(e){
+						this.innerText = title_pretty;
+					})
+				}
 				tr.appendChild(td);
 
 				td = Utils.create('td', ['song_date']);
@@ -452,7 +470,7 @@ class Table{
 				item['tr'] = tr;	
 			});
 		});
-		console.log(songs);
+		// console.log(songs);
 	}
 	init_table(songs){
 		console.time('init table');
@@ -683,7 +701,7 @@ class Drawers{
 			'#div_btn_lb div:hover{opacity:1}',
 			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column;}',
 			'#div_btn_lb .btn_active{color:green; opacity:1; font-weight:bolder;}',
-			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch{z-index:10; border-radius:50%; height:1.5rem; width:1.5rem; padding:0; cursor:pointer}',
+			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch{z-index:10; border-radius:50%; height:1.5rem; width:1.5rem; padding:0; cursor:pointer; border-width:1px; text-align:center}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_fore{background:white; color:black}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_back{background:grey; color:white}'
 		]);
@@ -819,7 +837,6 @@ class SearchBox{
 		console.timeEnd('search');
 		return ret;
 	}
-
 	search(e){
 		let values = e.target.value;
 		if (values == this.prev_values){
@@ -857,7 +874,7 @@ class SearchBox{
 		if (e.target.value != values) {
 			return;
 		}
-		console.log(new_songs);
+		// console.log(new_songs);
 		this.table.update_table(new_songs);
 	}
 }
@@ -971,6 +988,104 @@ class Image_RB{
 	}
 }
 
+// class MouseFollow{
+// 	constructor(){
+// 		this.follower = null;
+// 		this.follower_x = null;
+// 		this.follower_y = null;
+// 		this.mouse_x = null;
+// 		this.mouse_y = null;
+// 		this.is_disappearing = false;
+// 		this.offset_x = 40;
+// 		this.offset_y = 40;
+
+// 		this.mount();
+// 	}
+// 	mount(){
+// 		Utils.add_styles([
+// 			'.mouse_follow{position:fixed; height:4rem; width:4rem; top:-1000px; left:-1000px; background:red; z-index:-1;}',
+// 			'.mouse_follow_appear{opacity:0.9}',
+// 			'.mouse_follow_disappear{opacity:0; animation:follower_disappear 2s ease;}',
+// 			'@keyframes follower_disappear{0%{opacity:0.9} 100%{opacity:0}}',
+// 			'.face_left{transform: scaleX(-1);}',
+// 			'.face_right{transform: scaleX(1);}',
+// 			'.img_follow{width:100%;height:100%}'
+// 		])
+// 		let div = Utils.create('div', ['mouse_follow'], {});
+// 		document.body.appendChild(div);
+// 		let img = Utils.create('img', ['img_follow'], {'src': 'follower.png'});
+// 		div.appendChild(img);
+
+
+// 		this.follower = div;
+// 		let computed_style = window.getComputedStyle(div)
+// 		this.follower_wh = computed_style.width;
+// 		this.follower_hh = computed_style.height;
+// 		this.follower_wh = parseInt(this.follower_wh.substring(0, this.follower_wh.length - 2)) / 2;
+// 		this.follower_hh = parseInt(this.follower_hh.substring(0, this.follower_hh.length - 2)) / 2;
+// 		// console.log(this.follower_wh, this.follower_hh);
+// 		window.addEventListener('mousemove', (e) => {
+// 			this.mouse_x = e.clientX;
+// 			this.mouse_y = e.clientY;
+// 		})
+// 		setInterval(()=>{this.follow()}, 10);
+// 	}
+// 	follow(){
+// 		// console.log(this)
+// 		// console.log(this.mouse_x, this.follower_x, this.is_disappearing)
+// 		if (this.mouse_x == null && this.mouse_y == null){
+// 			return;
+// 		}
+// 		if (this.follower_x == null || this.follower_y == null){
+// 			this.appear();
+// 			this.follower_x = this.mouse_x;
+// 			this.follower_y = this.mouse_y;
+// 			this.follower.style.left = this.follower_x - this.follower_wh + 'px';
+// 			this.follower.style.top = this.follower_y - this.follower_hh + 'px';
+// 			return;		
+// 		}
+// 		if (Math.abs(this.mouse_x - this.follower_x) > this.offset_x || Math.abs(this.mouse_y - this.follower_y) > this.offset_y){
+// 			this.appear();
+// 			this.is_disappearing = false;
+// 		}
+// 		if (this.is_disappearing) {
+// 			this.disappear()
+// 			return;
+// 		}
+// 		this.follower_x += Math.max(Math.min(this.mouse_x - this.follower_x, this.offset_x), -this.offset_x);
+// 		this.follower_y += Math.max(Math.min(this.mouse_y - this.follower_y, this.offset_y), -this.offset_y);
+// 		if (this.follower_x == this.mouse_x && this.follower_y == this.mouse_y){
+// 			this.is_disappearing = true;
+// 		}
+// 		if (this.mouse_x < this.follower_x){
+// 			this.face('right');
+// 		} else if (this.mouse_x > this.follower_x){			
+// 			this.face('left');
+// 		}
+// 		this.follower.style.left = this.follower_x - this.follower_wh + 'px';
+// 		this.follower.style.top = this.follower_y - this.follower_hh + 'px';
+
+// 	}
+// 	appear(){
+// 		this.follower.classList.remove('mouse_follow_disappear');
+// 		this.follower.classList.add('mouse_follow_appear');
+// 	}
+// 	disappear(){
+// 		this.follower.classList.remove('mouse_follow_appear');
+// 		this.follower.classList.add('mouse_follow_disappear');
+// 	}
+// 	face(dir){
+// 		if (dir == 'right'){
+// 			this.follower.classList.remove('face_left');
+// 			this.follower.classList.add('face_right');
+// 		} else if (dir == 'left'){
+// 			this.follower.classList.add('face_left');
+// 			this.follower.classList.remove('face_right');
+// 		}
+// 	}
+// }
+
+
 
 function main(){
 	const TAGS = {
@@ -986,6 +1101,7 @@ function main(){
 	// loader.csv2songs(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
+	loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	console.log(loader.length);
 	console.log(Object.keys(loader.songs).length);
@@ -1000,6 +1116,7 @@ function main(){
 
 	let social_platforms = new SocialPlatforms();
 	let img_rb = new Image_RB('./sleep.png');
+	// let mouse_follow = new MouseFollow();
 
 }
 main();
