@@ -1209,7 +1209,7 @@ function main(){
 	// loader.csv2songs(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
-	// loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
+	loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	loader.sort_songs();
 	console.log(loader.length);
