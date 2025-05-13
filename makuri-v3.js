@@ -127,7 +127,7 @@ class Utils{
 		document.cookie = cookies_str;
 	}
 }
-const PLAY_FORESTAGE = Utils.get_cookie('play_forestage') == 'true' ? true : false;
+const PLAY_FOREGROUND = Utils.get_cookie('play_foreground') == 'true' ? true : false;
 
 
 class ClipBoard{
@@ -353,22 +353,22 @@ class DataLoader{
 
 
 class NewWin{
-	constructor(play_forestage=PLAY_FORESTAGE){
+	constructor(play_foreground=PLAY_FOREGROUND){
 		this.new_win = null;
 		this.timeout_close = null;
-		this.play_forestage = play_forestage;
+		this.play_foreground = play_foreground;
 	}
 	get isAvailable(){
 		return this.new_win != null && !this.new_win.closed;
 	}
 	close(force=false){
-		if ((force || this.play_forestage) && this.isAvailable){
+		if ((force || this.play_foreground) && this.isAvailable){
 			this.new_win.close();
 			this.new_win = null;
 		}
 	}
 	get open(){
-		return this.play_forestage ? this.open_url : this.change_url;
+		return this.play_foreground ? this.open_url : this.change_url;
 	}
 	change_url(url, duration=null, is_clip=false){
 		if (!this.isAvailable){
@@ -394,9 +394,9 @@ class NewWin{
 			}, (str2sec(duration) + 0.5) * 1000);
 		}
 	}
-	set_forestage(flag) {	
-		this.play_forestage = flag;
-		Utils.set_cookie('play_forestage', flag);
+	set_foreground(flag) {	
+		this.play_foreground = flag;
+		Utils.set_cookie('play_foreground', flag);
 	}
 }
 
@@ -804,8 +804,8 @@ class Drawers{
 		div_lb.appendChild(div);
 
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawClipCycle'});
-		btn = Utils.create('button', ['btn_fb_switch', PLAY_FORESTAGE ? 'btn_fore' : 'btn_back'], {'id': 'btn_fbSwitch'});
-		btn.innerText = PLAY_FORESTAGE ? 'F' : 'B';
+		btn = Utils.create('button', ['btn_fb_switch', PLAY_FOREGROUND ? 'btn_fore' : 'btn_back'], {'id': 'btn_fbSwitch'});
+		btn.innerText = PLAY_FOREGROUND ? 'F' : 'B';
 		btn.title = 'F: 切片视频前台切换\nB: 切片视频后台切换'
 		div.appendChild(btn);
 		div.innerHTML += '<br />循环';
@@ -815,12 +815,12 @@ class Drawers{
 					e.target.innerText = 'B';
 					e.target.classList.add('btn_back');
 					e.target.classList.remove('btn_fore');
-					this.new_win.set_forestage(false);
+					this.new_win.set_foreground(false);
 				} else {
 					e.target.innerText = 'F';
 					e.target.classList.add('btn_fore');
 					e.target.classList.remove('btn_back');
-					this.new_win.set_forestage(true);
+					this.new_win.set_foreground(true);
 				}
 				return;
 			}
