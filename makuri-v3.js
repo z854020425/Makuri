@@ -201,7 +201,7 @@ class DataLoader{
 			lang = data[bvid]?.['lang'] ?? '';
 			parts = data[bvid]?.['parts'];
 			tags = data[bvid]?.['tags'] ?? [];
-			in_pt = data[bvid]?.['in_pt'] ?? 1;
+			in_pt = data[bvid]?.['in_pt'] ?? 0.0001;
 			out_pt = data[bvid]?.['output'] ?? null;
 			is_clip = data[bvid]?.['is_clip'] ?? false;
 			href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt;
@@ -228,7 +228,7 @@ class DataLoader{
 				singer = parts[p]?.['singer'] ?? '';
 				lang = parts[p]?.['lang'] ?? '';
 				tags = parts[p]?.['tags'] ?? [];
-				in_pt = parts[p]?.['in_pt'] ?? 1;
+				in_pt = parts[p]?.['in_pt'] ?? 0.0001;
 				out_pt = parts[p]?.['out_pt'] ?? null;
 				is_clip = parts[p]?.['is_clip'] ?? false;
 				href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt + '&p=' + part;				
@@ -1195,7 +1195,6 @@ class Notification{
 }
 
 
-
 function main(){
 	const TAGS = {
 	"BAN": ['百万个吻', '骗赖', '你跟我比夹夹', '嘉宾', '香水有毒', '纤夫的爱', '天上掉下个猪八戒', '通天大道宽又阔', '大哥欢迎你', '好汉歌'],
@@ -1231,5 +1230,3 @@ function main(){
 console.time('MIAN');
 main();
 console.timeEnd('MIAN');
-
-
