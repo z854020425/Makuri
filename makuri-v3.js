@@ -127,8 +127,38 @@ class Utils{
 		document.cookie = cookies_str;
 	}
 }
-
 const PLAY_FORESTAGE = Utils.get_cookie('play_forestage') == 'true' ? true : false;
+
+
+class ClipBoard{
+	constructor(){
+		this.copy = this.copy_new
+		this.notification = new Notification();
+	}
+	copy_new(text){
+		navigator.clipboard.writeText(text)
+		.then(() => {
+			this.copy_success(text);
+		})
+		.catch((error) => console.log(error))
+	}
+	copy_old(text){
+		let textarea = Utils.createElement('textarea');
+		textarea.value = text;
+		document.body.appendChild(textarea);
+		textarea.select();
+		document.execCommand('copy');
+		document.body.removeChild(textarea);
+		this.copy_success(text);
+	}
+	copy_success(text){
+		if (this.notification){
+			this.notification.notify(text);
+			return;
+		}
+		window.alert('成功复制 『' + text + '』 到剪贴板');
+	}
+}
 
 
 class DataLoader{
@@ -393,6 +423,7 @@ class Table{
 		this.table = table;
 		this.songs = null;
 		this.add_styles();
+		this.clipboard = new ClipBoard();
 	}
 	add_styles(){
 		Utils.add_styles([
@@ -403,7 +434,7 @@ class Table{
 			'.song_tr_first td{padding-top:8px}',
 			'.song_tr_last td{padding-bottom:8px}',
 			'.song_tr_last{border-bottom:2px solid black}',
-			'.song_title{color:deeppink;padding:8px}',
+			'.song_title{color:deeppink;padding:8px; cursor:pointer; user-select:none;}',
 			'.song_href{text-decoration:none; color:brown; cursor:pointer}',
 			'.song_length{color:green; min-width:70px; text-align:center}',
 			'.song_singer{color:orange; text-align:center}',
@@ -451,11 +482,16 @@ class Table{
 					let title_chs_pretty = Utils.pretty_str(chs);
 					td.addEventListener('mouseover', function(e){
 						this.innerText = title_chs_pretty;
+						this.style.color = 'DodgerBlue';
 					})
 					td.addEventListener('mouseout', function(e){
 						this.innerText = title_pretty;
+						this.style.color = 'deeppink';
 					})
 				}
+				td.addEventListener('click', (e) => {;
+					this.clipboard.copy(e.target.parentNode.getAttribute('title'));
+				})
 				tr.appendChild(td);
 
 				td = Utils.create('td', ['song_date']);
@@ -731,7 +767,7 @@ class Drawers{
 			'.highlighted{font-weight:bolder; animation:highlight 3s infinite;}',
 			'@keyframes highlight{0%{color:red;} 14%{color:orange} 29%{color:yellow} 43%{color:green} 57%{color:cyan} 71%{color:blue} 86%{color:purple} 100%{color:red}}',
 
-			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:1px solid black;height:3rem; width:3rem; background:lightgrey;}',
+			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:1px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none}',
 			'#div_btn_lb div:hover{opacity:1}',
 			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column;}',
 			'#div_btn_lb .btn_active{color:green; opacity:1; font-weight:bolder;}',
@@ -1120,6 +1156,45 @@ class Image_RB{
 // }
 
 
+class Notification{
+	constructor(){
+		this.timeouts = [];
+		this.max_cnt = 5;
+		this.mount();
+	}
+	mount(){
+		Utils.add_styles([
+			'#div_notify{position:fixed; top:0; right:3rem; height:50vh; width:25rem;}',
+			'.notification{height:18%; width:100%; top:-22%; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border:5px double brown;margin:1% 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s, slide 5s;}',
+			'@keyframes disappear{0%{opacity:0} 8%{opacity:1} 70%{opacity:1} 100%{opacity:0.3}}',
+			'@keyframes slide{0%{top:100vh} 8%{top:0} 95%{top:0} 100%{top:-22%}}',
+			'.notification span{color:DarkGoldenRod; font-size:1.2rem; text-align:center;}'
+		]);
+
+		let div = Utils.create('div', [], {'id': 'div_notify'});
+		document.body.appendChild(div);
+		this.div = div;
+	}
+	notify(text){
+		if (this.timeouts.length >= this.max_cnt){
+			let timeout = this.timeouts.shift();
+			clearTimeout(timeout);
+			this.div.removeChild(this.div.childNodes[0]);
+		}
+		let notification = Utils.create('div', ['notification'], {});
+		notification.innerHTML = '<span>『' + text + '』</span>已成功复制！ ';
+		this.div.appendChild(notification)
+		this.timeouts.push(
+			setTimeout(((div, notification, timeouts) => {
+							div.removeChild(notification);
+							timeouts.shift();
+						}).bind(null, this.div, notification, this.timeouts)
+			, 4900)
+		);
+	}
+}
+
+
 
 function main(){
 	const TAGS = {
@@ -1129,13 +1204,12 @@ function main(){
 }
 
 	let loader = new DataLoader(TAGS);	
-
 	// loader.json2songs(loader.load_data('./真栗.json'), video_author='真栗');
 	// loader.json2songs(loader.load_data('./Monedula.json'), video_author='Monedula');
 	// loader.csv2songs(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
-	loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
+	// loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	loader.sort_songs();
 	console.log(loader.length);
@@ -1154,7 +1228,8 @@ function main(){
 	// let mouse_follow = new MouseFollow();
 
 }
+console.time('MIAN');
 main();
-
+console.timeEnd('MIAN');
 
 

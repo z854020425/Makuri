@@ -498,12 +498,12 @@
             },
             "p14": {
                 "part": 14,
-                "title": "名人",
+                "title": "Celebrity",
                 "length": "03:27"
             },
             "p15": {
                 "part": 15,
-                "title": "You（=I)",
+                "title": "You（=I）",
                 "length": "02:49"
             },
             "p16": {
@@ -1606,7 +1606,7 @@
             },
             "p6": {
                 "part": 6,
-                "title": "summertime",
+                "title": "Summertime",
                 "length": "04:05"
             },
             "p7": {
@@ -1710,7 +1710,7 @@
         "parts": {
             "p1": {
                 "part": 1,
-                "title": "again",
+                "title": "Again",
                 "length": "01:26"
             },
             "p2": {
@@ -1835,7 +1835,7 @@
             },
             "p26": {
                 "part": 26,
-                "title": "Silly",
+                "title": "silly",
                 "length": "05:04"
             },
             "p27": {
@@ -2136,12 +2136,12 @@
             },
             "p25": {
                 "part": 25,
-                "title": "梦町コントラスト",
+                "title": "夢町コントラスト",
                 "length": "04:45"
             },
             "p26": {
                 "part": 26,
-                "title": "星を渡る鳥",
+                "title": "星を渡る鸟",
                 "length": "01:43",
                 "tags": [
                     "半首"
@@ -2149,7 +2149,7 @@
             },
             "p27": {
                 "part": 27,
-                "title": "in the rain -Acoustic ver.",
+                "title": "in the rain-Acoustic ver.",
                 "length": "04:36"
             },
             "p28": {
@@ -2526,7 +2526,7 @@
         "parts": {
             "p1": {
                 "part": 1,
-                "title": "trust you",
+                "title": "Trust You",
                 "length": "05:43"
             },
             "p2": {
@@ -3548,7 +3548,7 @@
             },
             "p11": {
                 "part": 11,
-                "title": "shape of you",
+                "title": "Shape of You",
                 "length": "03:51"
             },
             "p12": {
@@ -3755,7 +3755,7 @@
             },
             "p14": {
                 "part": 14,
-                "title": "呆又呆",
+                "title": "Te-yut-te",
                 "length": "01:18"
             }
         }
@@ -4151,8 +4151,11 @@
             },
             "p22": {
                 "part": 22,
-                "title": "红尘客栈(半首）",
-                "length": "01:41"
+                "title": "红尘客栈",
+                "length": "01:41",
+                "tags": [
+                    "半首"
+                ]
             },
             "p23": {
                 "part": 23,
@@ -5244,12 +5247,12 @@
             },
             "p18": {
                 "part": 18,
-                "title": "除了春天爱情和樱花",
+                "title": "봄 사랑 벚꽃 말고",
                 "length": "01:13"
             },
             "p19": {
                 "part": 19,
-                "title": "POPSTARS",
+                "title": "POP/STARS",
                 "length": "03:10"
             },
             "p20": {
@@ -5662,12 +5665,12 @@
             },
             "p5": {
                 "part": 5,
-                "title": "again",
+                "title": "Again",
                 "length": "04:06"
             },
             "p6": {
                 "part": 6,
-                "title": "You",
+                "title": "you",
                 "length": "01:40",
                 "tags": [
                     "半首"
@@ -5999,7 +6002,7 @@
             },
             "p3": {
                 "part": 3,
-                "title": "电子天使",
+                "title": "えれくとりっく.えんじぇぅ",
                 "length": "03:10"
             },
             "p4": {
@@ -6285,7 +6288,7 @@
             },
             "p14": {
                 "part": 14,
-                "title": "lost stars",
+                "title": "Lost Stars",
                 "length": "03:57"
             },
             "p15": {
@@ -6295,7 +6298,7 @@
             }
         }
     },
-    "BV1Qq4y1k735": {
+    "?BV1Qq4y1k735": {
         "title": "【真栗】2021精选翻唱50首",
         "link": "https://www.bilibili.com/video/BV1Qq4y1k735/",
         "length": "03:22:46",
@@ -6700,7 +6703,7 @@
             },
             "p6": {
                 "part": 6,
-                "title": "活动小丑",
+                "title": "からくりピエロ",
                 "length": "04:17"
             },
             "p7": {
@@ -6905,7 +6908,7 @@
             },
             "p5": {
                 "part": 5,
-                "title": "loser",
+                "title": "LOSER",
                 "length": "04:01"
             },
             "p6": {
@@ -8275,7 +8278,7 @@
         }
     },
     "BV1Xr4y1C78x": {
-        "title": "You(=I)",
+        "title": "You（=I）",
         "link": "https://www.bilibili.com/video/BV1Xr4y1C78x/",
         "length": "03:08",
         "bvid": "BV1Xr4y1C78x",
@@ -8310,7 +8313,7 @@
             },
             "p5": {
                 "part": 5,
-                "title": "You(=I)",
+                "title": "You（=I）",
                 "length": "02:57"
             },
             "p6": {
@@ -8375,7 +8378,7 @@
             },
             "p18": {
                 "part": 18,
-                "title": "革新的变身",
+                "title": "かくしん的☆めたまるふぉ～ぜっ！",
                 "length": "01:26",
                 "tags": [
                     "半首"
@@ -8474,7 +8477,7 @@
         "parts": {
             "p1": {
                 "part": 1,
-                "title": "呆又呆",
+                "title": "Te-yut-te",
                 "length": "01:20"
             },
             "p2": {
@@ -8539,7 +8542,7 @@
             },
             "p14": {
                 "part": 14,
-                "title": "prisoner of love",
+                "title": "Prisoner Of Love",
                 "length": "04:38"
             },
             "p15": {
@@ -9510,7 +9513,7 @@
             },
             "p5": {
                 "part": 5,
-                "title": "交叉领域",
+                "title": "crossing field",
                 "length": "04:06"
             },
             "p6": {
@@ -10670,7 +10673,7 @@
             },
             "p5": {
                 "part": 5,
-                "title": "崩坏小丑",
+                "title": "壊れたピエロ",
                 "length": "04:43"
             },
             "p6": {
@@ -10920,7 +10923,7 @@
             },
             "p12": {
                 "part": 12,
-                "title": "Black Mamba",
+                "title": "Black Mabma",
                 "length": "02:52"
             },
             "p13": {
@@ -11190,7 +11193,7 @@
             },
             "p4": {
                 "part": 4,
-                "title": "呆又呆",
+                "title": "Te-yut-te",
                 "length": "01:28"
             },
             "p5": {
@@ -11970,7 +11973,7 @@
             },
             "p5": {
                 "part": 5,
-                "title": "lost stars",
+                "title": "Lost Stars",
                 "length": "05:13"
             },
             "p6": {
@@ -12217,7 +12220,7 @@
             },
             "p11": {
                 "part": 11,
-                "title": "TTime after time～花舞う街で～",
+                "title": "Time after time～花舞う街で～",
                 "length": "03:59"
             },
             "p12": {
@@ -12845,7 +12848,7 @@
             },
             "p4": {
                 "part": 4,
-                "title": "除了春天爱情和樱花",
+                "title": "봄 사랑 벚꽃 말고",
                 "length": "02:00",
                 "tags": [
                     "半首"
@@ -13108,7 +13111,7 @@
             },
             "p2": {
                 "part": 2,
-                "title": "honey honey",
+                "title": "Honey Honey",
                 "length": "04:28"
             },
             "p3": {
@@ -13471,7 +13474,7 @@
             },
             "p9": {
                 "part": 9,
-                "title": "EYES, NOSE, LIPS",
+                "title": "눈, 코, 입",
                 "length": "03:58"
             },
             "p10": {
@@ -14713,7 +14716,7 @@
             },
             "p16": {
                 "part": 16,
-                "title": "なきむし",
+                "title": "なきむし。",
                 "length": "05:38"
             },
             "p17": {
