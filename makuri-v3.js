@@ -85,7 +85,7 @@ class Utils{
 		}
 		let tag = document.createElement('style');
 		tag.innerText = styles;
-		document.head.insertAdjacentElement('afterend', tag);
+		document.head.appendChild(tag);
 	}
 	static create(tag_name, class_names=[], attrs={}){
 		let ret = document.createElement(tag_name);
