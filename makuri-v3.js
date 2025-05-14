@@ -126,6 +126,22 @@ class Utils{
 		});
 		document.cookie = cookies_str;
 	}
+	static preciseSetTimeout(duration){
+		let start_time = Date.now();
+		let expectation = duration;
+		let _interval = 1000;
+		function step(){
+			let now_time = Date.now();
+			let remaining = duration - now_time + start_time;
+			if (remaining <= 0){
+				return;
+			}
+			let next_timeout = _interval - (now_time - start_time) + expectation;
+			expectation += _interval;
+			setTimeout(step, Math(0, next_timeout));
+		}
+		setTimeout(step, _interval);
+	}
 }
 const PLAY_FOREGROUND = Utils.get_cookie('play_foreground') == 'true' ? true : false;
 
@@ -739,28 +755,36 @@ class Drawers{
 		this.clip = tr.querySelectorAll('td.song_date a.song_href')[0];
 		this.dur = tr.querySelectorAll('td.song_length')[0];
 		this.clip.classList.add('highlighted');
-		this.dur.classList.add('highlighted');
+		let ms = (Utils.str2sec(this.dur.innerText) + this.INTERVAL_CLIPS) * 1000;
 		this.timeout_highlight = setTimeout(() => {	
 			this.clip.classList.remove('highlighted');
-			this.dur.classList.remove('highlighted');
 			this.clip = null;
 			this.dur = null;
 
-		}, 5000);
+		}, ms);
 		this.clip.scrollIntoView();
 		console.log(this.clip.getAttribute('data-title'), this.clip.innerText, this.dur.innerText, Utils.str2sec(this.dur.innerText));	
 		document.title = '『' + this.clip.getAttribute('data-title') + '』';
 		this.new_win.open(this.clip.getAttribute('data-href'), this.clip.getAttribute('data-length'), this.clip.getAttribute('data-isClip'));
+		return ms;
 	}
 	draw_clip_cycle(){
 		window.focus();
-		this.draw_clip_once();
+		let ms = this.draw_clip_once();
 		this.timeout_cycle = setTimeout(()=>{
 			this.new_win.close();
 			this.draw_clip_cycle();
-		}, (Utils.str2sec(this.dur.innerText) + this.INTERVAL_CLIPS) * 1000);
+		}, ms);
 	}
 	reset(close_win){
+		if (this.song){
+			this.song.classList.remove('highlighted');
+			this.song = null;
+		}
+		if (this.clip){
+			this.clip.classList.remove('highlighted');
+			this.clip = null;
+		}
 		if (this.timeout_cycle){
 			clearTimeout(this.timeout_cycle);
 			this.timeout_cycle = null;
@@ -894,8 +918,8 @@ class SearchBox{
 		lang = item?.['lang'] ?? '';
 		author = item?.['author'] ?? '';
 
-		let attrs = [title, singer, author, tag, date, lang];
 		return vals.every(val => {
+			let attrs = [title, singer, author, tag, date, lang];
 			for (let key of ['title', 'date', 'tag', 'singer', 'lang', 'author']){
 				let n = key.length;
 				if (val.substring(0, n + 1).toLowerCase() == key + ':'){
