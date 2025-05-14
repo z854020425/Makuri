@@ -339,6 +339,15 @@ class DataLoader{
 			'chs': chs
 		});
 	}
+	get uncollected_songs(){
+		let uncollected_songs = [];
+		Object.keys(this.songs_info).forEach(title => {
+			if (!(this.ordered_songs.has(title))){
+				uncollected_songs.push(title);
+			}
+		});
+		return uncollected_songs.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'));
+	}
 	sort_songs(){
 		this.ordered_songs.clear();
 		// this.titles = Object.keys(this.songs).sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'));
@@ -397,6 +406,9 @@ class NewWin{
 	set_foreground(flag) {	
 		this.play_foreground = flag;
 		Utils.set_cookie('play_foreground', flag);
+	}
+	get foreground(){
+		return this.play_foreground;
 	}
 }
 
@@ -505,6 +517,7 @@ class Table{
 					e.preventDefault();
 					let btn_cycle = document.querySelectorAll('#btn_drawClipCycle.btn_active');
 					if (btn_cycle.length != 0) {
+						btn_cycle[0].setAttribute('close_win', new_win.foreground);
 						btn_cycle[0].click();
 					}
 					document.title = '『' + this.getAttribute('data-title') + '』';
@@ -746,7 +759,7 @@ class Drawers{
 			this.draw_clip_cycle();
 		}, (Utils.str2sec(this.dur.innerText) + this.INTERVAL_CLIPS) * 1000);
 	}
-	reset(){
+	reset(close_win){
 		if (this.timeout_cycle){
 			clearTimeout(this.timeout_cycle);
 			this.timeout_cycle = null;
@@ -758,7 +771,7 @@ class Drawers{
 		this.song = null;
 		this.clip = null;
 		this.dur = null;
-		this.new_win.close(true);
+		this.new_win.close(close_win);
 	}
 	mount(){
 		Utils.add_styles([
@@ -826,7 +839,8 @@ class Drawers{
 			}
 			if (e.target.classList.contains('btn_active')){
 				e.target.classList.remove('btn_active');
-				this.reset();
+				// console.log(e.target.getAttribute('close_win') == 'true' ? true: false)
+				this.reset(e.target.getAttribute('close_win') == 'true' ? true: false);
 				document.title = 'Makuri';
 			} else {
 				e.target.classList.add('btn_active');
@@ -1213,6 +1227,7 @@ function main(){
 	loader.sort_songs();
 	console.log(loader.length);
 	console.log(Object.keys(loader.ordered_songs).length);
+	console.log(loader.uncollected_songs);
 
 	let new_win = new NewWin();
 	let table = new Table(['Title', 'Date', 'Dur.', 'O.S.', 'Lang.', 'Tags']);
