@@ -519,6 +519,7 @@ class Table{
 					if (btn_cycle.length != 0) {
 						btn_cycle[0].setAttribute('close_win', new_win.foreground);
 						btn_cycle[0].click();
+						btn_cycle[0].removeAttribute('close_win');
 					}
 					document.title = '『' + this.getAttribute('data-title') + '』';
 					new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), this.getAttribute('data-isClip'));
@@ -840,7 +841,7 @@ class Drawers{
 			if (e.target.classList.contains('btn_active')){
 				e.target.classList.remove('btn_active');
 				// console.log(e.target.getAttribute('close_win') == 'true' ? true: false)
-				this.reset(e.target.getAttribute('close_win') == 'true' ? true: false);
+				this.reset(e.target.getAttribute('close_win') == 'false' ? false: true);
 				document.title = 'Makuri';
 			} else {
 				e.target.classList.add('btn_active');
