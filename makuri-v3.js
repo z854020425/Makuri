@@ -1,6 +1,7 @@
 // TODO: Keep-Alive
 // 邪道 后面研究下web workers+service worker
-setInterval(()=>{console.info(1);}, 500);
+
+
 function keepAliveBySilentAudio(){
 	let audio = document.createElement('audio');
 	audio.src = './silent.mp3';
@@ -62,7 +63,7 @@ class Utils{
 		const reg = /[\u4E00-\u9FFF\u3400-\u4DBF\U00020000-\U0002A6DF\U0002A700-\U0002B73F\U0002B740-\U0002B81F\U0002B820-\U0002CEAF\U0002CEB0-\U0002EBEF\U00030000-\U0003134F\U00031350-\U000323AF\U0002EBF0-\U0002EE5F\U0002F800-\U0002FA1F\uF900-\uFAFF\u2F00-\u2FDF\u2E80-\u2EFF\u31C0-\u31EF\u2FF0-\u2FFF]/;
 		let cnt = 0;
 		for (let i = 0; i < str.length; i += 1){
-			cnt += reg.test(str[i]) ? 2 : 1;
+			cnt += reg.test(str[i]) ? 1.5 : 1;
 			if (i != str.length - 1 && cnt > max_len - 1){
 				return str.substring(0, i) + '…';
 			}
@@ -153,6 +154,9 @@ class Utils{
 		}
 		setTimeout(step, _interval);
 	}
+	static sleep(ms){
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
 }
 const PLAY_FOREGROUND = Utils.get_cookie('play_foreground') == 'true' ? true : false;
 
@@ -204,10 +208,14 @@ class DataLoader{
 		});
 		return cnt;
 	}
+	//TODO: 同步->异步，Promise.all()
 	load_data(path){
 		let request = new XMLHttpRequest();
 		request.open('GET', path, false);
 		request.send(null);
+		if (request.status == 404){
+			return '';
+		}
 		return request.responseText;
 	}
 	json2songs_timer(data, video_author=null){
@@ -217,6 +225,7 @@ class DataLoader{
 		return ret
 	}
 	json2songs(data, video_author=null){
+		if (data == '') return;
 		data = JSON.parse(data);
 		let title, _title, date, length, singer, lang, parts, tags, in_pt, out_pt, is_clip, href;
 		Object.keys(data).forEach(bvid => {
@@ -229,6 +238,8 @@ class DataLoader{
 			parts = data[bvid]?.['parts'];
 			tags = data[bvid]?.['tags'] ?? [];
 			in_pt = data[bvid]?.['in_pt'] ?? 0.0001;
+			out_pt = Utils.str2sec(data[bvid]?.['out_pt']) ?? null;
+			length = length ?? Utils.sec2str(out_pt - in_pt);
 			out_pt = data[bvid]?.['output'] ?? null;
 			is_clip = data[bvid]?.['is_clip'] ?? false;
 			href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt;
@@ -255,8 +266,9 @@ class DataLoader{
 				singer = parts[p]?.['singer'] ?? '';
 				lang = parts[p]?.['lang'] ?? '';
 				tags = parts[p]?.['tags'] ?? [];
-				in_pt = parts[p]?.['in_pt'] ?? 0.0001;
-				out_pt = parts[p]?.['out_pt'] ?? null;
+				in_pt = Utils.str2sec(parts[p]?.['in_pt']) ?? 0.0001;
+				out_pt = Utils.str2sec(parts[p]?.['out_pt']) ?? null;
+				length = length ?? Utils.sec2str(out_pt - in_pt);
 				is_clip = parts[p]?.['is_clip'] ?? false;
 				href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt + '&p=' + part;				
 				this.add_song({
@@ -281,6 +293,7 @@ class DataLoader{
 		return ret
 	}
 	csv2songs(data, video_author=null){
+		if (data == '') return;
 		let bvid, date, page, in_pt, out_pt, title, tags, href, item;
 		let lines = data.split('\r\n');
 		for (let line of lines){
@@ -293,8 +306,9 @@ class DataLoader{
 			page = item[2] === '' ? page : item[2]
 			in_pt = Utils.str2sec(item[3]);
 			out_pt = Utils.str2sec(item[4]);
+			console.log(title);
 			title = item[5];
-			tags = item.length >= 7 ? item[6] : '';
+			tags = item.length >= 7 ? item[6].trim() : '';
 
 			href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt + '&p=' + page.substring(1);
 			this.add_song({
@@ -384,6 +398,54 @@ class DataLoader{
 			this.ordered_songs[title] = this.songs[title].sort((x1, x2) => -x1['date'].localeCompare(x2['date']));
 		});
 		this.songs = {};
+	}
+	get_cnts(){
+		let cnt_song = {}, cnt_clip = {};
+		this.ordered_songs.keys().forEach(title => {
+			let clips = this.ordered_songs[title];
+			let set = new Set();
+			clips.forEach(clip => {
+				let singer = clip?.['singer'];
+				if (singer == null){
+					return;
+				}
+				if (!set.has(singer)){
+					set.add(singer);
+					if (!(singer in cnt_song)){
+						cnt_song[singer] = 0;
+					}
+					cnt_song[singer] += 1;
+				}
+				if (!(singer in cnt_clip)){
+					cnt_clip[singer] = 1;
+				} else {
+					cnt_clip[singer] += 1;
+				}
+			})
+		})
+		let arr = [];
+		Object.keys(cnt_clip).forEach(singer => {
+			arr.push([cnt_clip[singer], singer]);
+		})
+		arr.sort((x1, x2) => {
+			if (x1[0] == x2[0]){
+				return x1[1].localeCompare(x2[1], 'zh-Hans-CN');
+			}
+			return x2[0] - x1[0];
+		})
+		console.log(arr.slice(0, 10));
+
+		arr = [];
+		Object.keys(cnt_song).forEach(singer => {
+			arr.push([cnt_song[singer], singer]);
+		})
+		arr.sort((x1, x2) => {
+			if (x1[0] == x2[0]){
+				return x1[1].localeCompare(x2[1], 'zh-Hans-CN');
+			}
+			return x2[0] - x1[0];
+		})
+		console.log(arr.slice(0, 10));
 	}
 }
 
@@ -479,14 +541,14 @@ class Table{
 			'.song_singer{color:orange; text-align:center}',
 			'.song_lang{text-align:center;color:grey}',
 			'.song_ranks{color: orange; min-width:70px; text-align:center}',
-			'.song_tags{color: blue; min-width:70px; text-align:center}',
+			'.song_tags{color: blue; min-width:70px; display:flex; flex-direction:row; justify-content:flex-start; padding-left:2rem}',
 			'.song_date{height:4vh; text-align:center; min-width:110px; user-select:none}',
 			'.song_tags span{margin:0px 2px; padding:0px 2px; border:2px dashed gray; border-radius:40% 0%; background:lightyellow}',
 			'span.面白い{color:purple}',
 			'span.儿歌{color:green}',
 			'span.录播组{color:NavajoWhite;background:gray}',
 			'span.薯片水獭{color:Turquoise;background:gray}',
-			'span.蝴蝶谷逸_{color:lightyellow;background:darkgray}',
+			'span.蝴蝶谷逸{color:lightyellow;background:darkgray}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 			'span.真栗{color:chocolate;text-shadow:0 0 2px orange}',
 			'span.BAN{color:red; font-weight:bold; text-decoration:line-through;}',
@@ -550,7 +612,8 @@ class Table{
 						btn_cycle[0].removeAttribute('close_win');
 					}
 					document.title = '『' + this.getAttribute('data-title') + '』';
-					new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), this.getAttribute('data-isClip'));
+					// new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), this.getAttribute('data-isClip'));
+					new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), true);
 				});
 				td.appendChild(link);
 				tr.appendChild(td);
@@ -568,11 +631,6 @@ class Table{
 				tr.appendChild(td);
 
 				td = Utils.create('td', ['song_tags'], {});
-				tags.forEach(tag => {
-					span = Utils.create('span', [tag], {'title': tag});
-					span.innerText = tag;
-					td.appendChild(span);
-				});
 				if (author) {
 					span = Utils.create('span', [author], {'title': author});
 					span.innerText = Utils.pretty_str(author, 6);
@@ -580,6 +638,11 @@ class Table{
 				} else if (tags.length == 0){
 					td.innerText = '----';
 				}
+				tags.forEach(tag => {
+					span = Utils.create('span', [tag], {'title': tag});
+					span.innerText = tag;
+					td.appendChild(span);
+				});
 				tr.appendChild(td);
 				item['tr'] = tr;	
 			});
@@ -910,10 +973,46 @@ class SearchBox{
 	mount(){
 		Utils.add_styles([
 			'.div_search{display:flex; justify-content:center;}',
-			'.hidden{display:none}'
+			'.hidden{display:none}',
+			'.input_search{min-width:15rem; margin:0 0.5rem;}',
+			'#select_presets option{text-align:right}'
 		]);
 		let div_search = Utils.create('div', ['div_search'], {});
 		document.querySelector('.div_drawer').insertAdjacentElement('afterend', div_search);
+
+		let select = Utils.create('select', [], {'id':'select_presets'});
+		let items = new Map([
+			['☆ALL☆', ''],
+			['周杰伦 专场', 'singer:周杰伦 -半首'],
+			['邓紫棋 专场', 'singer:邓紫棋 -半首'],
+			['王心凌 专场', 'singer:王心凌 -半首'],
+			['梁静茹 专场', 'singer:梁静茹 -半首'],
+			['孙燕姿 专场', 'singer:孙燕姿 -半首'],
+			['张韶涵 专场', 'singer:张韶涵 -半首'],
+			['陶喆 专场', 'singer:陶喆 -半首'],
+			['王菲 专场', 'singer:王菲 -半首'],
+			['初音ミク 专场', 'singer:初音ミク -半首'],
+			['谭姐 专场', 'title:谭姐'],
+			['日语 专场', 'lang:日语'],
+			['韩语 专场', 'lang:韩语'],
+			['粤语 专场', 'lang:粤语'],
+			['儿歌 专场', 'tag:儿歌'],
+			['2021精选(蝴蝶谷逸_)', 'tag:2021精选']
+		]);
+		items.entries().forEach((entry) => {
+			let [text, value] =[...entry];
+			let opt = Utils.create('option', [], {});
+			opt.text = text;
+			opt.value = value;
+			select.appendChild(opt);
+		});
+		select.addEventListener('change', (e) => {
+			let inp = document.querySelector('.input_search');
+			inp.value = e.target.value;
+			this.search_timer(e);
+		})
+		div_search.appendChild(select);
+
 
 		let inp = Utils.create('input', ['input_search'], {'type': 'text', 'placeholder': '搜索'});
 		inp.addEventListener('keyup', (e) => {
@@ -1253,19 +1352,20 @@ function main(){
 	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所']
 }
 
-	let loader = new DataLoader(TAGS);	
-	// loader.json2songs(loader.load_data('./真栗.json'), video_author='真栗');
-	// loader.json2songs(loader.load_data('./Monedula.json'), video_author='Monedula');
-	// loader.csv2songs(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
-	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');
+	console.time('LOAD JSON/CSV');
+	let loader = new DataLoader(TAGS);
+	loader.json2songs_timer(loader.load_data('./真栗.json'), video_author='真栗');	
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
-	loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
+	loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
 	loader.csv2songs_timer(loader.load_data('./真栗栗录播组.csv'), video_author='录播组');
+	loader.json2songs_timer(loader.load_data('./真栗栗录播组.json'), video_author='录播组');
 	loader.sort_songs();
+	// loader.get_cnts();
 	console.log(loader.length);
 	console.log(Object.keys(loader.ordered_songs).length);
 	console.log(loader.uncollected_songs);
+	console.timeEnd('LOAD JSON/CSV');
 
 	let new_win = new NewWin();
 	let table = new Table(['Title', 'Date', 'Dur.', 'O.S.', 'Lang.', 'Tags']);
