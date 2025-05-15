@@ -1,5 +1,16 @@
 // TODO: Keep-Alive
+// 邪道 后面研究下web workers+service worker
 setInterval(()=>{console.info(1);}, 500);
+function keepAliveBySilentAudio(){
+	let audio = document.createElement('audio');
+	audio.src = './silent.mp3';
+	audio.autoplay = true;
+	audio.loop = true;
+	document.body.appendChild(audio);
+}
+keepAliveBySilentAudio();
+
+
 
 class OrderedDict{
 	constructor(){
@@ -48,12 +59,12 @@ class Utils{
 		return '▶ ' + date.join('-');
 	}
 	static pretty_str(str, max_len=25){
-		const reg = /[\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef]/g;
+		const reg = /[\u4E00-\u9FFF\u3400-\u4DBF\U00020000-\U0002A6DF\U0002A700-\U0002B73F\U0002B740-\U0002B81F\U0002B820-\U0002CEAF\U0002CEB0-\U0002EBEF\U00030000-\U0003134F\U00031350-\U000323AF\U0002EBF0-\U0002EE5F\U0002F800-\U0002FA1F\uF900-\uFAFF\u2F00-\u2FDF\u2E80-\u2EFF\u31C0-\u31EF\u2FF0-\u2FFF]/;
 		let cnt = 0;
 		for (let i = 0; i < str.length; i += 1){
-			cnt += reg.test(str[i]) ? 2 : 1
-			if (cnt > max_len - 1){
-				return str.substring(0, i) + '…'
+			cnt += reg.test(str[i]) ? 2 : 1;
+			if (i != str.length - 1 && cnt > max_len - 1){
+				return str.substring(0, i) + '…';
 			}
 		}
 		return str;
@@ -283,7 +294,7 @@ class DataLoader{
 			in_pt = Utils.str2sec(item[3]);
 			out_pt = Utils.str2sec(item[4]);
 			title = item[5];
-			tags = item[6];
+			tags = item.length >= 7 ? item[6] : '';
 
 			href = 'https://www.bilibili.com/video/' + bvid + '/?t=' + in_pt + '&p=' + page.substring(1);
 			this.add_song({
@@ -473,11 +484,12 @@ class Table{
 			'.song_tags span{margin:0px 2px; padding:0px 2px; border:2px dashed gray; border-radius:40% 0%; background:lightyellow}',
 			'span.面白い{color:purple}',
 			'span.儿歌{color:green}',
+			'span.录播组{color:NavajoWhite;background:gray}',
 			'span.薯片水獭{color:Turquoise;background:gray}',
 			'span.蝴蝶谷逸_{color:lightyellow;background:darkgray}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 			'span.真栗{color:chocolate;text-shadow:0 0 2px orange}',
-			'span.BAN{color:red}',
+			'span.BAN{color:red; font-weight:bold; text-decoration:line-through;}',
 			'h2{color:DeepSkyBlue;display:flex;justify-content:center;margin:0;text-shadow:0 0 5px DarkTurquoise;text-align:center}',
 			'.td_hidden, .tr_hidden{display:none}'
 		]);
@@ -563,7 +575,7 @@ class Table{
 				});
 				if (author) {
 					span = Utils.create('span', [author], {'title': author});
-					span.innerText = Utils.pretty_str(author, 4);
+					span.innerText = Utils.pretty_str(author, 6);
 					td.appendChild(span);
 				} else if (tags.length == 0){
 					td.innerText = '----';
@@ -1249,6 +1261,7 @@ function main(){
 	loader.json2songs_timer(loader.load_data('./Monedula.json'), video_author='Monedula');
 	loader.json2songs_timer(loader.load_data('./蝴蝶谷逸_.json'), video_author='蝴蝶谷逸_');
 	loader.csv2songs_timer(loader.load_data('./薯片水獭.csv'), video_author='薯片水獭');
+	loader.csv2songs_timer(loader.load_data('./真栗栗录播组.csv'), video_author='录播组');
 	loader.sort_songs();
 	console.log(loader.length);
 	console.log(Object.keys(loader.ordered_songs).length);
