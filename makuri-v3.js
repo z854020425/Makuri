@@ -900,13 +900,16 @@ class Drawers{
 			'.highlighted{font-weight:bolder; animation:highlight 3s infinite;}',
 			'@keyframes highlight{0%{color:red;} 14%{color:orange} 29%{color:yellow} 43%{color:green} 57%{color:cyan} 71%{color:blue} 86%{color:purple} 100%{color:red}}',
 
-			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:1px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none}',
+			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:0px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none; position:relative}',
 			'#div_btn_lb div:hover{opacity:1}',
 			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column;}',
 			'#div_btn_lb .btn_active{color:green; opacity:1; font-weight:bolder;}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch{z-index:10; border-radius:50%; height:1.5rem; width:1.5rem; padding:0; cursor:pointer; border-width:1px; text-align:center}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_fore{background:white; color:black}',
-			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_back{background:grey; color:white}'
+			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_back{background:grey; color:white}',
+			'.div_btn svg{position:absolute; top:0; left:0; width:3rem; height:3rem; pointer-events:none;}',
+			'.div_btn svg rect{fill:none; width:3rem; height:3rem; stroke-width:4; stroke:ForestGreen; stroke-dasharray:12rem; stroke-dashoffset:0; transition: stroke-dashoffset 2.5s ease;}',
+			'.div_btn:hover svg rect{stroke-dasharray:12rem; stroke-dashoffset:24rem;}'
 		]);
 		let div_drawer = Utils.create('div', ['div_drawer'], {});
 		document.querySelector('h2').insertAdjacentElement('afterend', div_drawer);
@@ -922,21 +925,35 @@ class Drawers{
 		div_drawer.appendChild(btn_drawClip);
 
 		//left-bottom
+		let svg, rect;
 		let div_lb = Utils.create('div', [], {'id': 'div_btn_lb'})
 		document.body.appendChild(div_lb);
 
 		let div, btn, div_text;
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawSong'});
-		div.innerHTML = '♪<br />歌曲';
 		div.addEventListener('click', this.draw_song);
 		div_lb.appendChild(div);
+		svg = Utils.create('svg', [], {});
+		div.appendChild(svg);
+		rect = Utils.create('rect', [], {});
+		svg.appendChild(rect);
+		div.innerHTML += '♪<br />歌曲';
+
 
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawClip'});
-		div.innerHTML = '✄<br />切片';
 		div.addEventListener('click', this.draw_clip);
 		div_lb.appendChild(div);
+		svg = Utils.create('svg', [], {});
+		div.appendChild(svg);
+		rect = Utils.create('rect', [], {});
+		svg.appendChild(rect);
+		div.innerHTML += '✄<br />切片';
 
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawClipCycle'});
+		svg = Utils.create('svg', [], {});
+		div.appendChild(svg);
+		rect = Utils.create('rect', [], {});
+		svg.appendChild(rect);
 		btn = Utils.create('button', ['btn_fb_switch', PLAY_FOREGROUND ? 'btn_fore' : 'btn_back'], {'id': 'btn_fbSwitch'});
 		btn.innerText = PLAY_FOREGROUND ? 'F' : 'B';
 		btn.title = 'F: 切片视频前台切换\nB: 切片视频后台切换'
@@ -970,7 +987,11 @@ class Drawers{
 		div_lb.appendChild(div);
 
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_backToTop'});;
-		div.innerHTML = '▲<br />顶部';
+		svg = Utils.create('svg', [], {});
+		div.appendChild(svg);
+		rect = Utils.create('rect', [], {});
+		svg.appendChild(rect);
+		div.innerHTML += '▲<br />顶部';
 		div.addEventListener('click', function(e){
 			let video = document.querySelector('video.video_snow');
 			if (video) {
@@ -1246,7 +1267,7 @@ class Notification{
 	mount(){
 		Utils.add_styles([
 			'#div_notify{position:fixed; top:0; right:3rem; height:0vh; width:25rem;}',
-			'.notification{height:9.2vh; width:100%; top:-9.2vh; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border:5px double brown;margin:0.4vh 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s, slide 5s;}',
+			'.notification{height:9.2vh; width:100%; top:-9.2vh; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border:5px double brown;margin:0.4vh 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s ease, slide 5s; ease}',
 			'@keyframes disappear{0%{opacity:0} 8%{opacity:1} 70%{opacity:1} 100%{opacity:0.3}}',
 			'@keyframes slide{0%{top:100vh} 8%{top:0} 95%{top:0} 100%{top:-22%}}',
 			'.notification span{color:DarkGoldenRod; font-size:1.2rem; text-align:center;}'
@@ -1275,36 +1296,82 @@ class Notification{
 	}
 }
 
+// class Cursor{
+// 	constructor(){
+// 		this.mount();
+// 	}
+// 	mount(){
+// 		Utils.add_styles([
+// 			'#cursor{position:fixed; top:0; left:0; pointer-events:none; z-index:-1}',
+// 			'#cursor .box{position:absolute; top:-3rem; left:0; width:0.5rem; height:0.3rem; background:#00ff9a; box-shadow:0 0 1.5rem #00ff9a, 0 0 1.5rem #00ff9a; transform-origin:center 3rem;}'
+// 		])
+// 		let cursor = Utils.create('div', [], {'id': 'cursor'});
+// 		const N = 36;
+// 		const deg_each = Math.PI * 2 / N;
+// 		for (let i = 0; i < N; i++){
+// 			let span = Utils.create('span', ['box'], {});
+// 			span.style.setProperty('--i', i);
+// 			span.style.filter = `hue-rotate(${i * 360 / N}deg)`;
+// 			cursor.appendChild(span);
+// 		}
+// 		document.body.appendChild(cursor);
+// 		document.addEventListener('mousemove', e=>{
+// 			gsap.to('.box', {
+// 				x: e.clientX,
+// 				y: e.clientY,
+// 				rotate: (idx) => (idx) * 10,
+// 				stagger: 0.05
+// 			})
+// 		})
+// 	}
+// }
+
 class Cursor{
 	constructor(){
+		this.points = this.load_points('./points.json');
 		this.mount();
+	}
+	load_points(path){
+		let request = new XMLHttpRequest(path);
+		request.open('GET', path, false);
+		request.send(null);
+		if (request.status == 404){
+			return;
+		}
+		if (request.responseText.indexOf('<!DOCTYPE html>') != -1) {
+			return;
+		}
+		return JSON.parse(request.responseText);
 	}
 	mount(){
 		Utils.add_styles([
 			'#cursor{position:fixed; top:0; left:0; pointer-events:none; z-index:-1}',
-			'#cursor .box{position:absolute; top:-3rem; left:0; width:0.5rem; height:0.3rem; background:#00ff9a; box-shadow:0 0 1.5rem #00ff9a, 0 0 1.5rem #00ff9a; transform-origin:center 3rem;}'
+			'#cursor .point{position:absolute; top:0; left:-0.5rem; width:0.3rem; height:0.3rem; border-radius:50%; box-shadow:0 0 0.3rem SeaShell, 0 0 0.8rem PapayaWhip; }'
 		])
-		document.addEventListener('DOMContentLoaded', ()=>{			
-			let cursor = Utils.create('div', [], {'id': 'cursor'});
-			const N = 36;
-			const deg_each = Math.PI * 2 / N;
-			for (let i = 0; i < N; i++){
-				let span = Utils.create('span', ['box'], {});
-				span.style.setProperty('--i', i);
-				span.style.filter = `hue-rotate(${i * 360 / N}deg)`;
-				cursor.appendChild(span);
-			}
-			document.body.appendChild(cursor);
-		});
+		let cursor = Utils.create('div', [], {'id': 'cursor'});
+		Object.keys(this.points)
+		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
+		.forEach(idx => {
+			let x = this.points[idx]['x'];
+			let y = this.points[idx]['y'];
+			let rgba = this.points[idx]['rgba'];
+			rgba = 'rgba(' + rgba.join(',') + ')';
+			let span = Utils.create('span', ['point'], {});
+			span.style.setProperty('--i', parseInt(idx));
+			span.style.left = x * 0.3 + 'rem';
+			span.style.top  = y * 0.3 + 'rem';
+			span.style.transform = 'translate(100vw, 100vh)';
+			span.style.background = rgba;
+			cursor.appendChild(span);
+		})
+		document.body.appendChild(cursor);
 		document.addEventListener('mousemove', e=>{
-			gsap.to('.box', {
+			gsap.to('.point', {
 				x: e.clientX,
 				y: e.clientY,
-				rotate: (idx) => (idx) * 10,
-				stagger: 0.05
+				stagger: 0.002
 			})
 		})
-
 	}
 }
 
@@ -1342,7 +1409,6 @@ function main(){
 
 	let social_platforms = new SocialPlatforms();
 	let img_rb = new Image_RB('./sleep.png');
-	// let mouse_follow = new MouseFollow();
 
 	let cursor = new Cursor();
 
