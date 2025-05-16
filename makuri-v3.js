@@ -216,6 +216,9 @@ class DataLoader{
 		if (request.status == 404){
 			return '';
 		}
+		if (request.responseText.indexOf('<!DOCTYPE html>') != -1) {
+			return '';
+		}
 		return request.responseText;
 	}
 	json2songs_timer(data, video_author=null){
