@@ -1,7 +1,7 @@
 // TODO: Keep-Alive
 // 邪道 后面研究下web workers+service worker
 
-
+setInterval(() => {console.log(1)}, 1000);
 function keepAliveBySilentAudio(){
 	let audio = document.createElement('audio');
 	audio.src = './silent.mp3';
@@ -309,7 +309,7 @@ class DataLoader{
 			page = item[2] === '' ? page : item[2]
 			in_pt = Utils.str2sec(item[3]);
 			out_pt = Utils.str2sec(item[4]);
-			console.log(title);
+			// console.log(title);
 			title = item[5];
 			tags = item.length >= 7 ? item[6].trim() : '';
 
@@ -449,6 +449,16 @@ class DataLoader{
 			return x2[0] - x1[0];
 		})
 		console.log(arr.slice(0, 10));
+	}
+	get_total_duration(){
+		let duration = 0, dur;
+		this.ordered_songs.keys().forEach(title => {
+			this.ordered_songs[title].forEach(item => {
+				dur = item?.['length'];
+				duration += dur ? Utils.str2sec(dur) : 0;
+			})
+		})
+		console.log('Total DUR: ' + Utils.sec2str(duration));
 	}
 }
 
@@ -1227,104 +1237,6 @@ class Image_RB{
 	}
 }
 
-// class MouseFollow{
-// 	constructor(){
-// 		this.follower = null;
-// 		this.follower_x = null;
-// 		this.follower_y = null;
-// 		this.mouse_x = null;
-// 		this.mouse_y = null;
-// 		this.is_disappearing = false;
-// 		this.offset_x = 40;
-// 		this.offset_y = 40;
-
-// 		this.mount();
-// 	}
-// 	mount(){
-// 		Utils.add_styles([
-// 			'.mouse_follow{position:fixed; height:4rem; width:4rem; top:-1000px; left:-1000px; background:red; z-index:-1;}',
-// 			'.mouse_follow_appear{opacity:0.9}',
-// 			'.mouse_follow_disappear{opacity:0; animation:follower_disappear 2s ease;}',
-// 			'@keyframes follower_disappear{0%{opacity:0.9} 100%{opacity:0}}',
-// 			'.face_left{transform: scaleX(-1);}',
-// 			'.face_right{transform: scaleX(1);}',
-// 			'.img_follow{width:100%;height:100%}'
-// 		])
-// 		let div = Utils.create('div', ['mouse_follow'], {});
-// 		document.body.appendChild(div);
-// 		let img = Utils.create('img', ['img_follow'], {'src': 'follower.png'});
-// 		div.appendChild(img);
-
-
-// 		this.follower = div;
-// 		let computed_style = window.getComputedStyle(div)
-// 		this.follower_wh = computed_style.width;
-// 		this.follower_hh = computed_style.height;
-// 		this.follower_wh = parseInt(this.follower_wh.substring(0, this.follower_wh.length - 2)) / 2;
-// 		this.follower_hh = parseInt(this.follower_hh.substring(0, this.follower_hh.length - 2)) / 2;
-// 		// console.log(this.follower_wh, this.follower_hh);
-// 		window.addEventListener('mousemove', (e) => {
-// 			this.mouse_x = e.clientX;
-// 			this.mouse_y = e.clientY;
-// 		})
-// 		setInterval(()=>{this.follow()}, 10);
-// 	}
-// 	follow(){
-// 		// console.log(this)
-// 		// console.log(this.mouse_x, this.follower_x, this.is_disappearing)
-// 		if (this.mouse_x == null && this.mouse_y == null){
-// 			return;
-// 		}
-// 		if (this.follower_x == null || this.follower_y == null){
-// 			this.appear();
-// 			this.follower_x = this.mouse_x;
-// 			this.follower_y = this.mouse_y;
-// 			this.follower.style.left = this.follower_x - this.follower_wh + 'px';
-// 			this.follower.style.top = this.follower_y - this.follower_hh + 'px';
-// 			return;		
-// 		}
-// 		if (Math.abs(this.mouse_x - this.follower_x) > this.offset_x || Math.abs(this.mouse_y - this.follower_y) > this.offset_y){
-// 			this.appear();
-// 			this.is_disappearing = false;
-// 		}
-// 		if (this.is_disappearing) {
-// 			this.disappear()
-// 			return;
-// 		}
-// 		this.follower_x += Math.max(Math.min(this.mouse_x - this.follower_x, this.offset_x), -this.offset_x);
-// 		this.follower_y += Math.max(Math.min(this.mouse_y - this.follower_y, this.offset_y), -this.offset_y);
-// 		if (this.follower_x == this.mouse_x && this.follower_y == this.mouse_y){
-// 			this.is_disappearing = true;
-// 		}
-// 		if (this.mouse_x < this.follower_x){
-// 			this.face('right');
-// 		} else if (this.mouse_x > this.follower_x){			
-// 			this.face('left');
-// 		}
-// 		this.follower.style.left = this.follower_x - this.follower_wh + 'px';
-// 		this.follower.style.top = this.follower_y - this.follower_hh + 'px';
-
-// 	}
-// 	appear(){
-// 		this.follower.classList.remove('mouse_follow_disappear');
-// 		this.follower.classList.add('mouse_follow_appear');
-// 	}
-// 	disappear(){
-// 		this.follower.classList.remove('mouse_follow_appear');
-// 		this.follower.classList.add('mouse_follow_disappear');
-// 	}
-// 	face(dir){
-// 		if (dir == 'right'){
-// 			this.follower.classList.remove('face_left');
-// 			this.follower.classList.add('face_right');
-// 		} else if (dir == 'left'){
-// 			this.follower.classList.add('face_left');
-// 			this.follower.classList.remove('face_right');
-// 		}
-// 	}
-// }
-
-
 class Notification{
 	constructor(){
 		this.timeouts = [];
@@ -1363,6 +1275,39 @@ class Notification{
 	}
 }
 
+class Cursor{
+	constructor(){
+		this.mount();
+	}
+	mount(){
+		Utils.add_styles([
+			'#cursor{position:fixed; top:0; left:0; pointer-events:none; z-index:-1}',
+			'#cursor .box{position:absolute; top:-3rem; left:0; width:0.5rem; height:0.3rem; background:#00ff9a; box-shadow:0 0 1.5rem #00ff9a, 0 0 1.5rem #00ff9a; transform-origin:center 3rem;}'
+		])
+		document.addEventListener('DOMContentLoaded', ()=>{			
+			let cursor = Utils.create('div', [], {'id': 'cursor'});
+			const N = 36;
+			const deg_each = Math.PI * 2 / N;
+			for (let i = 0; i < N; i++){
+				let span = Utils.create('span', ['box'], {});
+				span.style.setProperty('--i', i);
+				span.style.filter = `hue-rotate(${i * 360 / N}deg)`;
+				cursor.appendChild(span);
+			}
+			document.body.appendChild(cursor);
+		});
+		document.addEventListener('mousemove', e=>{
+			gsap.to('.box', {
+				x: e.clientX,
+				y: e.clientY,
+				rotate: (idx) => (idx) * 10,
+				stagger: 0.05
+			})
+		})
+
+	}
+}
+
 
 function main(){
 	const TAGS = {
@@ -1381,6 +1326,7 @@ function main(){
 	loader.json2songs_timer(loader.load_data('./真栗栗录播组.json'), video_author='录播组');
 	loader.sort_songs();
 	// loader.get_cnts();
+	loader.get_total_duration();
 	console.log(loader.length);
 	console.log(Object.keys(loader.ordered_songs).length);
 	console.log(loader.uncollected_songs);
@@ -1397,6 +1343,8 @@ function main(){
 	let social_platforms = new SocialPlatforms();
 	let img_rb = new Image_RB('./sleep.png');
 	// let mouse_follow = new MouseFollow();
+
+	let cursor = new Cursor();
 
 }
 console.time('MIAN');
