@@ -468,9 +468,9 @@ class NewWin{
 	get open(){
 		return this.play_foreground ? this.open_url : this.change_url;
 	}
-	change_url(url, duration=null, is_clip=false){
+	change_url(url, duration=null, is_cycle=false){
 		if (!this.isAvailable){
-			this.open_url(url, duration, is_clip);
+			this.open_url(url, duration, is_cycle);
 			return;
 		}
 		if (this.timeout_close){
@@ -478,18 +478,24 @@ class NewWin{
 			this.timeout_close = null;
 		}
 		this.new_win.location.href = url;
+		if (!is_cycle && duration != null) {
+			this.timeout_close = setTimeout(()=>{
+				this.close(true);
+			}, (Utils.str2sec(duration) + 0.5) * 1000);
+		}
+
 	}
-	open_url(url, duration=null, is_clip=false){
+	open_url(url, duration=null, is_cycle=false){
 		if (this.timeout_close) {
 			clearTimeout(this.timeout_close);
 			this.timeout_close = null;
 		}
 		this.close();
 		this.new_win = window.open(url);
-		if (is_clip && duration != null) {
+		if (!is_cycle && duration != null) {
 			this.timeout_close = setTimeout(()=>{
-				this.close();
-			}, (str2sec(duration) + 0.5) * 1000);
+				this.close(true);
+			}, (Utils.str2sec(duration) + 0.5) * 1000);
 		}
 	}
 	set_foreground(flag) {	
@@ -600,6 +606,7 @@ class Table{
 				link = Utils.create('a', ['song_href'], {
 					'data-href': href,
 					'data-title': title,
+					'data-length': length,
 					'data-isClip': item['is_clip']
 				});
 				link.innerText = date;
@@ -613,7 +620,7 @@ class Table{
 					}
 					document.title = '『' + this.getAttribute('data-title') + '』';
 					// new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), this.getAttribute('data-isClip'));
-					new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), true);
+					new_win.open(this.getAttribute('data-href'), this.getAttribute('data-length'), false);
 				});
 				td.appendChild(link);
 				tr.appendChild(td);
@@ -840,7 +847,7 @@ class Drawers{
 		this.clip.scrollIntoView();
 		console.log(this.clip.getAttribute('data-title'), this.clip.innerText, this.dur.innerText, Utils.str2sec(this.dur.innerText));	
 		document.title = '『' + this.clip.getAttribute('data-title') + '』';
-		this.new_win.open(this.clip.getAttribute('data-href'), this.clip.getAttribute('data-length'), this.clip.getAttribute('data-isClip'));
+		this.new_win.open(this.clip.getAttribute('data-href'), this.clip.getAttribute('data-length'), true);
 		return ms;
 	}
 	draw_clip_cycle(){
@@ -1006,7 +1013,7 @@ class SearchBox{
 			opt.value = value;
 			select.appendChild(opt);
 		});
-		select.addEventListener('change', (e) => {
+		select.addEventListener('click', (e) => {
 			let inp = document.querySelector('.input_search');
 			inp.value = e.target.value;
 			this.search_timer(e);
@@ -1016,6 +1023,8 @@ class SearchBox{
 
 		let inp = Utils.create('input', ['input_search'], {'type': 'text', 'placeholder': '搜索'});
 		inp.addEventListener('keyup', (e) => {
+			let select = document.querySelector('#select_presets');
+			select.value = -1;
 			this.search_timer(e);
 		})
 		div_search.appendChild(inp);
@@ -1198,7 +1207,7 @@ class Image_RB{
 	mount(){
 		Utils.add_styles([
 		'img.img_sleep{opacity:0.65;position:relative;bottom:0; height:12rem; width:auto;transform: scaleX(-1);}',
-		'#div_img_rb{position:fixed; right:0; bottom:0; z-index:-1;}'
+		'#div_img_rb{position:fixed; right:0; bottom:0; z-index:-1; display:flex;}'
 	]);
 		let div_rb = Utils.create('div', [], {'id': 'div_img_rb'});
 		document.body.appendChild(div_rb);
@@ -1309,13 +1318,13 @@ class Image_RB{
 class Notification{
 	constructor(){
 		this.timeouts = [];
-		this.max_cnt = 5;
+		this.max_cnt = 8;
 		this.mount();
 	}
 	mount(){
 		Utils.add_styles([
-			'#div_notify{position:fixed; top:0; right:3rem; height:50vh; width:25rem;}',
-			'.notification{height:18%; width:100%; top:-22%; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border:5px double brown;margin:1% 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s, slide 5s;}',
+			'#div_notify{position:fixed; top:0; right:3rem; height:0vh; width:25rem;}',
+			'.notification{height:9.2vh; width:100%; top:-9.2vh; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border:5px double brown;margin:0.4vh 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s, slide 5s;}',
 			'@keyframes disappear{0%{opacity:0} 8%{opacity:1} 70%{opacity:1} 100%{opacity:0.3}}',
 			'@keyframes slide{0%{top:100vh} 8%{top:0} 95%{top:0} 100%{top:-22%}}',
 			'.notification span{color:DarkGoldenRod; font-size:1.2rem; text-align:center;}'
@@ -1349,7 +1358,7 @@ function main(){
 	const TAGS = {
 	"BAN": ['百万个吻', '骗赖', '你跟我比夹夹', '嘉宾', '香水有毒', '纤夫的爱', '天上掉下个猪八戒', '通天大道宽又阔', '大哥欢迎你', '好汉歌'],
 	"面白い": ['百万个吻', '骗赖', '香水有毒', '通天大道宽又阔', '你跟我比夹夹', 'TMD我爱你', '闹啥子嘛闹', '810975', '忐忑', '蕉蕉'],
-	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所']
+	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所', '加油鸭', '巴啦啦小魔仙', '小小鹿']
 }
 
 	console.time('LOAD JSON/CSV');
