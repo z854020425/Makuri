@@ -975,6 +975,9 @@ class SearchBox{
 		this.songs = songs;
 		this.table = table;
 		this.prev_values = null;
+
+		this.inp_search = null;
+		this.select_search = null;
 		this.mount();
 	}
 	mount(){
@@ -982,7 +985,7 @@ class SearchBox{
 			'.div_search{display:flex; justify-content:center;}',
 			'.hidden{display:none}',
 			'.input_search{min-width:15rem; margin:0 0.5rem;}',
-			'#select_presets option{text-align:right}'
+			'#select_presets option{text-align:center}'
 		]);
 		let div_search = Utils.create('div', ['div_search'], {});
 		document.querySelector('.div_drawer').insertAdjacentElement('afterend', div_search);
@@ -1014,19 +1017,23 @@ class SearchBox{
 			select.appendChild(opt);
 		});
 		select.addEventListener('click', (e) => {
-			let inp = document.querySelector('.input_search');
-			inp.value = e.target.value;
+			if (this.inp_search) {
+				this.inp_search.value = e.target.value;
+			}
 			this.search_timer(e);
 		})
 		div_search.appendChild(select);
+		this.select_search = select;
 
 
 		let inp = Utils.create('input', ['input_search'], {'type': 'text', 'placeholder': '搜索'});
 		inp.addEventListener('keyup', (e) => {
-			let select = document.querySelector('#select_presets');
-			select.value = -1;
+			if (this.select_search) {
+				this.select_search.value = -1;
+			}
 			this.search_timer(e);
-		})
+		});
+		this.inp_search = inp;
 		div_search.appendChild(inp);
 	}
 	is_filtered(item, vals){
