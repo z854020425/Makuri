@@ -555,6 +555,7 @@ class Table{
 			'.song_tr_last td{padding-bottom:8px}',
 			'.song_tr_last{border-bottom:2px solid black}',
 			'.song_title{color:deeppink;padding:8px; cursor:pointer; user-select:none;}',
+			'.song_title:hover{font-weight:bolder}',
 			'.song_href{text-decoration:none; color:brown; cursor:pointer}',
 			'.song_length{color:green; min-width:70px; text-align:center}',
 			'.song_singer{color:orange; text-align:center}',
@@ -562,6 +563,7 @@ class Table{
 			'.song_ranks{color: orange; min-width:70px; text-align:center}',
 			'.song_tags{color: blue; min-width:70px; display:flex; flex-direction:row; justify-content:flex-start; padding-left:2rem}',
 			'.song_date{height:4vh; text-align:center; min-width:110px; user-select:none}',
+			'.song_date:hover{font-weight:bolder}',
 			'.song_tags span{margin:0px 2px; padding:0px 2px; border:2px dashed gray; border-radius:40% 0%; background:lightyellow}',
 			'span.面白い{color:purple}',
 			'span.儿歌{color:green}',
@@ -1296,36 +1298,6 @@ class Notification{
 	}
 }
 
-// class Cursor{
-// 	constructor(){
-// 		this.mount();
-// 	}
-// 	mount(){
-// 		Utils.add_styles([
-// 			'#cursor{position:fixed; top:0; left:0; pointer-events:none; z-index:-1}',
-// 			'#cursor .box{position:absolute; top:-3rem; left:0; width:0.5rem; height:0.3rem; background:#00ff9a; box-shadow:0 0 1.5rem #00ff9a, 0 0 1.5rem #00ff9a; transform-origin:center 3rem;}'
-// 		])
-// 		let cursor = Utils.create('div', [], {'id': 'cursor'});
-// 		const N = 36;
-// 		const deg_each = Math.PI * 2 / N;
-// 		for (let i = 0; i < N; i++){
-// 			let span = Utils.create('span', ['box'], {});
-// 			span.style.setProperty('--i', i);
-// 			span.style.filter = `hue-rotate(${i * 360 / N}deg)`;
-// 			cursor.appendChild(span);
-// 		}
-// 		document.body.appendChild(cursor);
-// 		document.addEventListener('mousemove', e=>{
-// 			gsap.to('.box', {
-// 				x: e.clientX,
-// 				y: e.clientY,
-// 				rotate: (idx) => (idx) * 10,
-// 				stagger: 0.05
-// 			})
-// 		})
-// 	}
-// }
-
 class Cursor{
 	constructor(){
 		this.points = this.load_points('./points.json');
@@ -1346,7 +1318,9 @@ class Cursor{
 	mount(){
 		Utils.add_styles([
 			'#cursor{position:fixed; top:0; left:0; pointer-events:none; z-index:-1}',
-			'#cursor .point{position:absolute; top:0; left:-0.5rem; width:0.3rem; height:0.3rem; border-radius:50%; box-shadow:0 0 0.3rem SeaShell, 0 0 0.8rem PapayaWhip; }'
+			'#cursor .point{position:absolute; top:0; left:-0.5rem; width:0.3rem; height:0.3rem; border-radius:50%; box-shadow:0 0 0.3rem SeaShell, 0 0 0.8rem PapayaWhip; }',
+			'#cursor .point.disappear{animation: disappear 1s linear forwards}',
+			'@keyframes disappear{0%{opacity:1; tranform} 100%{}}'
 		])
 		let cursor = Utils.create('div', [], {'id': 'cursor'});
 		Object.keys(this.points)
@@ -1356,22 +1330,26 @@ class Cursor{
 			let y = this.points[idx]['y'];
 			let rgba = this.points[idx]['rgba'];
 			rgba = 'rgba(' + rgba.join(',') + ')';
+			let scale = this.points[idx]?.['scale'] ?? 1;
+			// console.log(scale)
 			let span = Utils.create('span', ['point'], {});
 			span.style.setProperty('--i', parseInt(idx));
 			span.style.left = x * 0.3 + 'rem';
 			span.style.top  = y * 0.3 + 'rem';
-			span.style.transform = 'translate(100vw, 100vh)';
+			let x0 = Math.random() * 20 + 100;
+			let y0 = Math.random() * 10 + 100;
+			span.style.transform = `translate(${x0}vw, ${y0}vh) scale(${scale})`;
 			span.style.background = rgba;
 			cursor.appendChild(span);
 		})
 		document.body.appendChild(cursor);
-		document.addEventListener('mousemove', e=>{
+		document.addEventListener('mousemove', e => {
 			gsap.to('.point', {
 				x: e.clientX,
 				y: e.clientY,
-				stagger: 0.002
+				stagger: 0.0025
 			})
-		})
+		});
 	}
 }
 
