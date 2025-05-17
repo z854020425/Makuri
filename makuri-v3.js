@@ -476,6 +476,7 @@ class NewWin{
 		if ((force || this.play_foreground) && this.isAvailable){
 			this.new_win.close();
 			this.new_win = null;
+			document.title = 'Makuri';
 		}
 	}
 	get open(){
@@ -905,12 +906,12 @@ class Drawers{
 			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:0px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none; position:relative}',
 			'#div_btn_lb div:hover{opacity:1}',
 			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column;}',
-			'#div_btn_lb .btn_active{color:green; opacity:1; font-weight:bolder;}',
+			'#div_btn_lb .btn_active{color:GoldenRod; opacity:1; font-weight:bolder; text-shadow:0 0 0.1rem brown;}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch{z-index:10; border-radius:50%; height:1.5rem; width:1.5rem; padding:0; cursor:pointer; border-width:1px; text-align:center}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_fore{background:white; color:black}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_back{background:grey; color:white}',
 			'.div_btn svg{position:absolute; top:0; left:0; width:3rem; height:3rem; pointer-events:none;}',
-			'.div_btn svg rect{fill:none; width:3rem; height:3rem; stroke-width:4; stroke:ForestGreen; stroke-dasharray:12rem; stroke-dashoffset:0; transition: stroke-dashoffset 2.5s ease;}',
+			'.div_btn svg rect{fill:none; width:3rem; height:3rem; stroke-width:4; stroke:DarkGoldenRod; stroke-dasharray:12rem; stroke-dashoffset:0; transition: stroke-dashoffset 2.5s ease;}',
 			'.div_btn:hover svg rect{stroke-dasharray:12rem; stroke-dashoffset:24rem;}'
 		]);
 		let div_drawer = Utils.create('div', ['div_drawer'], {});
@@ -1021,7 +1022,9 @@ class SearchBox{
 			'.div_search{display:flex; justify-content:center;}',
 			'.hidden{display:none}',
 			'.input_search{min-width:15rem; margin:0 0.5rem;}',
-			'#select_presets option{text-align:center}'
+			'#select_presets option{text-align:center}',
+			'.div_search a{height:1.2rem; width:1.2rem; align-items:center; display:flex; justify-content:center; border-radius:50%; border:2px solid grey; font-weight:500; color:grey; text-decoration:none; cursor:pointer; opacity:0.6}',
+			'.div_search a:hover{opacity:1}',
 		]);
 		let div_search = Utils.create('div', ['div_search'], {});
 		document.querySelector('.div_drawer').insertAdjacentElement('afterend', div_search);
@@ -1071,6 +1074,13 @@ class SearchBox{
 		});
 		this.inp_search = inp;
 		div_search.appendChild(inp);
+
+		let a = Utils.create('a', ['link_guide'], {});
+		a.innerText = '?';
+		a.addEventListener('click', e => {
+			 window.open('https://www.bilibili.com/video/BV1StEPzsEbK/');
+		})
+		div_search.appendChild(a);
 	}
 	is_filtered(item, vals){
 		let title, date, tag, singer, lang, author;
@@ -1187,11 +1197,13 @@ class SocialPlatforms{
 			}, {
 				'name': 'YouTube',
 				'icon': 'https://www.youtube.com/s/desktop/3747f4fc/img/logos/favicon_144x144.png',
+				// 'icon': 'https://s1.aigei.com/src/img/png/46/46e4d6a5e62b4b9497432fce6703ebc8.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:F9zbgQl_PX8Fw9kHd8ghtXuzocg=',
 				'href': 'https://www.youtube.com/@makuri0731',
 				'color': 'rgb(243,0,49)'
 			}, {
 				'name': 'instagram',
 				'icon': 'https://static.cdninstagram.com/rsrc.php/v4/yI/r/VsNE-OHk_8a.png',
+				// 'icon': 'https://s1.aigei.com/src/img/png/9c/9c38c5c69c244cb48457ac975eb829fb.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:pAa_1Zek7DGJ-MfCrpDGLZL20rY=',
 				'href': 'https://www.instagram.com/makuri0731/',
 				'color': 'rgb(249,37,116)'
 			}, {
@@ -1299,8 +1311,8 @@ class Notification{
 }
 
 class Cursor{
-	constructor(){
-		this.points = this.load_points('./points.json');
+	constructor(path){
+		this.points = this.load_points(path);
 		this.mount();
 	}
 	load_points(path){
@@ -1358,7 +1370,7 @@ function main(){
 	const TAGS = {
 	"BAN": ['百万个吻', '骗赖', '你跟我比夹夹', '嘉宾', '香水有毒', '纤夫的爱', '天上掉下个猪八戒', '通天大道宽又阔', '大哥欢迎你', '好汉歌'],
 	"面白い": ['百万个吻', '骗赖', '香水有毒', '通天大道宽又阔', '你跟我比夹夹', 'TMD我爱你', '闹啥子嘛闹', '810975', '忐忑', '蕉蕉'],
-	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所', '加油鸭', '巴啦啦小魔仙', '小小鹿']
+	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所', '加油鸭', '巴啦啦小魔仙', '小小鹿', '别看我是一只羊']
 }
 
 	console.time('LOAD JSON/CSV');
@@ -1388,7 +1400,7 @@ function main(){
 	let social_platforms = new SocialPlatforms();
 	let img_rb = new Image_RB('./sleep.png');
 
-	let cursor = new Cursor();
+	let cursor = new Cursor('./points.json');
 
 }
 console.time('MIAN');
