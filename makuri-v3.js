@@ -414,7 +414,12 @@ class DataLoader{
 				lang = 'TBD.';
 			}
 		}
-	
+
+		let tag = tags.join(' ').toLowerCase();
+		let is_song = true;
+		is_song &= !RegExp('舞|cos展示').test(tag);
+		is_song &= !RegExp('\\+').test(title);
+			
 		this.songs[title].push({
 			'title': chs == '' ? title.toLowerCase() : title.toLowerCase() + '|' + chs.toLowerCase(),
 			'date': '▶ ' + Utils.pretty_date(date),
@@ -423,11 +428,11 @@ class DataLoader{
 			'singer': singer,
 			'lang': lang,
 			'tags': tags,
-			'tag': tags.join(' ').toLowerCase(),
+			'tag': tag,
 			'author': author,
 			'is_clip': is_clip,
 			'chs': chs,
-			'is_song': !RegExp('舞|cos展示').test(tags.join(' ').toLowerCase())
+			'is_song': is_song
 		});
 	}
 	get uncollected_songs(){
@@ -673,6 +678,9 @@ class Table{
 			// let td_title = Utils.create('td', ['song_title'], {});
 			// td_title.innerText = Utils.pretty_str(title);
 			// songs[title]['td_title'] = td_title;
+			if (items.some(item => item['is_song'])){
+				cnt_songs += 1;
+			}
 
 			items.forEach((item, idx) => {
 				let tr, href, date, length, singer, lang, tags, author, td, link, span, chs;
@@ -766,7 +774,6 @@ class Table{
 				if (idx == 0){
 					td_title.classList.remove('td_hidden');
 					td_title.setAttribute('rowspan', String(songs[title].length));
-					cnt_songs += 1;
 				} else {
 					td_title.classList.add('td_hidden');
 				}
@@ -1303,7 +1310,7 @@ class SearchBox{
 	}
 	search_timer(e){
 		console.time('search');
-		console.log(this);
+		// console.log(this);
 		let ret = this.search(e);
 		console.timeEnd('search');
 		return ret;
@@ -1642,15 +1649,15 @@ function main(){
 	loader.json2songs_timer(loader.load_data('./assets/jsons/蝴蝶谷逸_.json'), video_author='蝴蝶谷逸');
 	loader.csv2songs_timer(loader.load_data('./assets/csvs/薯片水獭.csv') ?? '', video_author='薯片水獭');
 	loader.csv2songs_timer(loader.load_data('./assets/csvs/真栗栗录播组_Clean.csv') ?? '', video_author='录播组');
-	loader.csv2songs_timer(loader.load_data('./assets/csvs/真栗栗录播组_Selfuse.csv') ?? '', video_author='录播组');
+	loader.csv2songs_timer(loader.load_data('./真栗栗录播组_Selfuse.csv') ?? '', video_author='录播组');
 	loader.json2songs_timer(loader.load_data('./assets/jsons/真栗栗录播组.json') ?? '', video_author='录播组');
-	loader.json2songs_timer(loader.load_data('./assets/jsons/南夕君cC.json') ?? '', video_author='南夕君cC');
+	loader.json2songs_timer(loader.load_data('./南夕君cC.json') ?? '', video_author='南夕君cC');
 	loader.sort_songs();
 	loader.get_cnts();
 	loader.get_total_duration();
 	console.log(loader.length);
 	console.log(Object.keys(loader.ordered_songs).length);
-	console.log(loader.uncollected_songs);
+	console.log(`未收录(${loader.uncollected_songs.length})：\n`, loader.uncollected_songs.join('\n'));
 	console.timeEnd('LOAD JSON/CSV');
 
 	let new_win = new NewWin();
