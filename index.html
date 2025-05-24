@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Makuri</title>
+</head>
+<style type="text/css" media="screen">
+/*	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}*/
+
+	h1, span.time{
+		display:flex; 
+		justify-content:center;
+		color: gold;
+		text-shadow: 0 0 5px orange, 0 0 5px black;
+		text-stro
+	}
+	h1{
+		margin:0;
+		animation: shadowToggle 2s infinite;
+	}
+	@keyframes shadowToggle{
+		0% {
+			text-shadow: 0 0 1px orange, 0 0 3px black;
+		}
+		50% {
+			text-shadow: 0 0 30px orange, 0 0 10px black;
+		}
+		100% {
+			text-shadow: 0 0 1px orange, 0 0 3px black;
+		}
+	}
+	#intro {
+		display: flex;
+		justify-content: center;
+		font-size: 150%;
+		text-align: center;
+		color: Gold   ;
+		font-weight: 1000;
+		text-shadow: 0 0 15px orange, 0 0 5px black;
+
+		white-space: nowrap;
+		overflow: hidden;
+		box-sizing: border-box;
+		height: 200px;
+	}
+
+	#intro pre {
+		font-family: 楷体;
+		width: 100%;
+		height: auto;
+		animation: scroll-up 20s linear infinite, shadowToggle 2s infinite;
+  	}
+
+	@keyframes scroll-up {
+		0% {
+			transform: translateY(25vh); 
+		}
+		95% {
+			transform: translateY(-100%);
+		}
+		100% {
+			transform: translateY(-100%);
+		}
+	  }
+
+
+	video.video_snow{
+		width: 45rem; 
+		position: relative; 
+		opacity: 0.9
+	}
+	div.div_video::after{
+		content: ""; 
+		position: absolute; 
+		top: 0; 
+		left: 0; 
+		width: 100%;
+		height: 100%;
+		box-shadow: -7rem -2rem 4rem 1.7rem rgba(255, 255, 255, 1) inset;
+	}
+	.div_video{
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: -1;
+	}
+
+</style>
+<body>
+	<h1>Makuri</h1>
+	<div id='intro'>
+		<div id='div_pre'>
+		<pre>☞ 完美女人 ☜
+☞ 主机区歌姬 ☜
+☞ 超A短发 ☜
+☞ 栗门之主 ☜
+☞ 36D欺诈者 ☜
+☞ 腌入味的猩猩花栗鼠 ☜
+☞ 全新原味36D酱的持有者 ☜
+☞ 长腿美少女 ☜
+☞ 身高193的修女 ☜
+☞ 嘎蛋的猫咪 ☜
+☞ 宝宝巴士 ☜
+☞ 甜妹天花板 ☜
+☞ jio印写真制造者 ☜
+☞ 世界上最可爱的口呆花 ☜
+☞ 流芳百世的板栗烧鸡食谱 ☜
+☞ 呆又呆十四年历史学家 ☜
+☞ 百事可乐最坚定的支持者 ☜
+☞ 栗门炸鸡掌控者 ☜
+☞ 艾尔登传奇缔造者 ☜
+☞ 不可置疑的街唱大师 ☜
+☞ 嗦粉文化代言人 ☜
+☞ 四国语言传承者 ☜
+☞ 真栗栗不爱和你玩 ☜
+☞ 主包唱歌有一手810975之歌姬 ☜
+☞ 冬日限定这肩带可以限定皮肤 ☜
+☞ 情人节的布莱克斯 ☜
+☞ 这小妞挠的我心痒痒 ☜
+☞ 八千的虔诚信徒 ☜
+☞ 力挺好哥们 ☜
+☞ 笑起来超甜 ☜
+☞ 门牙不能住人 ☜
+☞ 史迪奇女友小梅梅 ☜
+☞ 举栗人领袖 ☜
+☞ 栗栗妹女士 ☜
+		</pre>
+		</div>		
+	</div>
+	<div class='div_video'>
+		<video class='video_snow' muted autoplay>
+			<source src="./assets/videos/snow.mp4">
+		</video>
+	</div>
+
+</body>
+</html>
+<!-- <script src="makuri-v2.js" type="text/javascript" charset="utf-8" async defer></script> -->
+<script type="text/javascript" charset="utf-8" async defer>	
+console.log = ()=>{};
+console.time = ()=>{};
+console.timeEnd = ()=>{};
+</script>
+<script src="./gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<!-- <script src="./anime.iife.min.js"></script> -->
+<script src="makuri-v3.js" type="text/javascript" charset="utf-8"defer></script>
