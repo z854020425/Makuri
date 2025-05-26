@@ -343,7 +343,7 @@ class DataLoader{
 		let lines = data.split('\r\n');
 		for (let line of lines){
 			item = line.split(',');
-			if (item.every(x => x == '')){
+			if (item.every(x => x.trim() == '')){
 				continue;
 			}
 			bvid = item[0] === '' ? bvid : item[0].match(/BV[\da-zA-Z]{10}/)[0];
@@ -419,7 +419,7 @@ class DataLoader{
 		let is_song = true;
 		is_song &= !RegExp('舞|cos展示').test(tag);
 		is_song &= !RegExp('\\+').test(title);
-			
+
 		this.songs[title].push({
 			'title': chs == '' ? title.toLowerCase() : title.toLowerCase() + '|' + chs.toLowerCase(),
 			'date': '▶ ' + Utils.pretty_date(date),
@@ -660,6 +660,7 @@ class Table{
 			'span.author{min-width:4rem;text-align:center;}',
 			'span.录播组{color:NavajoWhite;background:gray}',
 			'span.薯片水獭{color:Turquoise;background:gray}',
+			'span.希望小紫真栗永远健康{background-image:linear-gradient(to right, #c99a8b, #9276a3); color:BlanchedAlmond; border-color:BlueViolet;}',
 			'span.蝴蝶谷逸{color:lightyellow;background:darkgray}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 			'span.真栗{color:chocolate;text-shadow:0 0 2px orange}',
@@ -1630,6 +1631,8 @@ class BGColor{
 }
 
 
+
+
 function main(){
 	let social_platforms = new SocialPlatforms();
 	let img_rb = new Image_RB('./assets/imgs/sleep.png');
@@ -1650,6 +1653,7 @@ function main(){
 	loader.csv2songs_timer(loader.load_data('./assets/csvs/薯片水獭.csv') ?? '', video_author='薯片水獭');
 	loader.csv2songs_timer(loader.load_data('./assets/csvs/真栗栗录播组_Clean.csv') ?? '', video_author='录播组');
 	loader.csv2songs_timer(loader.load_data('./真栗栗录播组_Selfuse.csv') ?? '', video_author='录播组');
+	loader.csv2songs_timer(loader.load_data('./assets/csvs/希望小紫真栗永远健康.csv') ?? '', video_author='希望小紫真栗永远健康');
 	loader.json2songs_timer(loader.load_data('./assets/jsons/真栗栗录播组.json') ?? '', video_author='录播组');
 	loader.json2songs_timer(loader.load_data('./南夕君cC.json') ?? '', video_author='南夕君cC');
 	loader.sort_songs();
