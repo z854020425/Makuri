@@ -651,7 +651,7 @@ class virtualList{
 			'.group_title{width:35%; color:deeppink; cursor:pointer; user-select:none; align-items:center; display:flex; height:100%; min-width:fit-content;}',
 			'.group_title:hover{font-weight:bolder;}',
 			'.group_infos{display:flex; flex-direction:column; width:65%; text-align:center;}',
-			'.row_infos{display:flex; flex-direction:row; align-items:center; opacity:var(--percent);}',
+			`.row_infos{display:flex; flex-direction:row; align-items:center; opacity:var(--percent); height:${this.rem_item}rem}`,
 			'.row_infos:has(.info_date:hover){opacity:1;}',
 			'.row_infos:has(.highlighted){opacity:1;}',
 			'.info_date{width:20%; user-select:none; min-width:fit-content;}',
@@ -677,7 +677,7 @@ class virtualList{
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
 			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:row;}',
-			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 5px DarkTurquoise; margin:0 1.5rem;}'
+			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 8px DarkTurquoise, 0 0 2px purple; margin:0 1.5rem;}'
 		]);
 	}
 	update_visible_height(){
@@ -972,12 +972,12 @@ class SocialPlatforms{
 		]);
 		let div_rt = Utils.create('div', [], {'id': 'div_rt'});
 		document.body.appendChild(div_rt);
-		const pattern = /(https?:\/\/[^/]*)/i;
+		// const pattern = /(https?:\/\/[^/]*)/i;
 		this.data.forEach(item => {
-			const match = item['href'].match(pattern);
-			if (match && match[1]){
-				document.head.appendChild(Utils.create('link', [], {'rel': 'dns-prefetch', 'href': match[1]}));
-			}
+			// const match = item['href'].match(pattern);
+			// if (match && match[1]){
+			// 	document.head.appendChild(Utils.create('link', [], {'rel': 'dns-prefetch', 'href': match[1]}));
+			// }
 
 			let link = Utils.create('a', [], {
 				'title': '真栗栗的' + item['name'] + '主页',
@@ -1652,13 +1652,13 @@ class Drawers{
 		rect = Utils.create('rect', [], {});
 		svg.appendChild(rect);
 		div.innerHTML += '▲<br />顶部';
-		div.addEventListener('click', function(e){
+		div.addEventListener('click', (e) => {
 			let video = document.querySelector('video.video_snow');
 			if (video && video.paused) {
 				video.currentTime = 0;
 				video.play();
 			}
-			window.scrollTo(0, 0);
+			this.vl.div_container.scroll(0, 0);
 		})
 		div_lb.appendChild(div);
 	}
