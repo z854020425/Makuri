@@ -1153,14 +1153,15 @@ class Cursor{
 	update_points(path){
 		this.clear();
 		this.points = this.load_points(path);
-		console.log(this.points)
+		// console.log(this.points)
 		this.mount();		
 	}
 }
 
 
 class Cursor2{
-	constructor(path){
+	constructor(){
+		const path = this.get_path();
 		let data = this.load_points(path);
 		this.points = [];
 		Object.keys(data)
@@ -1170,6 +1171,12 @@ class Cursor2{
 		});
 
 		this.init_canvas();
+	}
+	get_path(){
+		let cursor_idx = Utils.get_cookie('cursor_idx');
+		if(!cursor_idx)
+			return './assets/jsons/points.json';
+		return `./assets/jsons/points${cursor_idx}.json`;		
 	}
 	load_points(path){
 		let request = new XMLHttpRequest(path);
@@ -1247,6 +1254,10 @@ class Cursor2{
 	}
 
 	render(){
+		if (this?.status_render == 'terminate'){
+			this.status_render = 'finish';
+			return;
+		}
 		if (this.cnt == 0) requestAnimationFrame(this.render.bind(this));
 
 		let rect = this.canvas.getBoundingClientRect();
@@ -1272,6 +1283,20 @@ class Cursor2{
 		});
 		this.xys.unshift(this.xys[0]);
 		this.cnt -= 1;
+		requestAnimationFrame(this.render.bind(this));
+	}
+	update_points(path){
+		this.clear();
+		this.points = this.load_points(path);
+		// console.log(this.points)
+		this.status_render = 'terminate';
+		const wait = ()=>{
+			if(this.status_render != 'finish'){
+				setTimeout(wait, 20);
+			}
+		};
+		wait();
+		
 		requestAnimationFrame(this.render.bind(this));
 	}
 }
@@ -1781,18 +1806,31 @@ class Introduction{
 		this.text = '完美女人·主机区歌姬·超A短发·栗门之主·36D欺诈者·腌入味的猩猩花栗鼠·全新原味36D酱的持有者·长腿美少女·身高193的修女·嘎蛋的猫咪·宝宝巴士·甜妹天花板·jio印写真制造者·世界上最可爱的口呆花·流芳百世的板栗烧鸡食谱·呆又呆十四年历史学家·百事可乐最坚定的支持者·栗门炸鸡掌控者·艾尔登传奇缔造者·不可置疑的街唱大师·嗦粉文化代言人·四国语言传承者·真栗栗不爱和你玩·主包唱歌有一手810975之歌姬·冬日限定这肩带可以限定皮肤·情人节的布莱克斯·这小妞挠的我心痒痒·八千的虔诚信徒·力挺好哥们·笑起来超甜·门牙不能住人·举栗人领袖·栗栗妹女士···';
 		this.text = this.text.split('·').map(text => text === '' ? '' : `☞ ${text} ☜`);
 		this.num_text = this.text.length;
-		this.mount();
+		// console.log(this.num_text)
+		this.add_styles();
+		this.mount(true);
 	}
-	mount(){
+	set_vl(vl){
+		this.vl = vl;
+	}
+	add_styles(){
 		Utils.add_styles([
 			'#intro_container{height:15rem; overflow:hidden;}',
 			'#intro{display:flex; flex-direction:column; align-items:center; justify-content:flex-start;}',
-			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; animation: appear 7.2s; user-select:none;}',
+			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; animation: appear 4.5s; user-select:none;}',
 			'#intro p{transform:translateY(-3rem); height:0; margin:0; font-size:0;}',
 			'@keyframes appear{0%{transform:translateY(16rem);height:1.2rem; margin:0.25rem;} 50%{font-size:1.65rem;} 80%{transform:translateY(0);font-size:1.2rem; height:1.2rem;} 95%{transform:translateY(-3rem); height:0; font-size:0;}} 100%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}}',
 			// '@keyframes shadowToggle{0%{text-shadow: 0 0 5px orange, 0 0 3px black;} 50%{text-shadow: 0 0 30px orange, 0 0 5px black;} 100%{text-shadow: 0 0 5px orange, 0 0 3px black;}}'
-		])
-
+		]);
+	}
+	clear(){
+		if(this?.div_container){
+			this.div_container.remove();
+			this.div_container = null;
+		}
+	}
+	mount(disappear=true){
+		console.log(111)
 		const div_container = Utils.create('div', [], {'id': 'intro_container'});
 		document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
 		const div_intro = Utils.create('div', [], {'id': 'intro'});
@@ -1810,8 +1848,25 @@ class Introduction{
 			ps.push(p);
 			idx = (idx + 1) % this.num_text;
 			div_intro.appendChild(p);
-		}, 800);
+		}, 500);
 
+		this.div_container = div_container;
+		if(!disappear)
+			return;
+
+		setTimeout(() => {
+			this.clear();
+			this?.vl.update_visible_height();
+			const h1 = document.querySelector('h1');
+			h1.style.cursor = 'pointer';
+			h1.addEventListener('click', ()=>{
+				if(this?.div_container){
+					this.clear();
+				} else {
+					this.mount(false);
+				}
+			})
+		}, 39.1 * 500);
 	}
 }
 
@@ -1854,12 +1909,13 @@ function main(){
 	vl.load_songs(loader.ordered_songs);
 	vl.init();
 	console.timeEnd('init virtual list');
+	introduction.set_vl(vl);
 
 	const search_box = new SearchBox(vl, loader.ordered_songs);
 	const drawers = new Drawers(new_win, vl);
 
-
 	setTimeout(()=>{
+		// const cursor = new Cursor();
 		const cursor = new Cursor();
 		drawers.set_cursor(cursor);
 	}, 500)
