@@ -1078,8 +1078,11 @@ class Cursor{
 	}
 	get_path(){
 		let cursor_idx = Utils.get_cookie('cursor_idx');
-		if(!cursor_idx)
+		if(!cursor_idx || cursor_idx === 'NaN'){
+			this.cursor_idx = null;
 			return './assets/jsons/points.json';
+		}
+		this.cursor_idx = parseInt(cursor_idx);
 		return `./assets/jsons/points${cursor_idx}.json`;
 	}
 	load_points(path){
@@ -1545,7 +1548,14 @@ class Drawers{
 	set_cursor(cursor){
 		this.cursor = cursor;
 		this.cursor_idx = 2;
-	}	
+	}
+	get cursor_idx(){
+		return this?.cursor?.cursor_idx;
+	}
+	set cursor_idx(val){
+		if(this?.cursor)
+			this.cursor.cursor_idx = val;
+	}
 	async draw_song(){
 		if (this.song && this.timeout_highlight) {
 			this.vl.highlighted_title = null;
@@ -1647,20 +1657,12 @@ class Drawers{
 		})
 	}
 	async draw_cursor(){
-		console.log(1)
 		if(!this?.cursor)
 			return;
-		const num = 6;
-		let idx;
-		while(true){
-			idx = Math.floor(Math.random() * num) + 1;
-			if (idx == this.cursor_idx){
-				await Utils.sleep(10);
-				continue;
-			}
-			this.cursor_idx = idx;
-			break;
-		}
+		const num = 7;
+		console.log(this.cursor_idx);
+		const idx = (this?.cursor_idx ?? 0 + 1) % num + 1;
+		this.cursor_idx = idx;
 		Utils.set_cookie('cursor_idx', idx);
 		this.cursor.update_points(`./assets/jsons/points${idx}.json`);
 	}
