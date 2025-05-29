@@ -1,3 +1,16 @@
+// TODO: Keep-Alive
+// 邪道 后面研究下web workers+service worker
+// setInterval(() => {console.log(1)}, 1000);
+function keepAliveBySilentAudio(){
+	let audio = document.createElement('audio');
+	audio.src = './assets/audios/silent.mp3';
+	audio.autoplay = true;
+	audio.loop = true;
+	document.body.appendChild(audio);
+}
+keepAliveBySilentAudio();
+
+
 class LRUCache{
 	constructor(capacity){
 		this.cap = capacity;
@@ -183,7 +196,7 @@ class Notification{
 		Utils.add_styles([
 			'#div_notify{position:fixed; top:0; right:3rem; height:0vh; width:25rem;}',
 			'.notification{height:9.2vh; width:100%; top:-9.2vh; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border-radius:10px; border:5px double brown;margin:0.4vh 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s ease, slide 5s; ease}',
-			'@keyframes disappear{0%{opacity:0} 8%{opacity:1} 70%{opacity:1} 100%{opacity:0.3}}',
+			'@keyframes disappear{0%{opacity:0; height:9.2vh;} 8%{opacity:1;} 70%{opacity:1; } 90%{opacity:0; height:9.2vh} 100%{opacity:0; height:0;}}',
 			'@keyframes slide{0%{top:100vh} 8%{top:0} 95%{top:0} 100%{top:-22%}}',
 			'.notification span{color:DarkGoldenRod; font-size:1.2rem; text-align:center;}'
 		]);
@@ -608,15 +621,43 @@ class virtualList{
 		this.vl = vl;
 		this.vl_rows = vl_rows;
 
-		this.div_container.addEventListener('wheel', function(e){
-			this.scrollBy(0, e.deltaY );
-		})
+		window.addEventListener('wheel', (e)=>{
+			e.stopPropagation()
+			this.div_container.scrollBy(0, e.deltaY );
+		});
+		// TODO: touchmove optimize
+		this.vl.addEventListener('touchstart', (e)=>{
+			console.log(e.target);
+			let prev_y = e.touches[0].clientY;
+			let scroll_top = this.div_container.scrollTop;
+			let timeout = null;
+			const touchmove_handler = (e)=>{
+				e.stopPropagation();
+				const cur_y = e.touches[0].clientY;
+				console.log((prev_y - cur_y) * 5);
 
-		this.add_styles()
+				if(timeout){
+					clearTimeout(timeout);
+				}
+				setTimeout(()=>{
+					this.div_container.scroll(0, scroll_top + (prev_y - cur_y) * 10);
+					timeout = null;
+				}, 150);
+			};
+			const touchmove_handler_debounce = Utils.debounce(touchmove_handler, 5);
+			window.addEventListener('touchmove', touchmove_handler, true);
+			window.addEventListener('touchend', (e)=>{
+				e.stopPropagation();
+				window.removeEventListener('touchmove', touchmove_handler_debounce);
+				window.removeEventListener('touchmove', touchmove_handler);
+			}, true)
+		}, true)
+
+		this.add_styles();
 		this.clipboard = new ClipBoard();
 
 		const div_cnts = Utils.create('div', ['div_cnts'], {});
-		document.querySelector('#intro').insertAdjacentElement('afterend', div_cnts);
+		document.querySelector('#intro_container').insertAdjacentElement('afterend', div_cnts);
 		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
 		cnt_songs.innerText = '已收录歌曲 {0} 首';
 		div_cnts.appendChild(cnt_songs);
@@ -677,7 +718,7 @@ class virtualList{
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
 			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:row;}',
-			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 8px DarkTurquoise, 0 0 2px purple; margin:0 1.5rem;}'
+			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0 1.5rem;}'
 		]);
 	}
 	update_visible_height(){
@@ -963,8 +1004,8 @@ class SocialPlatforms{
 	}
 	mount(){
 		Utils.add_styles([
-			'#div_rt{position:fixed; top:0.8rem; right:-29px; display: flex; flex-direction: column;}',
-			'#div_rt a{margin:0.25rem; display:flex; flex-direction: row; align-items: center; transition: transform 0.5s ease; z-index:100}',
+			'#div_rt{position:fixed; top:-0.8rem; right:-29px; display: flex; flex-direction: column; scale:0.9}',
+			'#div_rt a{margin:0.13rem; display:flex; flex-direction: row; align-items: center; transition: transform 0.5s ease; z-index:100}',
 			'#div_rt a img{border-radius:14px; background:white}',
 			'#div_rt a .div_dec{width:24px; height:19px; display:block; transform: translateX(-4px); z-index:-1;}',
 			'#div_rt a:hover {transform: translateX(-20px);}',
@@ -1026,9 +1067,17 @@ class Image_RB{
 
 
 class Cursor{
-	constructor(path){
+	constructor(){
+		this.init();
+		const path = this.get_path();
 		this.points = this.load_points(path);
 		this.mount();
+	}
+	get_path(){
+		let cursor_idx = Utils.get_cookie('cursor_idx');
+		if(!cursor_idx)
+			return './assets/jsons/points.json';
+		return `./assets/jsons/points${cursor_idx}.json`;
 	}
 	load_points(path){
 		let request = new XMLHttpRequest(path);
@@ -1042,13 +1091,18 @@ class Cursor{
 		}
 		return JSON.parse(request.responseText);
 	}
-	mount(){
+	init(){
 		Utils.add_styles([
 			'#cursor{position:fixed; top:0; left:0; pointer-events:none; z-index:10}',
 			'#cursor .point{position:absolute; top:0; left:-0.5rem; width:0.235rem; height:0.235rem; border-radius:45%; }',
 			'#cursor .point.disappear{animation: disappear 1s linear forwards}'
-		])
-		let cursor = Utils.create('div', [], {'id': 'cursor'});
+		])		
+		this.cursor = Utils.create('div', [], {'id': 'cursor'});
+		document.body.appendChild(this.cursor);
+
+	}
+	mount(){
+		let cursor = this.cursor;
 		let sign_x = Math.floor(Math.random() * 2);
 		let sign_y = Math.floor(Math.random() * 2);
 		Object.keys(this.points)
@@ -1071,24 +1125,33 @@ class Cursor{
 			span.style.background = rgba;
 			cursor.appendChild(span);
 		})
-		document.body.appendChild(cursor);
-		let move_points = Utils.debounce(((e) => {	
+		// let move_points = Utils.debounce(((e) => {	
+		// 	gsap.to('.point', {
+		// 		x: e.clientX,
+		// 		y: e.clientY,
+		// 		ease: 'back.out(1.2)',
+		// 		stagger:0.0015
+		// 	});
+		// }).bind(this), 1);
+		this.func_move_points = (e) => {
 			gsap.to('.point', {
 				x: e.clientX,
 				y: e.clientY,
 				ease: 'back.out(1.2)',
 				stagger:0.0015
-			});
-		}).bind(this), 1)
-		window.addEventListener('mousemove', function(e){
-			gsap.to('.point', {
-				x: e.clientX,
-				y: e.clientY,
-				ease: 'back.out(1.2)',
-				stagger:0.0015
-			});
-			// move_points(e);
-		});
+			});			
+		}
+		window.addEventListener('mousemove', this.func_move_points);
+	}
+	clear(){
+		this.cursor.innerHTML = '';
+		window.removeEventListener('mousemove', this.func_move_points);
+	}
+	update_points(path){
+		this.clear();
+		this.points = this.load_points(path);
+		console.log(this.points)
+		this.mount();		
 	}
 }
 
@@ -1440,6 +1503,10 @@ class Drawers{
 
 		this.mount();
 	}
+	set_cursor(cursor){
+		this.cursor = cursor;
+		this.cursor_idx = 2;
+	}
 	async draw_song(){
 		if (this.song && this.timeout_highlight) {
 			this.song.classList.remove('highlighted')
@@ -1540,6 +1607,24 @@ class Drawers{
 		// 	this.draw_clip_cycle();
 		// }, ms);
 	}
+	async draw_cursor(){
+		console.log(1)
+		if(!this?.cursor)
+			return;
+		const num = 4;
+		let idx;
+		while(true){
+			idx = Math.floor(Math.random() * num) + 1;
+			if (idx == this.cursor_idx){
+				await Utils.sleep(10);
+				continue;
+			}
+			this.cursor_idx = idx;
+			break;
+		}
+		Utils.set_cookie('cursor_idx', idx);
+		this.cursor.update_points(`./assets/jsons/points${idx}.json`);
+	}
 	reset(close_win){
 		if (this.song){
 			this.song.classList.remove('highlighted');
@@ -1585,6 +1670,18 @@ class Drawers{
 		document.body.appendChild(div_lb);
 
 		let div, btn, div_text;
+
+		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawCursor'});
+		div.addEventListener('click', () => {
+			this.draw_cursor();
+		});
+		div_lb.appendChild(div);
+		svg = Utils.create('svg', [], {});
+		div.appendChild(svg);
+		rect = Utils.create('rect', [], {});
+		svg.appendChild(rect);
+		div.innerHTML += '🖱<br />拖尾';
+
 		div = Utils.create('div', ['div_btn'], {'id': 'btn_drawSong'});
 		div.addEventListener('click', () => {
 			this.draw_song();
@@ -1665,8 +1762,49 @@ class Drawers{
 }
 
 
+class Introduction{
+	constructor(){
+		this.text = '完美女人·主机区歌姬·超A短发·栗门之主·36D欺诈者·腌入味的猩猩花栗鼠·全新原味36D酱的持有者·长腿美少女·身高193的修女·嘎蛋的猫咪·宝宝巴士·甜妹天花板·jio印写真制造者·世界上最可爱的口呆花·流芳百世的板栗烧鸡食谱·呆又呆十四年历史学家·百事可乐最坚定的支持者·栗门炸鸡掌控者·艾尔登传奇缔造者·不可置疑的街唱大师·嗦粉文化代言人·四国语言传承者·真栗栗不爱和你玩·主包唱歌有一手810975之歌姬·冬日限定这肩带可以限定皮肤·情人节的布莱克斯·这小妞挠的我心痒痒·八千的虔诚信徒·力挺好哥们·笑起来超甜·门牙不能住人·举栗人领袖·栗栗妹女士···';
+		this.text = this.text.split('·').map(text => text === '' ? '' : `☞ ${text} ☜`);
+		this.num_text = this.text.length;
+		this.mount();
+	}
+	mount(){
+		Utils.add_styles([
+			'#intro_container{height:15rem; overflow:hidden;}',
+			'#intro{display:flex; flex-direction:column; align-items:center; justify-content:flex-start;}',
+			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; animation: appear 7.2s;}',
+			'#intro p{transform:translateY(-3rem); height:0; margin:0; font-size:0;}',
+			'@keyframes appear{0%{transform:translateY(16rem);height:1.2rem; font-size:1.2rem; margin:0.25rem;} 50%{font-size:1.65rem;} 80%{transform:translateY(0);font-size:1.2rem; height:1.2rem;} 95%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}} 100%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}}',
+			// '@keyframes shadowToggle{0%{text-shadow: 0 0 5px orange, 0 0 3px black;} 50%{text-shadow: 0 0 30px orange, 0 0 5px black;} 100%{text-shadow: 0 0 5px orange, 0 0 3px black;}}'
+		])
 
-function main(){	
+		const div_container = Utils.create('div', [], {'id': 'intro_container'});
+		document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
+		const div_intro = Utils.create('div', [], {'id': 'intro'});
+		div_container.appendChild(div_intro);
+
+		let ps = [], p, idx = 0;
+		const max_num = 9;
+		setInterval(() => {
+			if(ps.length == max_num){
+				p = ps.shift()
+				div_intro.removeChild(p);
+			}
+			p = Utils.create('p', [], {});
+			p.innerText = this.text[idx];
+			ps.push(p);
+			idx = (idx + 1) % this.num_text;
+			div_intro.appendChild(p);
+		}, 800);
+
+	}
+}
+
+
+
+function main(){
+	const introduction = new Introduction();
 	const social_platforms = new SocialPlatforms();
 	const img_rb = new Image_RB('./assets/imgs/sleep.png');
 
@@ -1678,7 +1816,7 @@ function main(){
 	console.time('LOAD JSON/CSV');
 	const loader = new DataLoader(TAGS);
 	loader.json2songs_timer(loader.load_data('./assets/jsons/真栗.json') ?? '', video_author='真栗');
-	// for(let i=0;i<40;i++)
+	// for(let i=0;i<20;i++)
 	loader.json2songs_timer(loader.load_data('./assets/jsons/Monedula.json') ?? '', video_author='Monedula');
 	loader.json2songs_timer(loader.load_data('./assets/jsons/蝴蝶谷逸_.json'), video_author='蝴蝶谷逸');
 	loader.csv2songs_timer(loader.load_data('./assets/csvs/薯片水獭.csv') ?? '', video_author='薯片水獭');
@@ -1708,7 +1846,8 @@ function main(){
 
 
 	setTimeout(()=>{
-		const cursor = new Cursor('./assets/jsons/points.json');
+		const cursor = new Cursor();
+		drawers.set_cursor(cursor);
 	}, 500)
 
 }
