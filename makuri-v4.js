@@ -483,6 +483,7 @@ class DataLoader{
 		Object.keys(this.ordered_songs).forEach(title => {
 			this.ordered_songs[title].forEach((item, idx) => {
 				this.ordered_songs[title][idx]['mingap'] = this.ordered_songs[title][0]['gap'];
+				this.ordered_songs[title][idx]['totalnum'] = this.ordered_songs[title].length;
 			})
 		})
 		this.songs = {};
@@ -692,9 +693,9 @@ class virtualList{
 			'.group_title{width:35%; color:deeppink; cursor:pointer; user-select:none; align-items:center; display:flex; height:100%; min-width:fit-content;}',
 			'.group_title:hover{font-weight:bolder;}',
 			'.group_infos{display:flex; flex-direction:column; width:65%; text-align:center;}',
-			`.row_infos{display:flex; flex-direction:row; align-items:center; opacity:var(--percent); height:${this.rem_item}rem}`,
-			'.row_infos:has(.info_date:hover){opacity:1;}',
-			'.row_infos:has(.highlighted){opacity:1;}',
+			`.row_infos{display:flex; flex-direction:row; align-items:center; height:${this.rem_item}rem; filter:opacity(var(--percent))}`,
+			'.row_infos:has(.info_date:hover){filter:none;}',
+			'.row_infos:has(.highlighted){filter:none;}',
 			'.info_date{width:20%; user-select:none; min-width:fit-content;}',
 			'.info_date:hover{font-weight:bolder;}',
 			'.info_link{text-decoration:none; color:brown; cursor:pointer}',
@@ -717,8 +718,8 @@ class virtualList{
 			'span.儿歌{color:green}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
-			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:row;}',
-			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0 1.5rem;}'
+			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column;}',
+			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem;}'
 		]);
 	}
 	update_visible_height(){
@@ -1352,10 +1353,11 @@ class SearchBox{
 			['❤️情人节❤️ 专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25'],
 			['🎀COS🎀 专场', 'tag:cos'],
 			['🍺干杯🍺 专场', 'date:22-03-28|23-09-06|25-01-01'],
-			['距最近收录已有1️⃣年', 'mingap:>=1 -+'],
-			['距最近收录已有2️⃣年', 'mingap:>=2 -+'],
-			['距最近收录已有3️⃣年', 'mingap:>=3 -+'],
-			['距最近收录已有4️⃣年', 'mingap:>=4 -+'],
+			['孤品 专场', 'totalNum:==1 -+ -（'], 
+			['距最近收录已有1️⃣年', 'minGap:>=1 -+'],
+			['距最近收录已有2️⃣年', 'minGap:>=2 -+'],
+			['距最近收录已有3️⃣年', 'minGap:>=3 -+'],
+			['距最近收录已有4️⃣年', 'minGap:>=4 -+'],
 			['2021精选(蝴蝶谷逸_)', 'tag:2021精选'],
 		]);
 		items.entries().forEach((entry) => {
@@ -1400,7 +1402,7 @@ class SearchBox{
 		if (cache_key != null) return cache_key;
 
 		let _expr = expr.split(':');
-		let all_keys = ['title', 'date', 'tag', 'singer', 'lang', 'author', 'gap', 'mingap'];
+		let all_keys = ['title', 'date', 'tag', 'singer', 'lang', 'author', 'gap', 'mingap', 'totalnum'];
 
 		let ret_keys = new Set();
 		if (_expr.length == 1){
@@ -1431,9 +1433,9 @@ class SearchBox{
 			[keys, vals] = [...this.get_keys_vals(expr)];
 			// console.log(keys, vals)
 			let is_dateRange = keys.length == 1 && keys[0] == 'date' ? true : false;
-			let is_eval = keys.length == 1 && ['gap', 'mingap'].includes(keys[0]) ? true : false;
+			let is_eval = keys.length == 1 && ['gap', 'mingap', 'totalnum'].includes(keys[0]) ? true : false;
 
-			let attrs = keys.map(key => (item?.[key] ?? '').toLowerCase());
+			let attrs = keys.map(key => (item?.[key] ?? '').toString().toLowerCase());
 			return vals.some(val => {
 				if (is_dateRange && val.indexOf('~') != -1){
 					let [start, end] = [...val.split('~').map(x => x.trim())];
