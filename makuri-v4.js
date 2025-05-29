@@ -1611,7 +1611,7 @@ class Drawers{
 		console.log(1)
 		if(!this?.cursor)
 			return;
-		const num = 4;
+		const num = 6;
 		let idx;
 		while(true){
 			idx = Math.floor(Math.random() * num) + 1;
