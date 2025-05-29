@@ -853,6 +853,10 @@ class virtualList{
 					'data-titleChs': title_chs,
 					'title': title_raw
 				});
+				if(title_raw === this?.highlighted_title){
+					group_title.classList.add('highlighted');
+					this.highlighted_song = group_title;
+				}
 				group_title.innerText = Utils.pretty_str(title_raw);
 				if(title_chs){
 					group_title.onmouseover = (e)=>{
@@ -890,6 +894,10 @@ class virtualList{
 				'data-duration': duration,
 				'data-isSeperate': is_seperate
 			});
+			if(song === this?.highlighted_link){
+				info_link.classList.add('highlighted');
+				this.highlighted_clip = info_link;
+			}
 			info_link.innerText = date;
 			info_link.addEventListener('click', (e) => {
 				e.preventDefault();
@@ -1315,16 +1323,17 @@ class SearchBox{
 			['谭姐 专场', 'title:谭姐'],
 			['日语 专场', 'lang:日语'],
 			['韩语 专场', 'lang:韩语'],
+			['英语 专场', 'lang:英语'],
 			['粤语 专场', 'lang:粤语'],
 			['👶儿歌👶 专场', 'tag:儿歌'],
 			['❤️情人节❤️ 专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25'],
 			['🎀COS🎀 专场', 'tag:cos'],
 			['🍺干杯🍺 专场', 'date:22-03-28|23-09-06|25-01-01'],
-			['2021精选(蝴蝶谷逸_)', 'tag:2021精选'],
 			['距最近收录已有1️⃣年', 'mingap:>=1 -+'],
 			['距最近收录已有2️⃣年', 'mingap:>=2 -+'],
 			['距最近收录已有3️⃣年', 'mingap:>=3 -+'],
-			['距最近收录已有4️⃣年', 'mingap:>=4 -+']
+			['距最近收录已有4️⃣年', 'mingap:>=4 -+'],
+			['2021精选(蝴蝶谷逸_)', 'tag:2021精选'],
 		]);
 		items.entries().forEach((entry) => {
 			let [text, value] =[...entry];
@@ -1507,105 +1516,133 @@ class Drawers{
 		this.cursor = cursor;
 		this.cursor_idx = 2;
 	}
-	async draw_song(){
-		if (this.song && this.timeout_highlight) {
-			this.song.classList.remove('highlighted')
+	// async draw_song(){
+	// 	if (this.song && this.timeout_highlight) {
+	// 		this.song.classList.remove('highlighted')
+	// 		clearTimeout(this.timeout_highlight);
+	// 		this.timeout_highlight = null;
+	// 		this.song = null;
+	// 	}
+	// 	const idx = Math.floor(Math.random() * this.vl.songs_dic.size);
+	// 	const title = Array.from(this.vl.songs_dic.keys())[idx];
+	// 	this.vl.highlighted_title = title;
+	// 	const start = this.vl.songs_dic.get(title);
+	// 	console.log(title);
+	// 	this.vl.div_container.scroll(0, start);
+	// 	await Utils.sleep(50);
+
+	// 	const group_title = document.querySelector(`.group_title[data-titleraw="${title}"]`);
+	// 	// console.log(group_title)
+	// 	if(!group_title)
+	// 		return;
+	// 	group_title.classList.add('highlighted');
+	// 	this.song = group_title;
+	// 	this.timeout_highlight = setTimeout(()=>{
+	// 		this.song.classList.remove('highlighted');
+	// 		this.timeout_highlight = null;
+	// 		this.song = null;
+	// 	}, 5000);
+	// }
+	draw_song(){
+		if (this.vl.highlighted_song && this.timeout_highlight) {
+			this.vl.highlighted_title = null;
+			this.vl.highlighted_song.classList.remove('highlighted');
+			this.vl.highlighted_song = null;
 			clearTimeout(this.timeout_highlight);
 			this.timeout_highlight = null;
-			this.song = null;
 		}
 		const idx = Math.floor(Math.random() * this.vl.songs_dic.size);
 		const title = Array.from(this.vl.songs_dic.keys())[idx];
+		this.vl.highlighted_title = title;
 		const start = this.vl.songs_dic.get(title);
 		console.log(title);
 		this.vl.div_container.scroll(0, start);
-		await Utils.sleep(50);
+		if(!this.vl.highlighted_song){
+			this.vl.highlighted_song = document.querySelector(`.group_title[data-titleRaw="${title}"]`);
+		}	
+		this.vl.highlighted_song?.classList.add('highlighted');
 
-		const group_title = document.querySelector(`.group_title[data-titleraw="${title}"]`);
-		// console.log(group_title)
-		if(!group_title)
-			return;
-		group_title.classList.add('highlighted');
-		this.song = group_title;
 		this.timeout_highlight = setTimeout(()=>{
-			this.song.classList.remove('highlighted');
+			this.vl.highlighted_title = null;
+			this.vl.highlighted_song?.classList.remove('highlighted');
 			this.timeout_highlight = null;
-			this.song = null;
+			this.vl.highlighted_song = null;
 		}, 5000);
 	}
-	async draw_clip(){
-		if (this.clip && this.timeout_highlight) {
-			this.clip.classList.remove('highlighted')
+	draw_clip(){
+		if (this.vl.highlighted_clip && this.timeout_highlight) {
+			this.vl.highlighted_link = null;
+			this.vl.highlighted_clip.classList.remove('highlighted');
+			this.vl.highlighted_clip = null;
 			clearTimeout(this.timeout_highlight);
 			this.timeout_highlight = null;
-			this.clip = null;
 		}
 		const idx = Math.floor(Math.random() * this.vl.clips_arr.length);
 		const item = this.vl.clips_arr[idx];
+		this.vl.highlighted_link = item;
 		const start = idx === 0 ? 0 : this.vl.positions[idx - 1] * this.vl.rem2px_rate;
 		console.log(item?.['title'], item?.['date']);
 		this.vl.div_container.scroll(0, start);
-		await Utils.sleep(50);
+		if(!this.vl.highlighted_clip){
+			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
+		}	
+		this.vl.highlighted_clip?.classList.add('highlighted');
 
-		const info_link = document.querySelector(`.info_link[data-title="${item?.['title']}"]`);
-		if(!info_link){
-			return;
-		}
-		info_link.classList.add('highlighted');
-		this.clip = info_link;
 		this.timeout_highlight = setTimeout(() => {
-			this.clip.classList.remove('highlighted');
+			this.vl.highlighted_link = null;
+			this.vl.highlighted_clip?.classList.remove('highlighted');
+			this.vl.highlighted_clip = null;
 			this.timeout_highlight = null;
-			this.clip = null;
 		}, 5000);
 	}
-	async draw_clip_once(){
-		if (this.clip && this.timeout_highlight) {
-			this.clip.classList.remove('highlighted')
+	draw_clip_once(){
+		if (this.vl.highlighted_clip && this.timeout_highlight) {
+			this.vl.highlighted_link = null;
+			this.vl.highlighted_clip.classList.remove('highlighted');
+			this.vl.highlighted_clip = null;
 			clearTimeout(this.timeout_highlight);
 			this.timeout_highlight = null;
-			this.clip = null;
 		}
 		const idx = Math.floor(Math.random() * this.vl.clips_arr.length);
 		const item = this.vl.clips_arr[idx];
+		this.vl.highlighted_link = item;
 		const start = idx === 0 ? 0 : this.vl.positions[idx - 1] * this.vl.rem2px_rate;
-		console.log(item?.['title'], item?.['date']);
+		console.log(item?.['title'], item?.['date'], start);
 		this.vl.div_container.scroll(0, start);
-		await Utils.sleep(50);
+		if(!this.vl.highlighted_clip){
+			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
+		}	
+		this.vl.highlighted_clip?.classList.add('highlighted');
+		console.log(this.vl.highlighted_clip);
 
-		const info_link = document.querySelector(`.info_link[data-title="${item?.['title']}"]`);
-		if(!info_link){
-			return;
-		}
-		info_link.classList.add('highlighted');
-		this.clip = info_link;
-		this.dur = parseFloat(info_link.getAttribute('data-duration'));
-		this.clip.classList.add('highlighted');
+		this.dur = parseFloat(this.vl.highlighted_clip.getAttribute('data-duration'));
 		let ms = (this.dur + this.INTERVAL_CLIPS) * 1000;
-		ms += this.clip.getAttribute('is_seperate') == "true" ? 500 : 0;
+		ms += this.vl.highlighted_clip.getAttribute('is_seperate') == "true" ? 500 : 0;
 		this.timeout_highlight = setTimeout(() => {	
-			this.clip?.classList.remove('highlighted');
-			this.clip = null;
-			this.dur = null;
-
+			this.vl.highlighted_link = null;
+			this.vl.highlighted_clip?.classList.remove('highlighted');
+			this.vl.highlighted_clip = null;
+			this.timeout_highlight = null;
 		}, ms);
-		document.title = '『' + this.clip.getAttribute('data-title') + '』';
-		this.new_win.open(this.clip.getAttribute('data-href'), ms, true);
+		document.title = '『' + this.vl.highlighted_clip.getAttribute('data-title') + '』';
+		this.new_win.open(this.vl.highlighted_clip.getAttribute('data-href'), ms, true);
 		return ms;
 	}
 	draw_clip_cycle(){
 		window.focus();
-		let ret = this.draw_clip_once();
-		ret.then(ms => {
-			this.timeout_cycle = setTimeout(()=>{
-				this.new_win.close();
-				this.draw_clip_cycle();
-			}, ms);			
-		})
-		// this.timeout_cycle = setTimeout(()=>{
-		// 	this.new_win.close();
-		// 	this.draw_clip_cycle();
-		// }, ms);
+		// let ret = this.draw_clip_once();
+		// ret.then(ms => {
+		// 	this.timeout_cycle = setTimeout(()=>{
+		// 		this.new_win.close();
+		// 		this.draw_clip_cycle();
+		// 	}, ms);			
+		// })
+
+		let ms = this.draw_clip_once();
+		this.timeout_cycle = setTimeout(()=>{
+			this.new_win.close();
+			this.draw_clip_cycle();
+		}, ms);
 	}
 	async draw_cursor(){
 		console.log(1)
@@ -1773,9 +1810,9 @@ class Introduction{
 		Utils.add_styles([
 			'#intro_container{height:15rem; overflow:hidden;}',
 			'#intro{display:flex; flex-direction:column; align-items:center; justify-content:flex-start;}',
-			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; animation: appear 7.2s;}',
+			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; animation: appear 7.2s; user-select:none;}',
 			'#intro p{transform:translateY(-3rem); height:0; margin:0; font-size:0;}',
-			'@keyframes appear{0%{transform:translateY(16rem);height:1.2rem; font-size:1.2rem; margin:0.25rem;} 50%{font-size:1.65rem;} 80%{transform:translateY(0);font-size:1.2rem; height:1.2rem;} 95%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}} 100%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}}',
+			'@keyframes appear{0%{transform:translateY(16rem);height:1.2rem; margin:0.25rem;} 50%{font-size:1.65rem;} 80%{transform:translateY(0);font-size:1.2rem; height:1.2rem;} 95%{transform:translateY(-3rem); height:0; font-size:0;}} 100%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}}',
 			// '@keyframes shadowToggle{0%{text-shadow: 0 0 5px orange, 0 0 3px black;} 50%{text-shadow: 0 0 30px orange, 0 0 5px black;} 100%{text-shadow: 0 0 5px orange, 0 0 3px black;}}'
 		])
 
@@ -1816,7 +1853,7 @@ function main(){
 	console.time('LOAD JSON/CSV');
 	const loader = new DataLoader(TAGS);
 	loader.json2songs_timer(loader.load_data('./assets/jsons/真栗.json') ?? '', video_author='真栗');
-	// for(let i=0;i<20;i++)
+	// for(let i=0;i<37;i++)
 	loader.json2songs_timer(loader.load_data('./assets/jsons/Monedula.json') ?? '', video_author='Monedula');
 	loader.json2songs_timer(loader.load_data('./assets/jsons/蝴蝶谷逸_.json'), video_author='蝴蝶谷逸');
 	loader.csv2songs_timer(loader.load_data('./assets/csvs/薯片水獭.csv') ?? '', video_author='薯片水獭');
