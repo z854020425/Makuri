@@ -1021,12 +1021,7 @@ class SocialPlatforms{
 		]);
 		let div_rt = Utils.create('div', [], {'id': 'div_rt'});
 		document.body.appendChild(div_rt);
-		// const pattern = /(https?:\/\/[^/]*)/i;
 		this.data.forEach(item => {
-			// const match = item['href'].match(pattern);
-			// if (match && match[1]){
-			// 	document.head.appendChild(Utils.create('link', [], {'rel': 'dns-prefetch', 'href': match[1]}));
-			// }
 
 			let link = Utils.create('a', [], {
 				'title': '真栗栗的' + item['name'] + '主页',
@@ -1516,33 +1511,6 @@ class Drawers{
 		this.cursor = cursor;
 		this.cursor_idx = 2;
 	}
-	// async draw_song(){
-	// 	if (this.song && this.timeout_highlight) {
-	// 		this.song.classList.remove('highlighted')
-	// 		clearTimeout(this.timeout_highlight);
-	// 		this.timeout_highlight = null;
-	// 		this.song = null;
-	// 	}
-	// 	const idx = Math.floor(Math.random() * this.vl.songs_dic.size);
-	// 	const title = Array.from(this.vl.songs_dic.keys())[idx];
-	// 	this.vl.highlighted_title = title;
-	// 	const start = this.vl.songs_dic.get(title);
-	// 	console.log(title);
-	// 	this.vl.div_container.scroll(0, start);
-	// 	await Utils.sleep(50);
-
-	// 	const group_title = document.querySelector(`.group_title[data-titleraw="${title}"]`);
-	// 	// console.log(group_title)
-	// 	if(!group_title)
-	// 		return;
-	// 	group_title.classList.add('highlighted');
-	// 	this.song = group_title;
-	// 	this.timeout_highlight = setTimeout(()=>{
-	// 		this.song.classList.remove('highlighted');
-	// 		this.timeout_highlight = null;
-	// 		this.song = null;
-	// 	}, 5000);
-	// }
 	draw_song(){
 		if (this.vl.highlighted_song && this.timeout_highlight) {
 			this.vl.highlighted_title = null;
@@ -1569,7 +1537,7 @@ class Drawers{
 			this.vl.highlighted_song = null;
 		}, 5000);
 	}
-	draw_clip(){
+	async draw_clip(){
 		if (this.vl.highlighted_clip && this.timeout_highlight) {
 			this.vl.highlighted_link = null;
 			this.vl.highlighted_clip.classList.remove('highlighted');
@@ -1583,6 +1551,8 @@ class Drawers{
 		const start = idx === 0 ? 0 : this.vl.positions[idx - 1] * this.vl.rem2px_rate;
 		console.log(item?.['title'], item?.['date']);
 		this.vl.div_container.scroll(0, start);
+		await Utils.sleep(20);
+
 		if(!this.vl.highlighted_clip){
 			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
 		}	
@@ -1595,7 +1565,7 @@ class Drawers{
 			this.timeout_highlight = null;
 		}, 5000);
 	}
-	draw_clip_once(){
+	async draw_clip_once(){
 		if (this.vl.highlighted_clip && this.timeout_highlight) {
 			this.vl.highlighted_link = null;
 			this.vl.highlighted_clip.classList.remove('highlighted');
@@ -1609,40 +1579,36 @@ class Drawers{
 		const start = idx === 0 ? 0 : this.vl.positions[idx - 1] * this.vl.rem2px_rate;
 		console.log(item?.['title'], item?.['date'], start);
 		this.vl.div_container.scroll(0, start);
-		if(!this.vl.highlighted_clip){
-			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
-		}	
-		this.vl.highlighted_clip?.classList.add('highlighted');
-		console.log(this.vl.highlighted_clip);
+		// console.log(this.vl.highlighted_clip);
 
-		this.dur = parseFloat(this.vl.highlighted_clip.getAttribute('data-duration'));
+		this.dur = parseFloat(item?.['duration']);
 		let ms = (this.dur + this.INTERVAL_CLIPS) * 1000;
-		ms += this.vl.highlighted_clip.getAttribute('is_seperate') == "true" ? 500 : 0;
+		ms += item?.['is_seperate'] === true ? 500 : 0;
 		this.timeout_highlight = setTimeout(() => {	
 			this.vl.highlighted_link = null;
 			this.vl.highlighted_clip?.classList.remove('highlighted');
 			this.vl.highlighted_clip = null;
 			this.timeout_highlight = null;
 		}, ms);
-		document.title = '『' + this.vl.highlighted_clip.getAttribute('data-title') + '』';
-		this.new_win.open(this.vl.highlighted_clip.getAttribute('data-href'), ms, true);
+		document.title = '『' + item?.['title_raw'] + '』';
+		this.new_win.open(item?.['href'], ms, true);
+
+		await Utils.sleep(20);
+		if(!this.vl.highlighted_clip){
+			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
+		}	
+		this.vl.highlighted_clip?.classList.add('highlighted');
 		return ms;
 	}
 	draw_clip_cycle(){
 		window.focus();
-		// let ret = this.draw_clip_once();
-		// ret.then(ms => {
-		// 	this.timeout_cycle = setTimeout(()=>{
-		// 		this.new_win.close();
-		// 		this.draw_clip_cycle();
-		// 	}, ms);			
-		// })
-
-		let ms = this.draw_clip_once();
-		this.timeout_cycle = setTimeout(()=>{
-			this.new_win.close();
-			this.draw_clip_cycle();
-		}, ms);
+		this.draw_clip_once()
+		.then(ms => {
+			this.timeout_cycle = setTimeout(()=>{
+				this.new_win.close();
+				this.draw_clip_cycle();
+			}, ms);			
+		})
 	}
 	async draw_cursor(){
 		console.log(1)
