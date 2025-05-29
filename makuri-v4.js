@@ -1498,8 +1498,6 @@ class Drawers{
 		this.new_win = new_win;
 		this.vl = vl;
 
-		this.song = null;
-		this.clip = null;
 		this.dur = null;
 		this.timeout_highlight = null;
 		this.timeout_cycle = null;
@@ -1507,15 +1505,27 @@ class Drawers{
 
 		this.mount();
 	}
+	get song(){
+		return this.vl.highlighted_song;
+	}
+	set song(val){
+		this.vl.highlighted_song = val;
+	}
+	get clip(){
+		return this.vl.highlighted_clip;
+	}
+	set clip(val){
+		this.vl.highlighted_clip = val;
+	}
 	set_cursor(cursor){
 		this.cursor = cursor;
 		this.cursor_idx = 2;
-	}
-	draw_song(){
-		if (this.vl.highlighted_song && this.timeout_highlight) {
+	}	
+	async draw_song(){
+		if (this.song && this.timeout_highlight) {
 			this.vl.highlighted_title = null;
-			this.vl.highlighted_song.classList.remove('highlighted');
-			this.vl.highlighted_song = null;
+			this.song.classList.remove('highlighted');
+			this.song = null;
 			clearTimeout(this.timeout_highlight);
 			this.timeout_highlight = null;
 		}
@@ -1525,23 +1535,24 @@ class Drawers{
 		const start = this.vl.songs_dic.get(title);
 		console.log(title);
 		this.vl.div_container.scroll(0, start);
-		if(!this.vl.highlighted_song){
-			this.vl.highlighted_song = document.querySelector(`.group_title[data-titleRaw="${title}"]`);
+		await Utils.sleep(20);
+		if(!this.song){
+			this.song = document.querySelector(`.group_title[data-titleRaw="${title}"]`);
 		}	
-		this.vl.highlighted_song?.classList.add('highlighted');
+		this.song?.classList.add('highlighted');
 
 		this.timeout_highlight = setTimeout(()=>{
 			this.vl.highlighted_title = null;
-			this.vl.highlighted_song?.classList.remove('highlighted');
+			this.song?.classList.remove('highlighted');
 			this.timeout_highlight = null;
-			this.vl.highlighted_song = null;
+			this.song = null;
 		}, 5000);
 	}
 	async draw_clip(){
-		if (this.vl.highlighted_clip && this.timeout_highlight) {
+		if (this.clip && this.timeout_highlight) {
 			this.vl.highlighted_link = null;
-			this.vl.highlighted_clip.classList.remove('highlighted');
-			this.vl.highlighted_clip = null;
+			this.clip.classList.remove('highlighted');
+			this.clip = null;
 			clearTimeout(this.timeout_highlight);
 			this.timeout_highlight = null;
 		}
@@ -1553,23 +1564,23 @@ class Drawers{
 		this.vl.div_container.scroll(0, start);
 		await Utils.sleep(20);
 
-		if(!this.vl.highlighted_clip){
-			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
+		if(!this.clip){
+			this.clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
 		}	
-		this.vl.highlighted_clip?.classList.add('highlighted');
+		this.clip?.classList.add('highlighted');
 
 		this.timeout_highlight = setTimeout(() => {
 			this.vl.highlighted_link = null;
-			this.vl.highlighted_clip?.classList.remove('highlighted');
-			this.vl.highlighted_clip = null;
+			this.clip?.classList.remove('highlighted');
+			this.clip = null;
 			this.timeout_highlight = null;
 		}, 5000);
 	}
 	async draw_clip_once(){
-		if (this.vl.highlighted_clip && this.timeout_highlight) {
+		if (this.clip && this.timeout_highlight) {
 			this.vl.highlighted_link = null;
-			this.vl.highlighted_clip.classList.remove('highlighted');
-			this.vl.highlighted_clip = null;
+			this.clip.classList.remove('highlighted');
+			this.clip = null;
 			clearTimeout(this.timeout_highlight);
 			this.timeout_highlight = null;
 		}
@@ -1579,25 +1590,25 @@ class Drawers{
 		const start = idx === 0 ? 0 : this.vl.positions[idx - 1] * this.vl.rem2px_rate;
 		console.log(item?.['title'], item?.['date'], start);
 		this.vl.div_container.scroll(0, start);
-		// console.log(this.vl.highlighted_clip);
+		// console.log(this.clip);
 
 		this.dur = parseFloat(item?.['duration']);
 		let ms = (this.dur + this.INTERVAL_CLIPS) * 1000;
 		ms += item?.['is_seperate'] === true ? 500 : 0;
 		this.timeout_highlight = setTimeout(() => {	
 			this.vl.highlighted_link = null;
-			this.vl.highlighted_clip?.classList.remove('highlighted');
-			this.vl.highlighted_clip = null;
+			this.clip?.classList.remove('highlighted');
+			this.clip = null;
 			this.timeout_highlight = null;
 		}, ms);
 		document.title = '『' + item?.['title_raw'] + '』';
 		this.new_win.open(item?.['href'], ms, true);
 
 		await Utils.sleep(20);
-		if(!this.vl.highlighted_clip){
-			this.vl.highlighted_clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
+		if(!this.clip){
+			this.clip = document.querySelector(`.info_link[data-href="${item?.['href']}"]`);
 		}	
-		this.vl.highlighted_clip?.classList.add('highlighted');
+		this.clip?.classList.add('highlighted');
 		return ms;
 	}
 	draw_clip_cycle(){
