@@ -676,7 +676,7 @@ class virtualList{
 	add_styles(){
 		Utils.add_styles([
 			'body{margin:0; padding:0; overflow:hidden;}',
-			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent);}',
+			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent); width:62rem; max-width:92vw; margin:auto;}',
 			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.1rem);}',
 			'.header_title{width:35%;}',
 			'.header_date{width:13%;}',
