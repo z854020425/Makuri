@@ -1,3 +1,6 @@
+if('serviceWorker' in navigator){
+	navigator.serviceWorker.register('./sw.js');
+}
 // TODO: Keep-Alive
 // 邪道 后面研究下web workers+service worker
 // setInterval(() => {console.log(1)}, 1000);
