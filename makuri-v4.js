@@ -169,7 +169,14 @@ class Utils{
 		Object.keys(cookies_dict).forEach(key => {
 			cookies_str += `${key}=${cookies_dict[key]};`;
 		});
+		console.log(cookies_str)
 		document.cookie = cookies_str;
+	}
+	static get_storage(key){
+		return localStorage.getItem(String(key));
+	}
+	static set_storage(key, val){
+		localStorage.setItem(String(key), String(val));
 	}
 	static sleep(ms){
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -510,7 +517,7 @@ class DataLoader{
 
 class NewWindow{
 	constructor(){
-		this.play_foreground = Utils.get_cookie('play_foreground') == 'true' ? true : false;
+		this.play_foreground = Utils.get_storage('play_foreground') == 'true' ? true : false;
 		this.window = null;
 		this.timeout_close = null;
 	}
@@ -564,7 +571,7 @@ class NewWindow{
 		if(flag == this.play_foreground)
 			return;
 		this.play_foreground = flag;
-		Utils.set_cookie('play_foreground', flag);
+		Utils.set_storage('play_foreground', flag);
 	}
 }
 
@@ -1093,7 +1100,7 @@ class Cursor{
 		});
 	}
 	get_path(){
-		let cursor_idx = Utils.get_cookie('cursor_idx');
+		let cursor_idx = Utils.get_storage('cursor_idx');
 		if(!cursor_idx || cursor_idx === 'NaN'){
 			this.cursor_idx = null;
 			return './assets/jsons/points.json';
@@ -1692,7 +1699,9 @@ class Drawers{
 		console.log(this.cursor_idx);
 		const idx = (this?.cursor_idx ?? 0 + 1) % num + 1;
 		this.cursor_idx = idx;
-		Utils.set_cookie('cursor_idx', idx);
+		console.log(document.cookie);
+		Utils.set_storage('cursor_idx', idx);
+		console.log(document.cookie);
 		this.cursor.update_points(`./assets/jsons/points${idx}.json`);
 	}
 	reset(close_win){
@@ -1861,7 +1870,6 @@ class Introduction{
 		}
 	}
 	mount(disappear=false){
-		console.log(111)
 		const div_container = Utils.create('div', [], {'id': 'intro_container'});
 		document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
 		const div_intro = Utils.create('div', [], {'id': 'intro'});
@@ -1879,13 +1887,13 @@ class Introduction{
 			ps.push(p);
 			idx = (idx + 1) % this.num_text;
 			div_intro.appendChild(p);
-		}, 500);
-
+		}, 500);			
 		this.div_container = div_container;
+		
 
 		const h1 = document.querySelector('h1');
 		h1.style.cursor = 'pointer';
-		h1.addEventListener('click', ()=>{
+		h1.addEventListener('click', (e)=>{
 			if(this?.div_container){
 				this.clear();
 			} else {
