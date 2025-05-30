@@ -676,7 +676,7 @@ class virtualList{
 	add_styles(){
 		Utils.add_styles([
 			'body{margin:0; padding:0; overflow:hidden;}',
-			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center;}',
+			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent);}',
 			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.1rem);}',
 			'.header_title{width:35%;}',
 			'.header_date{width:13%;}',
@@ -686,7 +686,7 @@ class virtualList{
 			'.header_tags{width:26%;}',
 			'#vl{display:flex; justify-content:center;}',
 			'#vl_rows{position:absolute; width:60rem; max-width:90vw;}',
-			'#vl_container{width:70rem; max-width:98vw;}',
+			'#vl_container{width:62rem; max-width:92vw;}',
 
 			'.group_rows{display:flex; width:100%; align-items:center; border-top:0.125rem solid black;}',
 			'.group_rows:last-child{border-bottom:0.125rem solid black;}',
@@ -1869,6 +1869,7 @@ class Introduction{
 				} else {
 					this.mount(false);
 				}
+				this?.vl.update_visible_height();
 			})
 		}, 39.1 * 500);
 	}
