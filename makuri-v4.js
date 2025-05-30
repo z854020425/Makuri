@@ -284,6 +284,15 @@ class DataLoader{
 			return null;
 		return request.responseText;
 	}
+	fetch_data(path){
+		return fetch(path)
+		.then(response => {
+			if(!response.ok){
+				throw Error(`${path} Error`);
+			}
+			return response.text();
+		})
+	}
 	json2songs_timer(data, video_author=null){
 		console.time('json2songs_timer');
 		this.json2songs(data, video_author);
@@ -825,6 +834,7 @@ class virtualList{
 		let prev_title = null;
 		let group_rows, group_title, group_infos, row_infos;
 		let info_date, info_link, info_length, info_singer, info_lang, info_tags, span;
+		console.log(this.clips_arr.slice(start, end))
 		this.clips_arr.slice(start, end).forEach(song => {
 			let title, date, href, length, duration, singer, lang, author, tags, is_seperate, percent;
 			title = song?.['title'];
@@ -842,8 +852,8 @@ class virtualList{
 			let title_raw, title_chs;
 			title_raw = song?.['title_raw'];
 			title_chs = song?.['title_chs'];
-			if(prev_title == null || prev_title != title){
-				prev_title = title;
+			if(prev_title == null || prev_title != title_raw){
+				prev_title = title_raw;
 				group_rows = Utils.create('div', ['group_rows'], {});
 				group_rows.setAttribute('data-height', this.rem_padding * 2 + this.rem_item);
 				group_rows.style.height = `${group_rows.getAttribute('data-height')}rem`;
@@ -1074,8 +1084,13 @@ class Cursor{
 	constructor(){
 		this.init();
 		const path = this.get_path();
-		this.points = this.load_points(path);
-		this.mount();
+		// this.points = this.load_points(path);
+		// this.mount();
+		this.fetch_points(path)
+		.then(points => {
+			this.points = points;
+			this.mount();
+		});
 	}
 	get_path(){
 		let cursor_idx = Utils.get_cookie('cursor_idx');
@@ -1097,6 +1112,15 @@ class Cursor{
 			return;
 		}
 		return JSON.parse(request.responseText);
+	}
+	fetch_points(path){
+		return fetch(path)
+		.then(response => {
+			if(!response.ok)
+				throw Error(`${path} Error`);
+			return response.json();
+		})
+		.catch(error => console.error(error));
 	}
 	init(){
 		Utils.add_styles([
@@ -1156,9 +1180,12 @@ class Cursor{
 	}
 	update_points(path){
 		this.clear();
-		this.points = this.load_points(path);
-		// console.log(this.points)
-		this.mount();		
+
+		this.fetch_points(path)
+		.then(points => {
+			this.points = points;
+			this.mount();
+		})
 	}
 }
 
@@ -1833,7 +1860,7 @@ class Introduction{
 			this.div_container = null;
 		}
 	}
-	mount(disappear=true){
+	mount(disappear=false){
 		console.log(111)
 		const div_container = Utils.create('div', [], {'id': 'intro_container'});
 		document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
@@ -1855,22 +1882,23 @@ class Introduction{
 		}, 500);
 
 		this.div_container = div_container;
+
+		const h1 = document.querySelector('h1');
+		h1.style.cursor = 'pointer';
+		h1.addEventListener('click', ()=>{
+			if(this?.div_container){
+				this.clear();
+			} else {
+				this.mount();
+			}
+			this?.vl.update_visible_height();
+		})
+
 		if(!disappear)
 			return;
-
 		setTimeout(() => {
 			this.clear();
 			this?.vl.update_visible_height();
-			const h1 = document.querySelector('h1');
-			h1.style.cursor = 'pointer';
-			h1.addEventListener('click', ()=>{
-				if(this?.div_container){
-					this.clear();
-				} else {
-					this.mount(false);
-				}
-				this?.vl.update_visible_height();
-			})
 		}, 39.1 * 500);
 	}
 }
@@ -1881,6 +1909,7 @@ function main(){
 	const introduction = new Introduction();
 	const social_platforms = new SocialPlatforms();
 	const img_rb = new Image_RB('./assets/imgs/sleep.png');
+	const new_win = new NewWindow();
 
 	const TAGS = {
 	"BAN": ['百万个吻', '骗赖', '你跟我比夹夹', '嘉宾', '香水有毒', '纤夫的爱', '天上掉下个猪八戒', '通天大道宽又阔', '大哥欢迎你', '好汉歌'],
@@ -1889,41 +1918,53 @@ function main(){
 	};
 	console.time('LOAD JSON/CSV');
 	const loader = new DataLoader(TAGS);
-	loader.json2songs_timer(loader.load_data('./assets/jsons/真栗.json') ?? '', video_author='真栗');
-	// for(let i=0;i<37;i++)
-	loader.json2songs_timer(loader.load_data('./assets/jsons/Monedula.json') ?? '', video_author='Monedula');
-	loader.json2songs_timer(loader.load_data('./assets/jsons/蝴蝶谷逸_.json'), video_author='蝴蝶谷逸');
-	loader.csv2songs_timer(loader.load_data('./assets/csvs/薯片水獭.csv') ?? '', video_author='薯片水獭');
-	loader.csv2songs_timer(loader.load_data('./assets/csvs/真栗栗录播组_Clean.csv') ?? '', video_author='录播组');
-	loader.csv2songs_timer(loader.load_data('./真栗栗录播组_Selfuse.csv') ?? '', video_author='录播组');
-	loader.csv2songs_timer(loader.load_data('./assets/csvs/希望小紫真栗永远健康.csv') ?? '', video_author='希望小紫真栗永远健康');
-	// loader.json2songs_timer(loader.load_data('./assets/jsons/真栗栗录播组.json') ?? '', video_author='录播组');
-	loader.json2songs_timer(loader.load_data('./assets/jsons/橙光游戏.json') ?? '', video_author='橙光游戏');
-	loader.json2songs_timer(loader.load_data('./南夕君cC.json') ?? '', video_author='南夕君cC');
-	loader.sort_songs();
-	console.log(Object.keys(loader.ordered_songs).length);
-	// console.log(`未收录(${loader.uncollected_songs.length})：\n`, loader.uncollected_songs.join('\n'));
-	console.log(loader.num_songs, loader.num_clips)
-	console.timeEnd('LOAD JSON/CSV');
+	const load_args = [
+		['json2songs_timer', './assets/jsons/真栗.json', '真栗'],
+		['json2songs_timer', './assets/jsons/Monedula.json', 'Monedula'],
+		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸'],
+		['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
+		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '录播组'],
+		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '录播组'],
+		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
+		['json2songs_timer', './assets/jsons/橙光游戏.json', '橙光游戏'],
+		['json2songs_timer', './南夕君cC.json', '南夕君cC']
+	]
+	// load_args.forEach(args => {
+	// 	loader?.[args[0]](loader.load_data(args[1]) ?? '', video_author=args[2]);
+	// });
+	const data_processors = load_args.map(args => 
+		loader.fetch_data(args[1])
+		.then(data => {
+			loader?.[args[0]](data ?? '', video_author=args[2]);
+			console.log(loader.num_clips)
+		})
+		.catch(error => console.error(error))
+	);
+	Promise.all(data_processors)
+	.then(() => {
+		loader.sort_songs();
+		console.log(Object.keys(loader.ordered_songs).length);
+		// console.log(`未收录(${loader.uncollected_songs.length})：\n`, loader.uncollected_songs.join('\n'));
+		console.log(loader.num_songs, loader.num_clips)
+		console.timeEnd('LOAD JSON/CSV');
+	})
+	.then(() => {		
+		console.time('init virtual list');
+		const vl = new virtualList(new_win);
+		vl.load_songs(loader.ordered_songs);
+		vl.init();
+		console.timeEnd('init virtual list');
+		introduction.set_vl(vl);
 
-
-	const new_win = new NewWindow();
-
-	console.time('init virtual list');
-	const vl = new virtualList(new_win);
-	vl.load_songs(loader.ordered_songs);
-	vl.init();
-	console.timeEnd('init virtual list');
-	introduction.set_vl(vl);
-
-	const search_box = new SearchBox(vl, loader.ordered_songs);
-	const drawers = new Drawers(new_win, vl);
-
-	setTimeout(()=>{
-		// const cursor = new Cursor();
+		const search_box = new SearchBox(vl, loader.ordered_songs);
+		const drawers = new Drawers(new_win, vl);
+		return drawers;
+	})
+	.then((drawers) => {
 		const cursor = new Cursor();
-		drawers.set_cursor(cursor);
-	}, 500)
+		drawers.set_cursor(cursor);		
+	});
+
 
 }
 main();
