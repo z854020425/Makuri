@@ -674,7 +674,7 @@ class virtualList{
 		this.clipboard = new ClipBoard();
 
 		const div_cnts = Utils.create('div', ['div_cnts'], {});
-		document.querySelector('#intro_container').insertAdjacentElement('afterend', div_cnts);
+		document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
 		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
 		cnt_songs.innerText = '已收录歌曲 {0} 首';
 		div_cnts.appendChild(cnt_songs);
@@ -693,7 +693,7 @@ class virtualList{
 		Utils.add_styles([
 			'body{margin:0; padding:0; overflow:hidden;}',
 			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent); width:62rem; max-width:92vw; margin:auto;}',
-			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.1rem);}',
+			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.6rem);}',
 			'.header_title{width:35%;}',
 			'.header_date{width:13%;}',
 			'.header_length{width:6.5%;}',
@@ -841,7 +841,7 @@ class virtualList{
 		let prev_title = null;
 		let group_rows, group_title, group_infos, row_infos;
 		let info_date, info_link, info_length, info_singer, info_lang, info_tags, span;
-		console.log(this.clips_arr.slice(start, end))
+		// console.log(this.clips_arr.slice(start, end))
 		this.clips_arr.slice(start, end).forEach(song => {
 			let title, date, href, length, duration, singer, lang, author, tags, is_seperate, percent;
 			title = song?.['title'];
@@ -1847,7 +1847,23 @@ class Introduction{
 		this.text = this.text.split('·').map(text => text === '' ? '' : `☞ ${text} ☜`);
 		this.num_text = this.text.length;
 		// console.log(this.num_text)
-		this.add_styles();
+		this.add_styles();		
+
+		const h1 = document.querySelector('h1');
+		h1.style.cursor = 'pointer';
+		h1.addEventListener('click', (e)=>{
+			console.log(e.target)
+			if(this?.div_container){
+				Utils.set_storage('show_intro', false);
+				this.clear();
+			} else {
+				Utils.set_storage('show_intro', true);
+			}
+				this.mount();
+			this?.vl.update_visible_height();
+		})
+
+
 		this.mount(true);
 	}
 	set_vl(vl){
@@ -1870,37 +1886,29 @@ class Introduction{
 		}
 	}
 	mount(disappear=false){
-		const div_container = Utils.create('div', [], {'id': 'intro_container'});
-		document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
-		const div_intro = Utils.create('div', [], {'id': 'intro'});
-		div_container.appendChild(div_intro);
-
-		let ps = [], p, idx = 0;
-		const max_num = 9;
-		setInterval(() => {
-			if(ps.length == max_num){
-				p = ps.shift()
-				div_intro.removeChild(p);
-			}
-			p = Utils.create('p', [], {});
-			p.innerText = this.text[idx];
-			ps.push(p);
-			idx = (idx + 1) % this.num_text;
-			div_intro.appendChild(p);
-		}, 500);			
-		this.div_container = div_container;
-		
-
-		const h1 = document.querySelector('h1');
-		h1.style.cursor = 'pointer';
-		h1.addEventListener('click', (e)=>{
-			if(this?.div_container){
-				this.clear();
-			} else {
-				this.mount();
-			}
-			this?.vl.update_visible_height();
-		})
+		const show_intro = Utils.get_storage('show_intro') === 'false' ? false : true;
+		console.log(show_intro);
+		if(show_intro){
+			const div_container = Utils.create('div', [], {'id': 'intro_container'});
+			document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
+			const div_intro = Utils.create('div', [], {'id': 'intro'});
+			div_container.appendChild(div_intro);
+	
+			let ps = [], p, idx = 0;
+			const max_num = 9;
+			setInterval(() => {
+				if(ps.length == max_num){
+					p = ps.shift()
+					div_intro.removeChild(p);
+				}
+				p = Utils.create('p', [], {});
+				p.innerText = this.text[idx];
+				ps.push(p);
+				idx = (idx + 1) % this.num_text;
+				div_intro.appendChild(p);
+			}, 500);			
+			this.div_container = div_container;
+		}
 
 		if(!disappear)
 			return;
