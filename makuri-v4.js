@@ -677,7 +677,13 @@ class virtualList{
 		this.clipboard = new ClipBoard();
 
 		const div_cnts = Utils.create('div', ['div_cnts'], {});
-		document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
+		const intro_container = document.querySelector('#intro_container')
+		if(intro_container)
+			intro_container.insertAdjacentElement('afterend', div_cnts);
+		else
+			setTimeout(()=>{
+				document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
+			}, 200);
 		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
 		cnt_songs.innerText = '已收录歌曲 {0} 首';
 		div_cnts.appendChild(cnt_songs);
@@ -1175,7 +1181,7 @@ class Cursor{
 		// 	});
 		// }).bind(this), 1);
 		this.func_move_points = (e) => {
-			gsap.to('.point', {
+			this.tween = gsap.to('.point', {
 				x: e.clientX,
 				y: e.clientY,
 				ease: 'back.out(1.2)',
@@ -1855,7 +1861,6 @@ class Introduction{
 		const h1 = document.querySelector('h1');
 		h1.style.cursor = 'pointer';
 		h1.addEventListener('click', (e)=>{
-			console.log(e.target)
 			if(this?.div_container){
 				Utils.set_storage('show_intro', false);
 				this.clear();
@@ -1876,9 +1881,9 @@ class Introduction{
 		Utils.add_styles([
 			'#intro_container{height:15rem; overflow:hidden;}',
 			'#intro{display:flex; flex-direction:column; align-items:center; justify-content:flex-start;}',
-			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; animation: appear 4.5s; user-select:none;}',
+			'#intro p{font-family:楷体; font-weight:bolder; color:Gold; text-shadow:0 0 15px orange, 0 0 5px black; transfrom:translateY(-16rem); height:1.2rem; margin:0.25rem; animation: appear 4.5s; user-select:none;}',
 			'#intro p{transform:translateY(-3rem); height:0; margin:0; font-size:0;}',
-			'@keyframes appear{0%{transform:translateY(16rem);height:1.2rem; margin:0.25rem;} 50%{font-size:1.65rem;} 80%{transform:translateY(0);font-size:1.2rem; height:1.2rem;} 95%{transform:translateY(-3rem); height:0; font-size:0;}} 100%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}}',
+			'@keyframes appear1{0%{transform:translateY(16rem);height:1.2rem; margin:0.25rem;} 50%{font-size:1.65rem;} 80%{transform:translateY(0);font-size:1.2rem; height:1.2rem;} 95%{transform:translateY(-3rem); height:0; font-size:0;}} 100%{transform:translateY(-3rem); height:0; margin:0; font-size:0;}}',
 			// '@keyframes shadowToggle{0%{text-shadow: 0 0 5px orange, 0 0 3px black;} 50%{text-shadow: 0 0 30px orange, 0 0 5px black;} 100%{text-shadow: 0 0 5px orange, 0 0 3px black;}}'
 		]);
 	}
@@ -1887,10 +1892,17 @@ class Introduction{
 			this.div_container.remove();
 			this.div_container = null;
 		}
+		if(this?.interval){
+			clearInterval(this.interval);
+			this.interval = null;
+		}
+		if(this?.timeout){
+			clearTimeout(this.timeout);
+			this.timeout = null;
+		}
 	}
 	mount(disappear=false){
 		const show_intro = Utils.get_storage('show_intro') === 'false' ? false : true;
-		console.log(show_intro);
 		if(show_intro){
 			const div_container = Utils.create('div', [], {'id': 'intro_container'});
 			document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
@@ -1899,26 +1911,37 @@ class Introduction{
 	
 			let ps = [], p, idx = 0;
 			const max_num = 9;
-			setInterval(() => {
+			let cnt = 0;
+			this.interval = setInterval(() => {
 				if(ps.length == max_num){
 					p = ps.shift()
 					div_intro.removeChild(p);
 				}
-				p = Utils.create('p', [], {});
+				p = Utils.create('p', [], {'id': `intro_p_${cnt}`});
 				p.innerText = this.text[idx];
 				ps.push(p);
 				idx = (idx + 1) % this.num_text;
 				div_intro.appendChild(p);
+				const timeline = gsap.timeline();
+				timeline
+				.to(`#intro_p_${cnt}`, {y: '16rem', height: '1.2rem', margin:'0.25rem', fontSize: '1.65rem', duration:0})
+				.to(`#intro_p_${cnt}`, {y: 0, fontSize: '1.5rem', margin: '0.1rem', duration:3.8})
+				.to(`#intro_p_${cnt}`, {y:'-3rem', height:0, fontSize:0, duration: 0.4, margin: 0})
+				.to(`#intro_p_${cnt}`, {duration: 0.2,});
+				
+				cnt += 1;
+
+
 			}, 500);			
 			this.div_container = div_container;
 		}
 
 		if(!disappear)
 			return;
-		setTimeout(() => {
+		this.timeout = setTimeout(() => {
 			this.clear();
 			this?.vl.update_visible_height();
-		}, 39.1 * 500);
+		}, 39.4 * 500);
 	}
 }
 
