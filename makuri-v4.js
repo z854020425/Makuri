@@ -539,25 +539,25 @@ class NewWindow{
 	get open(){
 		return this.play_foreground ? this.open_url : this.change_url;
 	}
-	change_url(url, duration=null, is_cycle=false, is_seperate=false){
+	change_url(url, duration=null, is_cycle=false, is_seperate=false, title=null){
 		if(!this.isAvailable){
 			this.open_url(url, duration, is_cycle, is_seperate);
 			return;
 		}
-		if(this.timeout_close){
+		if(this?.timeout_close){
 			clearTimeout(this.timeout_close);
 			this.timeout_close = null;
 		}
 		this.window.location.href = url;
-		duration = parseFloat(duration);
+
 		if(!is_cycle && duration){
 			this.timeout_close = setTimeout(() => {
 				this.close(true);
 			}, (duration + 1 + (is_seperate ? 0.5 : 0)) * 1000);
 		}
 	}
-	open_url(url, duration=null, is_cycle=false, is_seperate=false){
-		if(this.timeout_close){
+	open_url(url, duration=null, is_cycle=false, is_seperate=false, title=null){
+		if(this?.timeout_close){
 			clearTimeout(this.timeout_close);
 			this.timeout_close = null;
 		}
@@ -646,13 +646,13 @@ class virtualList{
 			this.div_container.scrollBy(0, e.deltaY );
 		});
 		// TODO: touchmove optimize
-		this.vl.addEventListener('touchstart', (e)=>{
-			console.log(e.target);
+		window.addEventListener('touchstart', (e)=>{
 			let prev_y = e.touches[0].clientY;
 			let scroll_top = this.div_container.scrollTop;
 			let timeout = null;
 			const touchmove_handler = (e)=>{
-				e.stopPropagation();
+				// e.stopPropagation();
+				console.log(e.target)
 				const cur_y = e.touches[0].clientY;
 				console.log((prev_y - cur_y) * 5);
 
@@ -665,13 +665,13 @@ class virtualList{
 				}, 150);
 			};
 			const touchmove_handler_debounce = Utils.debounce(touchmove_handler, 5);
-			window.addEventListener('touchmove', touchmove_handler, true);
+			window.addEventListener('touchmove', touchmove_handler);
 			window.addEventListener('touchend', (e)=>{
 				e.stopPropagation();
 				window.removeEventListener('touchmove', touchmove_handler_debounce);
 				window.removeEventListener('touchmove', touchmove_handler);
-			}, true)
-		}, true)
+			})
+		})
 
 		this.add_styles();
 		this.clipboard = new ClipBoard();
@@ -939,7 +939,8 @@ class virtualList{
 					link.getAttribute('data-href'),
 					link.getAttribute('data-duration'),
 					false,
-					link.getAttribute('data-isSeperate')
+					link.getAttribute('data-isSeperate'),
+					link.getAttribute('data-title')
 				);
 			})
 			info_date.append(info_link);
@@ -1395,7 +1396,7 @@ class SearchBox{
 			['👶儿歌👶 专场', 'tag:儿歌'],
 			['❤️情人节❤️ 专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25'],
 			['🎀COS🎀 专场', 'tag:cos'],
-			['🍺干杯🍺 专场', 'date:22-03-28|23-09-06|25-01-01'],
+			['🍺干杯🍺 专场', 'date:22-03-28|23-09-06|25-01-01|24-12-31'],
 			['孤品 专场', 'totalNum:==1 -+ -（'], 
 			['距最近收录已有1️⃣年', 'minGap:>=1 -+'],
 			['距最近收录已有2️⃣年', 'minGap:>=2 -+'],
@@ -1682,7 +1683,7 @@ class Drawers{
 			this.timeout_highlight = null;
 		}, ms);
 		document.title = '『' + item?.['title_raw'] + '』';
-		this.new_win.open(item?.['href'], ms, true);
+		this.new_win.open(item?.['href'], ms, true, item?.['title_raw']);
 
 		await Utils.sleep(20);
 		if(!this.clip){
@@ -1950,13 +1951,13 @@ class Introduction{
 function main(){
 	const introduction = new Introduction();
 	const social_platforms = new SocialPlatforms();
-	const img_rb = new Image_RB('./assets/imgs/sleep.png');
+	const img_rb = new Image_RB('./assets/imgs/sleep.webp');
 	const new_win = new NewWindow();
 
 	const TAGS = {
 	"BAN": ['百万个吻', '骗赖', '你跟我比夹夹', '嘉宾', '香水有毒', '纤夫的爱', '天上掉下个猪八戒', '通天大道宽又阔', '大哥欢迎你', '好汉歌'],
 	"面白い": ['百万个吻', '骗赖', '香水有毒', '通天大道宽又阔', '你跟我比夹夹', 'TMD我爱你', '闹啥子嘛闹', '810975', '忐忑', '蕉蕉'],
-	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所', '加油鸭', '巴啦啦小魔仙', '小小鹿', '别看我是一只羊', '宝贝宝贝', '白龙马', '葫芦娃', '大家一起喜羊羊', '天上掉下个猪八戒']
+	"儿歌": ['小鲤鱼历险记', '我爱洗澡', '勇气大爆发', '我会自己上厕所', '加油鸭', '巴啦啦小魔仙', '小小鹿', '别看我是一只羊', '宝贝宝贝', '白龙马', '葫芦娃', '大家一起喜羊羊', '天上掉下个猪八戒', '快乐小孩', '少年英雄小哪吒', '我为厨艺狂', '永远的奥特曼']
 	};
 	console.time('LOAD JSON/CSV');
 	const loader = new DataLoader(TAGS);
