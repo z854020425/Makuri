@@ -896,7 +896,7 @@ class virtualList{
 					};
 				}
 				group_title.addEventListener('click', (e) => {
-					this.clipboard.copy(e.target.textContent);
+					this.clipboard.copy(e.target.getAttribute('data-titleRaw'));
 				})
 				group_rows.appendChild(group_title);
 
