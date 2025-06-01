@@ -662,33 +662,7 @@ class virtualList{
 			e.stopPropagation()
 			this.div_container.scrollBy(0, e.deltaY );
 		});
-		// TODO: touchmove optimize
-		window.addEventListener('touchstart', (e)=>{
-			let prev_y = e.touches[0].clientY;
-			let scroll_top = this.div_container.scrollTop;
-			let timeout = null;
-			const touchmove_handler = (e)=>{
-				// e.stopPropagation();
-				console.log(e.target)
-				const cur_y = e.touches[0].clientY;
-				console.log((prev_y - cur_y) * 5);
-
-				if(timeout){
-					clearTimeout(timeout);
-				}
-				setTimeout(()=>{
-					this.div_container.scroll(0, scroll_top + (prev_y - cur_y) * 10);
-					timeout = null;
-				}, 150);
-			};
-			const touchmove_handler_debounce = Utils.debounce(touchmove_handler, 5);
-			window.addEventListener('touchmove', touchmove_handler);
-			window.addEventListener('touchend', (e)=>{
-				e.stopPropagation();
-				window.removeEventListener('touchmove', touchmove_handler_debounce);
-				window.removeEventListener('touchmove', touchmove_handler);
-			})
-		})
+		this.init_touch();
 
 		this.add_styles();
 		this.clipboard = new ClipBoard();
@@ -699,6 +673,88 @@ class virtualList{
 		this.height_visible = (window.innerHeight - rect.y) * 0.95 / this.rem2px_rate;
 		div_container_wrapper.style.height = `${this.height_visible}rem`;
 		div_container.style.height = `${this.height_visible}rem`;
+	}
+	init_touch(){
+		this.cur_ele = null;
+		this.last_timestamp = performance.now();
+		// TODO: touchmove optimize
+		const func_touchstart = (e)=>{
+			// if(e.target != document.body && e.target.tagName != 'svg' && e.target.getAttribute('id') != 'vl')
+			// 	return;
+			console.log(this?.touch_dragging);
+			if(this?.touch_dragging === true)
+				return;
+
+			this.touch_start_y = e.touches[0].clientY;
+			this.start_scroll_top = this.div_container.scrollTop;
+			this.last_scroll_up = this.div_container.scrollTop;
+			this.velocity = 0;
+			if(this?.animation_frame){
+				cancelAnimationFrame(this.animation_frame);
+				this.animation_frame = null;
+			}
+			this.touch_dragging = true;
+		};
+		const func_touchmove = (e)=>{
+			if(!this?.touch_dragging)
+				return;
+			if(this?.start_scroll_top === null || this?.touch_start_y === null)
+				return;
+			if(['group_title', 'info_date', 'info_link', 'info_length', 'info_singer', 'info_lang', 'info_tag', 'info_tags'].some(x => e.target.classList.contains(x)))
+				this.cur_ele = e.target;
+			const y = e.touches[0].clientY;
+			const delta_y = y - this.touch_start_y;
+			// console.log((this.touch_start_y - y) * 5)
+			this.div_container.scroll(0, this.start_scroll_top - delta_y);
+			const now = performance.now();
+			const delta_time = now - this.last_timestamp;
+			if(delta_time > 0){
+				this.velocity = (this.div_container.scrollTop - this.last_scroll_up) / delta_time;
+				// console.log(this.velocity);
+				this.last_scroll_up = this.div_container.scrollTop;
+				this.last_timestamp = now;
+			}
+			// 连续滑动小trick
+			if(delta_y != 0 && this.cur_ele){
+				this.cur_ele.style.display = 'hidden';
+				document.body.appendChild(this.cur_ele);
+			}		
+		};
+		const func_touchend = (e)=>{
+			if(!this?.touch_dragging)
+				return;
+			this.touch_dragging = false;
+			this.start_scroll_top = null;
+			this.touch_start_y = null;
+			this.cur_ele && this.cur_ele.remove();
+			this.cur_ele = null;
+
+			console.log(this.velocity);
+			if(Math.abs(this.velocity) < 0.1)
+				return;
+			const start_time = performance.now();
+			let start_scroll_top = this.div_container.scrollTop;
+			const start_velocity = this.velocity * 100;
+			const animate_scroll = (timestamp) => {
+				const elapsed = timestamp - start_time;
+				const decay = Math.exp(-elapsed / 325);
+				const scroll_delta = start_velocity * decay;
+				const new_scroll_top = start_scroll_top + scroll_delta;
+				// console.log(scroll_delta, new_scroll_top);
+				start_scroll_top = new_scroll_top;
+				if(new_scroll_top < 0 || new_scroll_top > this.vl.scrollHeight || decay < 0.01 || Math.abs(scroll_delta) < 5){
+					this.div_container.scroll(0, new_scroll_top);
+					return;
+				}
+				this.div_container.scroll(0, new_scroll_top);
+				this.animation_frame = requestAnimationFrame(animate_scroll);
+			}
+			this.animation_frame = requestAnimationFrame(animate_scroll);
+		};
+		window.addEventListener('touchstart', func_touchstart);
+		window.addEventListener('touchmove', func_touchmove, {passive:true});
+		window.addEventListener('touchend', func_touchend);
+		window.addEventListener('touchcancel', func_touchend);
 	}
 	add_styles(){
 		Utils.add_styles([
@@ -824,6 +880,30 @@ class virtualList{
 
 			this.render_visible_rows(start, end);
 		})
+		this.div_container.addEventListener('click', (e)=>{
+				console.log(e.target.classList.contains('group_title'))
+			if(e.target.tagName == 'DIV' && e.target.classList.contains('group_title')){
+				this.clipboard.copy(e.target.getAttribute('data-titleRaw'));
+				return;
+			}
+			if(e.target.tagName == 'A' && e.target.classList.contains('info_link')){
+				e.preventDefault();
+				if(this.btn_cycle && this.btn_cycle.classList.contains('btn_active')){
+					this.btn_cycle.setAttribute('close_win', this.new_win.play_foreground);
+					this.btn_cycle.click();
+					this.btn_cycle.removeAttribute('close_win');
+				}
+				let link = e.target;
+				document.title = `『${link.getAttribute('data-titleRaw')}』`;
+				this.new_win.open(
+					link.getAttribute('data-href'),
+					link.getAttribute('data-duration'),
+					false,
+					link.getAttribute('data-isSeperate'),
+					link.getAttribute('data-titleRaw')
+				);
+			}
+		})
 	}
 	bisect_left(arr, val){
 		let left = 0, right = arr.length, mid;
@@ -897,9 +977,6 @@ class virtualList{
 						e.target.style.color = 'deeppink';
 					};
 				}
-				group_title.addEventListener('click', (e) => {
-					this.clipboard.copy(e.target.getAttribute('data-titleRaw'));
-				})
 				group_rows.appendChild(group_title);
 
 				group_infos = Utils.create('div', ['group_infos'], {});
@@ -929,23 +1006,6 @@ class virtualList{
 				this.highlighted_clip = info_link;
 			}
 			info_link.innerText = date;
-			info_link.addEventListener('click', (e) => {
-				e.preventDefault();
-				if(this.btn_cycle && this.btn_cycle.classList.contains('btn_active')){
-					this.btn_cycle.setAttribute('close_win', this.new_win.play_foreground);
-					this.btn_cycle.click();
-					this.btn_cycle.removeAttribute('close_win');
-				}
-				let link = e.target;
-				document.title = `『${link.getAttribute('data-titleRaw')}』`;
-				this.new_win.open(
-					link.getAttribute('data-href'),
-					link.getAttribute('data-duration'),
-					false,
-					link.getAttribute('data-isSeperate'),
-					link.getAttribute('data-titleRaw')
-				);
-			})
 			info_date.append(info_link);
 			// length
 			info_length = Utils.create('div', ['info_length'], {});
@@ -1051,16 +1111,22 @@ class SocialPlatforms{
 			'.div_dec{border-top: 6px double white; border-bottom: 6px double white; filter: hue-rotate(15deg);}'
 		]);
 		let div_rt = Utils.create('div', [], {'id': 'div_rt'});
+		div_rt.addEventListener('click', (e)=>{
+			if(e.target.tagName == 'A'){
+				e.preventDefault();
+				window.open(e.target.href);
+			}
+			if(e.target.tagName == 'IMG' || e.target.classList.contains('div_dec')){
+				e.preventDefault();
+				window.open(e.target.parentNode.href);
+			}
+		});
 		document.body.appendChild(div_rt);
 		this.data.forEach(item => {
 
 			let link = Utils.create('a', [], {
 				'title': '真栗栗的' + item['name'] + '主页',
 				'href': item['href']
-			});
-			link.addEventListener('click', function(e){
-				e.preventDefault();
-				window.open(this.href);
 			});
 			div_rt.appendChild(link);
 
@@ -1570,7 +1636,6 @@ class SearchBox{
 }
 
 
-
 class Drawers{
 	constructor(new_win, vl){
 		this.new_win = new_win;
@@ -1888,8 +1953,6 @@ class Introduction{
 				this.mount();
 			this?.vl.update_visible_height();
 		})
-
-
 		this.mount(true);
 	}
 	set_vl(vl){
@@ -1948,8 +2011,6 @@ class Introduction{
 				.to(`#intro_p_${cnt}`, {duration: 0.2,});
 				
 				cnt += 1;
-
-
 			}, 500);			
 			this.div_container = div_container;
 		}
@@ -2032,7 +2093,8 @@ class Signature{
 
 
 		const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-		g.setAttribute('transform', 'translate(100,450) scale(1,-1)');
+		// g.setAttribute('transform', 'translate(50,450) scale(1,-1)');
+		g.style.transform = 'translate(3rem,27rem) scale(1,-1)'
 		g.setAttribute('fill', 'none');
 		g.setAttribute('stroke', 'none');
 		g.setAttribute('filter', 'blur(0.025rem)');
@@ -2086,7 +2148,6 @@ class Signature{
 		this.paths.forEach(path => {
 			path.classList.remove('path_show');
 			path.style.stroke = 'none';
-
 		});
 	}
 }
