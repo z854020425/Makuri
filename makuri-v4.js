@@ -1382,6 +1382,7 @@ class SearchBox{
 		let items = new Map([
 			['🌟 ALL 🌟', ''],
 			['⁺✞ʚ 🌰 ɞ✟₊', '-谭姐 -姨妈'],
+			['最近 N 首', 'gap:<=32/365'],
 			['周杰伦 专场', 'singer:周杰伦 -半首'],
 			['邓紫棋 专场', 'singer:邓紫棋 -半首'],
 			['王心凌 专场', 'singer:王心凌 -半首'],
@@ -1598,6 +1599,9 @@ class Drawers{
 		this.cursor = cursor;
 		this.cursor_idx = 2;
 	}
+	set_signature(signature){
+		this.signature = signature;
+	}
 	get cursor_idx(){
 		return this?.cursor?.cursor_idx;
 	}
@@ -1697,6 +1701,10 @@ class Drawers{
 	}
 	draw_clip_cycle(){
 		window.focus();
+		if(this.vl.clips_arr.length == 0){
+			window.alert('暂无切片');
+			return false;
+		}
 		this.draw_clip_once()
 		.then(ms => {
 			this.timeout_cycle = setTimeout(()=>{
@@ -1704,6 +1712,7 @@ class Drawers{
 				this.draw_clip_cycle();
 			}, ms);			
 		})
+		return true;
 	}
 	async draw_cursor(){
 		if(!this?.cursor)
@@ -1829,8 +1838,8 @@ class Drawers{
 				this.reset(e.target.getAttribute('close_win') == 'false' ? false: true);
 				document.title = 'Makuri';
 			} else {
-				e.target.classList.add('btn_active');
-				this.draw_clip_cycle();
+				if(this.draw_clip_cycle())
+					e.target.classList.add('btn_active');
 			}
 		});
 		div_lb.appendChild(div);
@@ -1848,6 +1857,11 @@ class Drawers{
 				video.play();
 			}
 			this.vl.div_container.scroll(0, 0);
+
+			if(this?.signature){
+				this.signature.hidden();
+				this.signature.show();
+			}
 		})
 		div_lb.appendChild(div);
 	}
@@ -1950,6 +1964,133 @@ class Introduction{
 }
 
 
+class Signature{
+	constructor(){
+		this.add_styles();
+		this.init_svg();
+		this.load_paths('./assets/jsons/paths.json')
+		.then(paths => this.create_paths(paths))
+	}
+	load_paths(path){
+		return fetch(path)
+		.then(response => {
+			if(!response.ok){
+				throw Error(`${path} Error`);
+			}
+			return response.json();
+		})
+	}
+	add_styles(){
+		Utils.add_styles([
+			'.path_show{stroke:#e25b1bba; stroke-width:6; stroke-dasharray:var(--length); stroke-dashoffset:var(--length); animation:stroke var(--duration) linear forwards; stroke-linecap:round; }',
+			'@keyframes stroke{to{stroke-dashoffset: 0;}}',
+			'#signature_svg{width:100vw; height:100vh; position:fixed; left:0; top:0; z-index:-1;}'
+		]);
+	}
+	init_svg(){
+		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		svg.setAttribute('id', 'signature_svg');
+		svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+		svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+		document.body.appendChild(svg);
+		const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+		svg.appendChild(defs);
+		let gradient, stop;
+		gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+		gradient.setAttribute('id', 'gradient');
+		gradient.setAttribute('x1', '0%');
+		gradient.setAttribute('y1', '0%');
+		gradient.setAttribute('x2', '100%');
+		gradient.setAttribute('y2', '0%');
+		defs.appendChild(gradient);
+
+		stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+		stop.setAttribute('offset', '0%');
+		stop.setAttribute('stop-color', '#ead62cc4');
+		gradient.appendChild(stop);
+		stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+		stop.setAttribute('offset', '100%');
+		stop.setAttribute('stop-color', '#fe9100ab');
+		gradient.appendChild(stop);
+
+		gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+		gradient.setAttribute('id', 'gradient_r');
+		gradient.setAttribute('x1', '0%');
+		gradient.setAttribute('y1', '0%');
+		gradient.setAttribute('x2', '100%');
+		gradient.setAttribute('y2', '0%');
+		defs.appendChild(gradient);
+
+		stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+		stop.setAttribute('offset', '0%');
+		stop.setAttribute('stop-color', '#fe9100ab');
+		gradient.appendChild(stop);
+		stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+		stop.setAttribute('offset', '100%');
+		stop.setAttribute('stop-color', '#ead62cc4');
+		gradient.appendChild(stop);
+
+
+		const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		g.setAttribute('transform', 'translate(100,450) scale(1,-1)');
+		g.setAttribute('fill', 'none');
+		g.setAttribute('stroke', 'none');
+		g.setAttribute('filter', 'blur(0.025rem)');
+		svg.appendChild(g);
+
+		this.svg = svg;
+		this.g = g;
+	}
+	create_paths(paths_data){
+		let paths = [];
+		paths_data.forEach(path_data => {
+			const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+			paths.push(path);
+			// path.setAttribute('class', 'path_show');
+			path.setAttribute('d', path_data);
+			this.g.appendChild(path);
+		});
+		this.paths = paths
+		this.show();
+	}
+	show(){
+		const paths = this.paths;
+		const speed = 200;
+		this.drawing = true;
+		const draw = async(start, end, times, stroke='#000') => {
+			let path, length;
+			for(let idx = start; idx < end; idx++){
+				if(this?.drawing === false)
+					break
+ 				path = paths[idx];
+ 				length = Math.ceil(path.getTotalLength());
+				path.style.setProperty('--length', length);
+				path.style.setProperty('--duration', length / speed * times + 's');
+				if(end - idx <= 3 && stroke == 'url(#gradient)')
+					stroke = 'url(#gradient_r)'
+				path.style.stroke = stroke;
+				path.classList.add('path_show');
+				await Utils.sleep((length / speed * times + 0.1) * 1000);
+			}
+		};
+		draw(0, 15, 1, '#e25b1bba');
+		draw(15, paths.length, 1.5, 'url(#gradient)');
+		// this.timeout = setTimeout(this.hidden.bind(this), 10 * 1000);
+	}
+	hidden(){
+		this.drawing = false;
+		if(this?.timeout){
+			clearTimeout(this.timeout);
+			this.timeout = null;
+		}
+		this.paths.forEach(path => {
+			path.classList.remove('path_show');
+			path.style.stroke = 'none';
+
+		});
+	}
+}
+
 
 function main(){
 	const introduction = new Introduction();
@@ -2009,9 +2150,10 @@ function main(){
 	})
 	.then((drawers) => {
 		const cursor = new Cursor();
-		drawers.set_cursor(cursor);		
+		drawers.set_cursor(cursor);	
+
+		const signature = new Signature();
+		drawers.set_signature(signature);
 	});
-
-
 }
 main();
