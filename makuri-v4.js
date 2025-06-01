@@ -599,6 +599,23 @@ class virtualList{
 		this.new_win = new_win;
 		this.btn_cycle = null;
 
+		this.init_container();
+	}
+	init_container(){
+		const div_cnts = Utils.create('div', ['div_cnts'], {});
+		const intro_container = document.querySelector('#intro_container')
+		if(intro_container)
+			intro_container.insertAdjacentElement('afterend', div_cnts);
+		else
+			document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
+		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
+		cnt_songs.innerText = '已收录歌曲 {0} 首';
+		div_cnts.appendChild(cnt_songs);
+		const cnt_clips = Utils.create('div', ['cnt_clips'], {});
+		cnt_clips.innerText = '已收录切片 {0} 枚';
+		div_cnts.appendChild(cnt_clips);
+		this.cnt_songs = cnt_songs;
+
 		const div_container_wrapper = Utils.create('div', [], {'id': 'vl_container_wrapper'});
 		document.body.appendChild(div_container_wrapper);;
 
@@ -676,21 +693,6 @@ class virtualList{
 		this.add_styles();
 		this.clipboard = new ClipBoard();
 
-		const div_cnts = Utils.create('div', ['div_cnts'], {});
-		const intro_container = document.querySelector('#intro_container')
-		if(intro_container)
-			intro_container.insertAdjacentElement('afterend', div_cnts);
-		else
-			setTimeout(()=>{
-				document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
-			}, 200);
-		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
-		cnt_songs.innerText = '已收录歌曲 {0} 首';
-		div_cnts.appendChild(cnt_songs);
-		const cnt_clips = Utils.create('div', ['cnt_clips'], {});
-		cnt_clips.innerText = '已收录切片 {0} 枚';
-		div_cnts.appendChild(cnt_clips);
-		this.cnt_songs = cnt_songs;
 		this.cnt_clips = cnt_clips;
 
 		let rect = div_container_wrapper.getClientRects()[0];
@@ -1997,6 +1999,7 @@ function main(){
 		const vl = new virtualList(new_win);
 		vl.load_songs(loader.ordered_songs);
 		vl.init();
+
 		console.timeEnd('init virtual list');
 		introduction.set_vl(vl);
 
