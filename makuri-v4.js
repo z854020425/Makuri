@@ -759,7 +759,7 @@ class virtualList{
 	add_styles(){
 		Utils.add_styles([
 			'body{margin:0; padding:0; overflow:hidden;}',
-			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent); width:62rem; max-width:92vw; margin:auto;}',
+			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent); width:62rem; max-width:92vw; margin:auto; z-index:10; position:relative;}',
 			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.6rem);}',
 			'.header_title{width:35%;}',
 			'.header_date{width:13%;}',
@@ -1923,10 +1923,10 @@ class Drawers{
 			}
 			this.vl.div_container.scroll(0, 0);
 
-			if(this?.signature){
-				this.signature.hidden();
-				this.signature.show();
-			}
+			// if(this?.signature){
+			// 	this.signature.hidden();
+			// 	this.signature.show();
+			// }
 		})
 		div_lb.appendChild(div);
 	}
@@ -2045,15 +2045,19 @@ class Signature{
 		Utils.add_styles([
 			'.path_show{stroke:#e25b1bba; stroke-width:6; stroke-dasharray:var(--length); stroke-dashoffset:var(--length); animation:stroke var(--duration) linear forwards; stroke-linecap:round; }',
 			'@keyframes stroke{to{stroke-dashoffset: 0;}}',
-			'#signature_svg{width:100vw; height:100vh; position:fixed; left:0; top:0; z-index:-1;}'
+			'#signature_svg{position:absolute; left:0; top:0; z-index:-1;}',
+			'#signature_wrapper{position:fixed; left:2rem; top:19rem; height:9.9rem; width:13.1rem;}'
 		]);
 	}
 	init_svg(){
+		const wrapper = Utils.create('div', [], {'id': 'signature_wrapper'});
+		document.body.appendChild(wrapper);
+
 		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 		svg.setAttribute('id', 'signature_svg');
 		svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 		svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-		document.body.appendChild(svg);
+		wrapper.appendChild(svg);
 		const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
 		svg.appendChild(defs);
 		let gradient, stop;
@@ -2094,12 +2098,18 @@ class Signature{
 
 		const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 		// g.setAttribute('transform', 'translate(50,450) scale(1,-1)');
-		g.style.transform = 'translate(3rem,27rem) scale(1,-1)'
+		g.style.transform = 'translate(0rem,100%) scale(1,-1)'
 		g.setAttribute('fill', 'none');
 		g.setAttribute('stroke', 'none');
 		g.setAttribute('filter', 'blur(0.025rem)');
+
+		// wrapper.addEventListener('click', async()=>{
+		// 	await this.hidden();
+		// 	await this.show();
+		// })
 		svg.appendChild(g);
 
+		this.wrapper = wrapper;
 		this.svg = svg;
 		this.g = g;
 	}
@@ -2115,7 +2125,7 @@ class Signature{
 		this.paths = paths
 		this.show();
 	}
-	show(){
+	async show(){
 		const paths = this.paths;
 		const speed = 200;
 		this.drawing = true;
@@ -2135,11 +2145,16 @@ class Signature{
 				await Utils.sleep((length / speed * times + 0.1) * 1000);
 			}
 		};
-		draw(0, 15, 1, '#e25b1bba');
-		draw(15, paths.length, 1.5, 'url(#gradient)');
 		// this.timeout = setTimeout(this.hidden.bind(this), 10 * 1000);
+		await Promise.all([
+			draw(0, 15, 1, '#e25b1bba'),
+			draw(15, paths.length, 1.5, 'url(#gradient)')
+		])
+		this.drawing = false;
 	}
-	hidden(){
+	async hidden(){
+		if(this?.drawing == true)
+			return;
 		this.drawing = false;
 		if(this?.timeout){
 			clearTimeout(this.timeout);
@@ -2149,6 +2164,7 @@ class Signature{
 			path.classList.remove('path_show');
 			path.style.stroke = 'none';
 		});
+		await Utils.sleep(100)
 	}
 }
 
