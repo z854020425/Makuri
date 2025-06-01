@@ -5,7 +5,14 @@
 	<meta charset="UTF-8">
 	<title>Makuri</title>
 	<link rel="icon" href="./favicon.png">
-	<link rel="preload" href="./assets/videos/snow.mp4" as="video">
+	<link rel="preload" href="./assets/videos/snow.mp4" as="video" type="video/mp4">
+	<link rel="preload" href="./assets/jsons/真栗.json" as="fetch">
+	<link rel="preload" href="./assets/jsons/Monedula.json" as="fetch">
+	<link rel="preload" href="./assets/jsons/蝴蝶谷逸_.json" as="fetch">
+	<link rel="preload" href="./assets/csvs/薯片水獭.csv" as="fetch">
+	<link rel="preload" href="./assets/csvs/真栗栗录播组_Clean.csv" as="fetch">
+	<link rel="preload" href="./assets/csvs/希望小紫真栗永远健康.csv" as="fetch">
+	<link rel="preload" href="./assets/jsons/橙光游戏.json" as="fetch">
 	<link rel="dns-prefetch" href="https://weibo.com">
 	<link rel="dns-prefetch" href="https://www.bilibili.com">
 	<link rel="dns-prefetch" href="https://p-pc-weboff.byteimg.com">
@@ -15,12 +22,15 @@
 	<link rel="dns-prefetch" href="http://5sing.kugou.com">
 	<style type="text/css" media="screen">
 		h1{
+			width: fit-content;
+		    position: relative;
+		    margin: 0 auto;
 			display:flex; 
 			justify-content:center;
 			color: gold;
 			text-shadow: 0 0 5px orange, 0 0 5px black;
-			margin:0;
 			font-size: 160%;
+			user-select: none;
 			animation: shadowToggle 2s infinite;
 		}
 		@keyframes shadowToggle{
@@ -62,6 +72,14 @@
 		<video class='video_snow' muted autoplay>
 			<source src="./assets/videos/snow.mp4">
 		</video>
+		<script>
+			const video = document.querySelector('.video_snow');
+			video.addEventListener('ratechange', () => {
+				if (video.playbackRate != 1.0) {
+					video.playbackRate = 1.0;
+				}
+			});
+		</script>
 	</div>
 
 </body>
