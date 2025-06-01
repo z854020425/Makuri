@@ -917,7 +917,8 @@ class virtualList{
 			row_infos.append(info_date);
 			info_link = Utils.create('a', ['info_link'], {
 				'data-href': href,
-				'data-title': title,
+				'data-titleRaw': title_raw,
+				'data-titleChs': title_chs,
 				'data-duration': duration,
 				'data-isSeperate': is_seperate
 			});
@@ -934,13 +935,13 @@ class virtualList{
 					this.btn_cycle.removeAttribute('close_win');
 				}
 				let link = e.target;
-				document.title = `『${link.getAttribute('data-title')}』`;
+				document.title = `『${link.getAttribute('data-titleRaw')}』`;
 				this.new_win.open(
 					link.getAttribute('data-href'),
 					link.getAttribute('data-duration'),
 					false,
 					link.getAttribute('data-isSeperate'),
-					link.getAttribute('data-title')
+					link.getAttribute('data-titleRaw')
 				);
 			})
 			info_date.append(info_link);
