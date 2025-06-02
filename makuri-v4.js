@@ -2,7 +2,7 @@ if('serviceWorker' in navigator){
 	navigator.serviceWorker.register('./sw.js');
 }
 // TODO: Keep-Alive
-// 邪道 后面研究下web workers+service worker
+// 邪道 后面研究下worker
 // setInterval(() => {console.log(1)}, 1000);
 function keepAliveBySilentAudio(){
 	let audio = document.createElement('audio');
@@ -626,9 +626,11 @@ class virtualList{
 			document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
 		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
 		cnt_songs.innerText = '已收录歌曲 {0} 首';
+		cnt_songs.setAttribute('data-text', cnt_songs.innerText);
 		div_cnts.appendChild(cnt_songs);
 		const cnt_clips = Utils.create('div', ['cnt_clips'], {});
 		cnt_clips.innerText = '已收录切片 {0} 枚';
+		cnt_clips.setAttribute('data-text', cnt_clips.innerText);
 		div_cnts.appendChild(cnt_clips);
 		this.cnt_songs = cnt_songs;
 
@@ -856,7 +858,8 @@ class virtualList{
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
 			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column; user-select:none;}',
-			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem;}'
+			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem; text-shadow:none; -webkit-text-stroke:0.15rem #0005ffa3; position:relative;}',
+			'.cnt_songs::after, .cnt_clips::after{content:attr(data-text);position:absolute; left:0; top:0; -webkit-text-stroke:initial;}'
 		]);
 	}
 	update_visible_height(){
@@ -890,12 +893,14 @@ class virtualList{
 		.filter(title => this.songs[title].some(item => item['is_song']))
 		.length;
 		this.cnt_songs.innerText = `已收录歌曲 ${cnt_songs} 首`;
+		this.cnt_songs.setAttribute('data-text', this.cnt_songs.innerText);
 		let cnt_clips = Array.from(this.songs.values())
 		.map(items => items.length)
 		.reduce((sum, val) => {
 			return sum + val;
 		}, 0);
 		this.cnt_clips.innerText = `已收录切片 ${cnt_clips} 枚`;
+		this.cnt_clips.setAttribute('data-text', this.cnt_clips.innerText);
 	}
 	get_positions(){
 		this.positions = [];
