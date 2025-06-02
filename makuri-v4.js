@@ -404,8 +404,11 @@ class DataLoader{
 				const match_res = item[0].match(/BV[0-9a-zA-Z]{10}/);
 				if(match_res)
 					bvid = match_res[0];
-				else
-					console.error(`${bvid} error`);				
+				else{
+					console.error(`${item} error`);	
+					continue;
+				}
+
 			}
 			// bvid = item[0] === '' ? bvid : item[0].match(/BV[0-9a-zA-Z]{10}/)[0];
 			date = item[1] === '' ? date : item[1];
