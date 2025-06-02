@@ -393,6 +393,8 @@ class DataLoader{
 	csv2songs(data, video_author=null){
 		if(data == '')
 			return;
+		if(data.indexOf('<!DOCTYPE html>') != -1)
+			return;
 		let bvid, date, page, in_pt, out_pt, title, tags, singer, href, item;
 		const lines = data.split('\r\n');
 		for(let line of lines){
