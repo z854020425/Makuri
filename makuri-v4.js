@@ -204,7 +204,7 @@ class Notification{
 	}
 	mount(){
 		Utils.add_styles([
-			'#div_notify{position:fixed; top:0; right:3rem; height:0vh; width:25rem;}',
+			'#div_notify{position:fixed; top:0; right:3rem; height:0vh; width:25rem; z-index:20;}',
 			'.notification{height:9.2vh; width:100%; top:-9.2vh; background:aliceblue; color:ForestGreen; font-size:1.2rem; font-weight:bolder; border-radius:10px; border:5px double brown;margin:0.4vh 0; box-sizing: content-box; display:flex; flex-direction: column; align-items:center; justify-content:center; position:relative; animation:disappear 5s ease, slide 5s; ease}',
 			'@keyframes disappear{0%{opacity:0; height:9.2vh;} 8%{opacity:1;} 70%{opacity:1; } 90%{opacity:0; height:9.2vh} 100%{opacity:0; height:0;}}',
 			'@keyframes slide{0%{top:100vh} 8%{top:0} 95%{top:0} 100%{top:-22%}}',
@@ -553,7 +553,7 @@ class NewWindow{
 		if(!is_cycle && duration){
 			this.timeout_close = setTimeout(() => {
 				this.close(true);
-			}, (duration + 1 + (is_seperate ? 0.5 : 0)) * 1000);
+			}, (parseFloat(duration) + 1 + (is_seperate ? 0.5 : 0)) * 1000);
 		}
 	}
 	open_url(url, duration=null, is_cycle=false, is_seperate=false, title=null){
@@ -567,7 +567,7 @@ class NewWindow{
 		if(!is_cycle && duration){
 			this.timeout_close = setTimeout(() => {
 				this.close(true);
-			}, (duration + 1 + (is_seperate ? 0.5 : 0)) * 1000);
+			}, (parseFloat(duration) + 1 + (is_seperate ? 0.5 : 0)) * 1000);
 		}
 	}
 	set_foreground(flag){
@@ -673,6 +673,44 @@ class virtualList{
 		this.height_visible = (window.innerHeight - rect.y) * 0.95 / this.rem2px_rate;
 		div_container_wrapper.style.height = `${this.height_visible}rem`;
 		div_container.style.height = `${this.height_visible}rem`;
+
+		
+		this.div_container.addEventListener('scroll', (e) => {
+			let pos = e.target.scrollTop / this.rem2px_rate;
+			const start = pos == 0 ? 0 : this.bisect_left(this.positions, pos) + 1;
+			this.vl_start = start
+			let end;
+			if (start == 0)
+				end = this.bisect_right(this.positions, this.height_visible - this.rem_item);
+			else
+				end = this.bisect_right(this.positions, this.positions[start] + this.height_visible - this.rem_item - this.rem_border) - 1;
+
+			this.render_visible_rows(start, end);
+		})
+		this.div_container.addEventListener('click', (e)=>{
+			if(e.target.tagName == 'DIV' && e.target.classList.contains('group_title')){
+				this.clipboard.copy(e.target.getAttribute('data-titleRaw'));
+				return;
+			}
+			if(e.target.tagName == 'A' && e.target.classList.contains('info_link')){
+				e.preventDefault();
+				if(this.btn_cycle && this.btn_cycle.classList.contains('btn_active')){
+					this.btn_cycle.setAttribute('close_win', this.new_win.play_foreground);
+					this.btn_cycle.click();
+					this.btn_cycle.removeAttribute('close_win');
+				}
+				let link = e.target;
+				document.title = `『${link.getAttribute('data-titleRaw')}』`;
+				this.new_win.open(
+					link.getAttribute('data-href'),
+					link.getAttribute('data-duration'),
+					false,
+					link.getAttribute('data-isSeperate'),
+					link.getAttribute('data-titleRaw')
+				);
+				return;
+			}
+		})
 	}
 	init_touch(){
 		this.cur_ele = null;
@@ -801,7 +839,7 @@ class virtualList{
 			'span.儿歌{color:green}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
-			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column;}',
+			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column; user-select:none;}',
 			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem;}'
 		]);
 	}
@@ -868,42 +906,6 @@ class virtualList{
 		// console.log(this.clips_arr);
 		// console.log(this.songs_dic);
 
-		this.div_container.addEventListener('scroll', (e) => {
-			let pos = e.target.scrollTop / this.rem2px_rate;
-			const start = pos == 0 ? 0 : this.bisect_left(this.positions, pos) + 1;
-			this.vl_start = start
-			let end;
-			if (start == 0)
-				end = this.bisect_right(this.positions, this.height_visible - this.rem_item);
-			else
-				end = this.bisect_right(this.positions, this.positions[start] + this.height_visible - this.rem_item - this.rem_border) - 1;
-
-			this.render_visible_rows(start, end);
-		})
-		this.div_container.addEventListener('click', (e)=>{
-				console.log(e.target.classList.contains('group_title'))
-			if(e.target.tagName == 'DIV' && e.target.classList.contains('group_title')){
-				this.clipboard.copy(e.target.getAttribute('data-titleRaw'));
-				return;
-			}
-			if(e.target.tagName == 'A' && e.target.classList.contains('info_link')){
-				e.preventDefault();
-				if(this.btn_cycle && this.btn_cycle.classList.contains('btn_active')){
-					this.btn_cycle.setAttribute('close_win', this.new_win.play_foreground);
-					this.btn_cycle.click();
-					this.btn_cycle.removeAttribute('close_win');
-				}
-				let link = e.target;
-				document.title = `『${link.getAttribute('data-titleRaw')}』`;
-				this.new_win.open(
-					link.getAttribute('data-href'),
-					link.getAttribute('data-duration'),
-					false,
-					link.getAttribute('data-isSeperate'),
-					link.getAttribute('data-titleRaw')
-				);
-			}
-		})
 	}
 	bisect_left(arr, val){
 		let left = 0, right = arr.length, mid;
