@@ -2189,15 +2189,15 @@ function main(){
 	console.time('LOAD JSON/CSV');
 	const loader = new DataLoader(TAGS);
 	const load_args = [
-		['json2songs_timer', '/assets/jsons/真栗.json', '真栗'],
-		['json2songs_timer', '/assets/jsons/Monedula.json', 'Monedula'],
-		['json2songs_timer', '/assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸'],
-		['csv2songs_timer', '/assets/csvs/薯片水獭.csv', '薯片水獭'],
-		['csv2songs_timer', '/assets/csvs/真栗栗录播组_Clean.csv', '录播组'],
-		['csv2songs_timer', '/真栗栗录播组_Selfuse.csv', '录播组'],
-		['csv2songs_timer', '/assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
-		['json2songs_timer', '/assets/jsons/橙光游戏.json', '橙光游戏'],
-		['json2songs_timer', '/南夕君cC.json', '南夕君cC']
+		['json2songs_timer', 'assets/jsons/真栗.json', '真栗'],
+		['json2songs_timer', 'assets/jsons/Monedula.json', 'Monedula'],
+		['json2songs_timer', 'assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸'],
+		['csv2songs_timer', 'assets/csvs/薯片水獭.csv', '薯片水獭'],
+		['csv2songs_timer', 'assets/csvs/真栗栗录播组_Clean.csv', '录播组'],
+		['csv2songs_timer', '真栗栗录播组_Selfuse.csv', '录播组'],
+		['csv2songs_timer', 'assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
+		['json2songs_timer', 'assets/jsons/橙光游戏.json', '橙光游戏'],
+		['json2songs_timer', '南夕君cC.json', '南夕君cC']
 	]
 	// load_args.forEach(args => {
 	// 	loader?.[args[0]](loader.load_data(args[1]) ?? '', video_author=args[2]);
