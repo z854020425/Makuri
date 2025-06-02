@@ -400,7 +400,14 @@ class DataLoader{
 			if(item.every(x => x.trim() == ''))
 				continue;
 			// console.log(item)
-			bvid = item[0] === '' ? bvid : item[0].match(/BV[0-9a-zA-Z]{10}/)[0];
+			if(item[0] != ''){
+				const match_res = item[0].match(/BV[0-9a-zA-Z]{10}/);
+				if(match_res)
+					bvid = match_res[0];
+				else
+					console.error(`${bvid} error`);				
+			}
+			// bvid = item[0] === '' ? bvid : item[0].match(/BV[0-9a-zA-Z]{10}/)[0];
 			date = item[1] === '' ? date : item[1];
 			page = item[2] === '' ? page : item[2];
 			in_pt = Math.max(0.0001, Utils.str2sec(item[3]));
@@ -1500,12 +1507,17 @@ class SearchBox{
 		let inp = Utils.create('input', ['input_search'], {'type': 'search', 'placeholder': '搜索'});
 		const search_debounce = Utils.debounce(this.search_timer.bind(this), 200);
 		inp.addEventListener('keyup', (e) => {
-			if (this.select_search) {
-				this.select_search.value = -1;
+			if (this?.select_search) {
+				this.select_search.value = e.target.value;
 			}
 			// this.search_timer(e);
 			search_debounce(e);
 		});
+		inp.addEventListener('blur', (e)=>{
+			if(this?.select_search)
+				this.select_search.value = e.target.value;
+			search_debounce(e);
+		})
 		this.inp_search = inp;
 		div_search.appendChild(inp);
 
