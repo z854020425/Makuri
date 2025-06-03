@@ -1691,7 +1691,7 @@ class Drawers{
 	}
 	set_cursor(cursor){
 		this.cursor = cursor;
-		this.cursor_idx = 2;
+		this.cursor_idx = Utils.get_storage('cursor_idx') ?? 2;
 	}
 	set_signature(signature){
 		this.signature = signature;
