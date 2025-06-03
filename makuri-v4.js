@@ -733,11 +733,9 @@ class virtualList{
 	init_touch(){
 		this.cur_ele = null;
 		this.last_timestamp = performance.now();
-		// TODO: touchmove optimize
 		const func_touchstart = (e)=>{
 			// if(e.target != document.body && e.target.tagName != 'svg' && e.target.getAttribute('id') != 'vl')
 			// 	return;
-			console.log(this?.touch_dragging);
 			if(this?.touch_dragging === true)
 				return;
 
@@ -750,8 +748,10 @@ class virtualList{
 				this.animation_frame = null;
 			}
 			this.touch_dragging = true;
+
 		};
 		const func_touchmove = (e)=>{
+			// console.log(this?.touch_dragging);
 			if(!this?.touch_dragging)
 				return;
 			if(this?.start_scroll_top === null || this?.touch_start_y === null)
@@ -771,8 +771,9 @@ class virtualList{
 				this.last_timestamp = now;
 			}
 			// 连续滑动小trick
-			if(delta_y != 0 && this.cur_ele){
+			if(delta_y != 0 && this.cur_ele && !this.cur_ele.classList.contains('temp_hidden')){
 				this.cur_ele.style.display = 'hidden';
+				this.cur_ele.classList.add('temp_hidden');
 				document.body.appendChild(this.cur_ele);
 			}		
 		};
@@ -858,7 +859,7 @@ class virtualList{
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
 			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column; user-select:none;}',
-			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem; text-shadow:none; -webkit-text-stroke:0.15rem #0005ffa3; position:relative;}',
+			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem; text-shadow:none; -webkit-text-stroke:0.15rem #00dfc89c; position:relative;}',
 			'.cnt_songs::after, .cnt_clips::after{content:attr(data-text);position:absolute; left:0; top:0; -webkit-text-stroke:initial;}'
 		]);
 	}
@@ -909,7 +910,7 @@ class virtualList{
 		this.get_rem2px_rate();
 
 		let cur = 0;
-		this.songs.keys().forEach(title => {
+		Array.from(this.songs.keys()).forEach(title => {
 			this.songs_dic.set(title, cur);
 			cur += this.px_padding + this.px_border;
 			this.songs[title].forEach((item, idx) => {
@@ -1456,7 +1457,7 @@ class SearchBox{
 	}
 	mount(){
 		Utils.add_styles([
-			'.div_search{display:flex; justify-content:center;}',
+			'.div_search{display:flex; justify-content:center; z-index:10; position:relative;}',
 			'.hidden{display:none}',
 			'.input_search{min-width:15rem; margin:0 0.5rem;}',
 			'#select_presets option{text-align:center}',
@@ -1497,7 +1498,7 @@ class SearchBox{
 			['距最近收录已有4️⃣年', 'minGap:>=4 -+'],
 			['2021精选(蝴蝶谷逸_)', 'tag:2021精选'],
 		]);
-		items.entries().forEach((entry) => {
+		Array.from(items.entries()).forEach((entry) => {
 			let [text, value] =[...entry];
 			let opt = Utils.create('option', [], {});
 			opt.text = text;
@@ -1848,7 +1849,7 @@ class Drawers{
 
 			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:0px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none; position:relative;}',
 			'#div_btn_lb div:hover{opacity:1}',
-			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column;}',
+			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column; z-index:10;}',
 			'#div_btn_lb .btn_active{color:GoldenRod; opacity:1; font-weight:bolder; text-shadow:0 0 0.1rem brown;}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch{z-index:10; border-radius:50%; height:1.5rem; width:1.5rem; padding:0; cursor:pointer; border-width:1px; text-align:center}',
 			'#div_btn_lb #btn_drawClipCycle #btn_fbSwitch.btn_fore{background:white; color:black}',
@@ -2236,6 +2237,7 @@ function main(){
 	.then(() => {
 		loader.sort_songs();
 		console.log(Object.keys(loader.ordered_songs).length);
+		// console.log(loader.ordered_songs);
 		// console.log(`未收录(${loader.uncollected_songs.length})：\n`, loader.uncollected_songs.join('\n'));
 		console.log(loader.num_songs, loader.num_clips)
 		console.timeEnd('LOAD JSON/CSV');
