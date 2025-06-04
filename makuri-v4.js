@@ -336,7 +336,7 @@ class DataLoader{
 			duration = out_pt ? Math.round(out_pt - in_pt) : Utils.str2sec(length);
 			length = out_pt ? Utils.sec2str(duration) : length;
 			// href = `https://www.bilibili.com/video/${bvid}/?t=${in_pt}`;
-			href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&high_quality=1`;
+			href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&high_quality=1&autoplay=1`;
 			if(!parts){
 				this.add_song({
 					'title': title,
@@ -370,7 +370,7 @@ class DataLoader{
 				duration = out_pt ? Math.round(out_pt - in_pt) : Utils.str2sec(length);
 				length = out_pt ? Utils.sec2str(duration) : length;
 				// href = `https://www.bilibili.com/video/${bvid}/?t=${in_pt}&p=${part}`;
-				href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${part}&high_quality=1`;
+				href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${part}&high_quality=1&autoplay=1`;
 				this.add_song({
 					'title': title,
 					'date': date,
@@ -427,7 +427,7 @@ class DataLoader{
 			tags = item.length >= 7 ? item[6].split(' ').filter(x => x!= '') : [];
 			singer - item.length >= 8 ? item[7] : null;
 			// href = `https://www.bilibili.com/video/${bvid}/?t=${in_pt}&p=${page.substring(1)}`;
-			href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${page.substring(1)}&high_quality=1`;
+			href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${page.substring(1)}&high_quality=1&autoplay=1`;
 			this.add_song({
 				'title': title,
 				'date': date,
