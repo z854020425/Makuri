@@ -572,7 +572,7 @@ class NewWindow{
 		if(!is_cycle && duration){
 			this.timeout_close = setTimeout(() => {
 				this.close(true);
-			}, (parseFloat(duration) + 1 + (is_seperate ? 0.5 : 0)) * 1000);
+			}, (parseFloat(duration) + 1.5 + (is_seperate ? 0.5 : 0)) * 1000);
 		}
 	}
 	open_url(url, duration=null, is_cycle=false, is_seperate=false, title=null){
@@ -586,7 +586,7 @@ class NewWindow{
 		if(!is_cycle && duration){
 			this.timeout_close = setTimeout(() => {
 				this.close(true);
-			}, (parseFloat(duration) + 1 + (is_seperate ? 0.5 : 0)) * 1000);
+			}, (parseFloat(duration) + 1.5 + (is_seperate ? 0.5 : 0)) * 1000);
 		}
 	}
 	set_foreground(flag){
@@ -751,10 +751,8 @@ class VirtualList{
 				this.animation_frame = null;
 			}
 			this.touch_dragging = true;
-
 		};
 		const func_touchmove = (e)=>{
-			// console.log(this?.touch_dragging);
 			if(!this?.touch_dragging)
 				return;
 			if(this?.start_scroll_top === null || this?.touch_start_y === null)
@@ -764,6 +762,11 @@ class VirtualList{
 			const y = e.touches[0].clientY;
 			const delta_y = y - this.touch_start_y;
 			// console.log((this.touch_start_y - y) * 5)
+			if(this.start_scroll_top - delta_y < 0 || this.start_scroll_top - delta_y > (this.height - this.height_visible) * this.rem2px_rate){
+				this.cur_ele = null;
+				return;
+			}
+
 			this.div_container.scroll(0, this.start_scroll_top - delta_y);
 			const now = performance.now();
 			const delta_time = now - this.last_timestamp;
@@ -786,7 +789,7 @@ class VirtualList{
 			this.touch_dragging = false;
 			this.start_scroll_top = null;
 			this.touch_start_y = null;
-			this.cur_ele && this.cur_ele.remove();
+			this?.cur_ele?.remove();
 			this.cur_ele = null;
 
 			console.log(this.velocity);
