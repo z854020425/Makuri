@@ -347,7 +347,8 @@ class DataLoader{
 					'lang': lang,
 					'tags': tags,
 					'author': video_author,
-					'duration': duration
+					'duration': duration,
+					'out_pt': out_pt
 				});
 				return;
 			}
@@ -380,7 +381,8 @@ class DataLoader{
 					'lang': lang,
 					'tags': tags,
 					'author': video_author,
-					'duration': duration
+					'duration': duration,
+					'out_pt': out_pt
 				});
 				return;
 			})
@@ -439,12 +441,13 @@ class DataLoader{
 				'tags': tags,
 				'author': video_author,
 				'is_clip': true,
-				'is_seperate': tags.includes('follow')
+				'is_seperate': tags.includes('follow'),
+				'out_pt': out_pt
 			});
 		}
 	}
 	add_song(item){
-		let title, date, href, length, singer, lang, tags, author, duration
+		let title, date, href, length, singer, lang, tags, author, duration, out_pt;
 		title = item?.['title'];
 		date = item?.['date'];
 		href = item?.['href'];
@@ -454,6 +457,7 @@ class DataLoader{
 		tags = item?.['tags'];
 		author = item?.['author'];
 		duration = item?.['duration'];
+		out_pt = item?.['out_pt'];
 		title = item?.['title'];
 		if(!(title in this.songs))
 			this.songs[title] = [];
@@ -508,7 +512,8 @@ class DataLoader{
 			'is_clip': true,
 			'is_song': is_song,
 			'gap': gap.toString(),
-			'percent': percent
+			'percent': percent,
+			'out_pt': out_pt ?? duration
 		});
 	}
 	sort_songs(){
@@ -1452,6 +1457,7 @@ class Cursor2{
 class SearchBox{
 	constructor(vl, songs){
 		this.songs = songs;
+		sessionStorage.setItem('search_result', JSON.stringify(songs));
 		this.vl = vl;
 		this.cache_kv = new LRUCache(20);
 		this.cache_search = new LRUCache(50);
@@ -1665,6 +1671,7 @@ class SearchBox{
 			return;
 		}
 		// console.log(new_songs);
+		sessionStorage.setItem('search_result', JSON.stringify(new_songs));
 		this.vl.load_songs(new_songs);
 		this.vl.init();
 	}
