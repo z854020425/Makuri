@@ -871,7 +871,7 @@ class VirtualList{
 			'span.希望小紫真栗永远健康{background-image:linear-gradient(to right, #c99a8b, #9276a3); color:BlanchedAlmond; border-color:BlueViolet;}',
 			'span.蝴蝶谷逸{color:lightyellow;background:darkgray}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
-			'span.麻糕{background:linear-gradient(180deg,skyblue,snow); color:#423e3d; text-shadow:0 0 0.2rem pink;}',
+			'span.麻糕{background:linear-gradient(170deg,skyblue,snow); color:#423e3d; text-shadow:0 0 0.2rem pink;}',
 			'span.橙光游戏{color:orangered; text-shadow:0 0 2px green}',
 			'span.BAN{color:red; font-weight:bold; text-decoration:line-through;}',
 			'span.cos{color:gold; font-weight:bold; text-shadow:0 0 0.3rem #533806; background:#819cea;}',
