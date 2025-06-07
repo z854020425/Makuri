@@ -13,6 +13,12 @@ function keepAliveBySilentAudio(){
 }
 keepAliveBySilentAudio();
 
+const AUTHORS_SIM = {
+	'蝴蝶谷逸_': '蝴蝶谷逸',
+	'真栗栗录播组': '录播组',
+	'麻糕Mago0': '麻 糕'
+}
+
 
 class LRUCache{
 	constructor(capacity){
@@ -866,12 +872,12 @@ class VirtualList{
 			'.info_tag{margin:0px 0.125rem; padding:0px 0.125rem; border:0.125rem dashed gray; border-radius:40% 0%; background:lightyellow; color:blue; min-width:fit-content;}',
 			'span.info_author{min-width:4rem;}',
 			'span.真栗{color:chocolate;text-shadow:0 0 0.125rem orange}',
-			'span.录播组{color:NavajoWhite;background:gray}',
+			'span.真栗栗录播组{color:NavajoWhite;background:gray}',
 			'span.薯片水獭{color:Turquoise;background:gray}',
 			'span.希望小紫真栗永远健康{background-image:linear-gradient(to right, #c99a8b, #9276a3); color:BlanchedAlmond; border-color:BlueViolet;}',
-			'span.蝴蝶谷逸{color:lightyellow;background:darkgray}',
+			'span.蝴蝶谷逸_{color:lightyellow;background:darkgray}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
-			'span.麻糕{background:linear-gradient(170deg,skyblue,snow); color:#423e3d; text-shadow:0 0 0.2rem pink;}',
+			'span.麻糕Mago0{background:linear-gradient(170deg,skyblue,snow); color:#7d645d; text-shadow:0 0 0.2rem pink; -webkit-text-stroke:0.04rem #7d645d;}',
 			'span.橙光游戏{color:orangered; text-shadow:0 0 2px green}',
 			'span.BAN{color:red; font-weight:bold; text-decoration:line-through;}',
 			'span.cos{color:gold; font-weight:bold; text-shadow:0 0 0.3rem #533806; background:#819cea;}',
@@ -1067,7 +1073,7 @@ class VirtualList{
 			// tags
 			info_tags = Utils.create('div', ['info_tags'], {});
 			span = Utils.create('span', ['info_author', 'info_tag', author], {'title': author});
-			span.innerText = Utils.pretty_str(author, 6);;
+			span.innerText = Utils.pretty_str(AUTHORS_SIM?.[author] ?? author, 6);;
 			info_tags.appendChild(span);
 			tags.forEach(tag => {
 				span = Utils.create('span', ['info_tag', tag], {});
@@ -2236,9 +2242,9 @@ function main(){
 	const loader = new DataLoader(TAGS);
 	const load_args = [
 		['json2songs_timer', './assets/jsons/真栗.json', '真栗'],
-		['json2songs_timer', './assets/jsons/麻糕Mago0.json', '麻糕'],
+		['json2songs_timer', './assets/jsons/麻糕Mago0.json', '麻糕Mago0'],
 		['json2songs_timer', './assets/jsons/Monedula.json', 'Monedula'],
-		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸'],
+		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸_'],
 		['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
 		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '录播组'],
 		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '录播组'],
