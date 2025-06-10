@@ -16,7 +16,8 @@ keepAliveBySilentAudio();
 const AUTHORS_SIM = {
 	'蝴蝶谷逸_': '蝴蝶谷逸',
 	'真栗栗录播组': '录播组',
-	'麻糕Mago0': '麻 糕'
+	'麻糕Mago0': '麻 糕',
+	'真栗': '真 栗'
 }
 
 
@@ -859,7 +860,7 @@ class VirtualList{
 			'.group_title{width:35%; color:deeppink; cursor:pointer; user-select:none; align-items:center; display:flex; height:100%; min-width:fit-content;}',
 			'.group_title:hover{font-weight:bolder;}',
 			'.group_infos{display:flex; flex-direction:column; width:65%; text-align:center;}',
-			`.row_infos{display:flex; flex-direction:row; align-items:center; height:${this.rem_item}rem; filter:opacity(var(--percent))}`,
+			`.row_infos{display:flex; flex-direction:row; align-items:center; height:${this.rem_item}rem; filter:opacity(var(--percent));}`,
 			'.row_infos:has(.info_date:hover){filter:none;}',
 			'.row_infos:has(.highlighted){filter:none;}',
 			'.info_date{width:20%; user-select:none; min-width:fit-content;}',
@@ -1154,7 +1155,7 @@ class SocialPlatforms{
 	}
 	mount(){
 		Utils.add_styles([
-			'#div_rt{position:fixed; top:-0.8rem; right:-29px; display: flex; flex-direction: column; scale:0.9}',
+			'#div_rt{position:fixed; top:-0.8rem; right:-29px; display: flex; flex-direction: column; scale:0.9; z-index:20;}',
 			'#div_rt a{margin:0.13rem; display:flex; flex-direction: row; align-items: center; transition: transform 0.5s ease; z-index:100}',
 			'#div_rt a img{border-radius:14px; background:white}',
 			'#div_rt a .div_dec{width:24px; height:19px; display:block; transform: translateX(-4px); z-index:-1;}',
@@ -1487,11 +1488,17 @@ class SearchBox{
 		Utils.add_styles([
 			'.div_search{display:flex; justify-content:center; z-index:10; position:relative;}',
 			'.hidden{display:none}',
-			'.input_search{min-width:15rem; margin:0 0.5rem;}',
+			'.input_search{min-width:15rem; margin:0 0.5rem; border-radius:0.7rem; outline:0.15rem solid grey; padding-inline:1rem; border:none; transition:0.3s;}',
+			'.input_search:hover{outline:2px solid skyblue}',
+			'.input_search:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue;}',
 			'#select_presets option{text-align:center}',
-			'.div_search a{height:1.2rem; width:1.2rem; align-items:center; display:flex; justify-content:center; border-radius:50%; border:0.2rem solid grey; font-weight:500; color:grey; text-decoration:none; cursor:pointer; opacity:0.6; font-weight:bolder;}',
-			'.div_search a:hover{opacity:1; border:0.2rem solid skyblue; color:skyblue;}',
+			'.div_search a.link_guide{height:1.2rem; width:1.2rem; align-items:center; display:flex; justify-content:center; border-radius:50%; border:0.2rem solid grey; font-weight:500; color:grey; text-decoration:none; cursor:pointer; opacity:0.6; font-weight:bolder; transition:0.5s;}',
+			'.div_search a:hover{opacity:1; border:0.2rem solid skyblue; color:skyblue; box-shadow:0 0 0.8rem skyblue;}',
 			'#select_presets option{font-family:Arial,sans-serif; font-weight:500;}',
+			'#select_presets{border-radius:0.7rem; outline:0.15rem solid grey; padding-inline:0.2rem; border:none; transition:0.3s;}',
+			'#select_presets:hover{outline:0.15rem solid skyblue; color:skyblue}',
+			'#select_presets:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue; color:CornflowerBlue; font-weight:600;}',
+			'#select_presets:focus option{font-weight:600;}'
 		]);
 		let div_search = Utils.create('div', ['div_search'], {});
 		document.querySelector('#vl_container_wrapper').insertAdjacentElement('beforebegin', div_search);
@@ -1546,6 +1553,13 @@ class SearchBox{
 		let inp = Utils.create('input', ['input_search'], {'type': 'search', 'placeholder': '搜索'});
 		const search_debounce = Utils.debounce(this.search_timer.bind(this), 200);
 		inp.addEventListener('keyup', (e) => {
+			if(this?.select_search) {
+				this.select_search.value = e.target.value;
+			}
+			// this.search_timer(e);
+			search_debounce(e);
+		});
+		inp.addEventListener('search', (e) => {
 			if(this?.select_search) {
 				this.select_search.value = e.target.value;
 			}
@@ -1840,7 +1854,7 @@ class Drawers{
 	async draw_cursor(){
 		if(!this?.cursor)
 			return;
-		const num = 7;
+		const num = 7
 		console.log(this.cursor_idx);
 		const idx = (this?.cursor_idx ?? 0 + 1) % num + 1;
 		this.cursor_idx = idx;
@@ -1876,7 +1890,7 @@ class Drawers{
 			'.highlighted{font-weight:bolder; animation:highlight 3s infinite; opacity:1;}',
 			'@keyframes highlight{0%{color:red;} 14%{color:orange} 29%{color:yellow} 43%{color:green} 57%{color:cyan} 71%{color:blue} 86%{color:purple} 100%{color:red}}',
 
-			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:0px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none; position:relative;}',
+			'#div_btn_lb div{cursor:pointer; opacity:0.5; font-size:1rem; text-align:center;border:0px solid black;height:3rem; width:3rem; background:lightgrey; user-select:none; position:relative; transition:0.3s;}',
 			'#div_btn_lb div:hover{opacity:1}',
 			'#div_btn_lb{position:fixed; bottom:0.03rem; left:0; display:flex; flex-direction:column; z-index:10;}',
 			'#div_btn_lb .btn_active{color:GoldenRod; opacity:1; font-weight:bolder; text-shadow:0 0 0.1rem brown;}',
@@ -2104,7 +2118,8 @@ class Signature{
 			'.path_show{stroke:#e25b1bba; stroke-width:6; stroke-dasharray:var(--length); stroke-dashoffset:var(--length); animation:stroke var(--duration) linear forwards; stroke-linecap:round; }',
 			'@keyframes stroke{to{stroke-dashoffset: 0;}}',
 			'#signature_svg{position:absolute; left:0; top:0; z-index:-1;}',
-			'#signature_wrapper{position:fixed; left:2rem; top:19rem; height:9.9rem; width:13.1rem;}'
+			'#signature_wrapper{position:fixed; left:2rem; top:19rem; height:9.9rem; width:13.1rem;}',
+			'#signature_wrapper:hover{filter:blur(0.05rem);}'
 		]);
 	}
 	init_svg(){
@@ -2268,7 +2283,7 @@ function main(){
 		loader.sort_songs();
 		console.log(Object.keys(loader.ordered_songs).length);
 		// console.log(loader.ordered_songs);
-		// console.log(`未收录(${loader.uncollected_songs.length})：\n`, loader.uncollected_songs.join('\n'));
+		console.log(`未收录(${loader.uncollected_songs.length})：\n`, loader.uncollected_songs.join('\n'));
 		console.log(loader.num_songs, loader.num_clips)
 		console.timeEnd('LOAD JSON/CSV');
 	})
