@@ -1488,14 +1488,14 @@ class SearchBox{
 		Utils.add_styles([
 			'.div_search{display:flex; justify-content:center; z-index:10; position:relative;}',
 			'.hidden{display:none}',
-			'.input_search{min-width:15rem; margin:0 0.5rem; border-radius:0.7rem; outline:0.15rem solid grey; padding-inline:1rem; border:none; transition:0.3s;}',
+			'.input_search{min-width:15rem; margin:0 0.5rem; border-radius:0.7rem; outline:0.15rem solid #80808091; padding-inline:1rem; border:none; transition:0.3s;}',
 			'.input_search:hover{outline:2px solid skyblue}',
 			'.input_search:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue;}',
 			'#select_presets option{text-align:center}',
 			'.div_search a.link_guide{height:1.2rem; width:1.2rem; align-items:center; display:flex; justify-content:center; border-radius:50%; border:0.2rem solid grey; font-weight:500; color:grey; text-decoration:none; cursor:pointer; opacity:0.6; font-weight:bolder; transition:0.5s;}',
 			'.div_search a:hover{opacity:1; border:0.2rem solid skyblue; color:skyblue; box-shadow:0 0 0.8rem skyblue;}',
 			'#select_presets option{font-family:Arial,sans-serif; font-weight:500;}',
-			'#select_presets{border-radius:0.7rem; outline:0.15rem solid grey; padding-inline:0.2rem; border:none; transition:0.3s;}',
+			'#select_presets{border-radius:0.7rem; outline:0.15rem solid #80808091; padding-inline:0.2rem; border:none; transition:0.3s;}',
 			'#select_presets:hover{outline:0.15rem solid skyblue; color:skyblue}',
 			'#select_presets:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue; color:CornflowerBlue; font-weight:600;}',
 			'#select_presets:focus option{font-weight:600;}'
@@ -2261,8 +2261,8 @@ function main(){
 		['json2songs_timer', './assets/jsons/Monedula.json', 'Monedula'],
 		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸_'],
 		['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
-		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '录播组'],
-		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '录播组'],
+		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '真栗栗录播组'],
+		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
 		['json2songs_timer', './assets/jsons/橙光游戏.json', '橙光游戏'],
 		['json2songs_timer', './南夕君cC.json', '南夕君cC']
