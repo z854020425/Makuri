@@ -1272,6 +1272,7 @@ class Cursor{
 	}
 	mount(){
 		let cursor = this.cursor;
+		let fragment = document.createDocumentFragment();
 		let sign_x = Math.floor(Math.random() * 2);
 		let sign_y = Math.floor(Math.random() * 2);
 		Object.keys(this.points)
@@ -1292,8 +1293,10 @@ class Cursor{
 			span.style.transform = `translate(${x0}vw, ${y0}vh) scale(${scale})`;
 			span.style.boxShadow = `0 0 0.5rem ${rgba}`;
 			span.style.background = rgba;
-			cursor.appendChild(span);
+			// cursor.appendChild(span);
+			fragment.appendChild(span);
 		})
+		this.cursor.appendChild(fragment);
 		// let move_points = Utils.debounce(((e) => {	
 		// 	gsap.to('.point', {
 		// 		x: e.clientX,
@@ -1306,8 +1309,9 @@ class Cursor{
 			this.tween = gsap.to('.point', {
 				x: e.clientX,
 				y: e.clientY,
-				ease: 'back.out(1.2)',
-				stagger:0.0015
+				// ease: 'back.out(1.1)',
+				ease: "power4.out",
+				stagger:0.002
 			});			
 		}
 		window.addEventListener('mousemove', this.func_move_points);
@@ -2119,7 +2123,7 @@ class Signature{
 			'@keyframes stroke{to{stroke-dashoffset: 0;}}',
 			'#signature_svg{position:absolute; left:0; top:0; z-index:-1;}',
 			'#signature_wrapper{position:fixed; left:2rem; top:19rem; height:9.9rem; width:13.1rem;}',
-			'#signature_wrapper:hover{filter:blur(0.05rem);}'
+			'#signature_wrapper:hover #signature_svg g{filter:none;}'
 		]);
 	}
 	init_svg(){
@@ -2174,7 +2178,7 @@ class Signature{
 		g.style.transform = 'translate(0rem,100%) scale(1,-1)'
 		g.setAttribute('fill', 'none');
 		g.setAttribute('stroke', 'none');
-		g.setAttribute('filter', 'blur(0.025rem)');
+		g.setAttribute('filter', 'blur(0.03rem)');
 
 		// wrapper.addEventListener('click', async()=>{
 		// 	await this.hidden();
