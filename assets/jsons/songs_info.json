@@ -6179,9 +6179,10 @@
             "lang": "日语"
         }
     ],
-    "LEVEL5 -Judgelight": [
+    "LEVEL5 -Judgelight-": [
         {
-            "title": "LEVEL5 -Judgelight",
+            "title": "LEVEL5 -Judgelight-",
+            "chs": "等级5 -裁决之光-",
             "singer": "fripSide",
             "lang": "日语"
         }
@@ -6648,9 +6649,9 @@
     ],
     "星を渡る鸟": [
         {
-            "title": "星を渡る鳥",
+            "title": "星を渡る鸟",
             "chs": "飞渡星星的鸟",
-            "singer": "镜音レン",
+            "singer": "镜音连",
             "lang": "日语"
         }
     ],
@@ -8592,6 +8593,119 @@
             "title": "龙魂萌妹成长指南",
             "singer": "真栗",
             "lang": "国语"
+        }
+    ],
+    "希望燎原": [
+        {
+            "title": "希望燎原",
+            "singer": "邓园长、真栗、樱萍Apple、大肉嘎、呆毛魔王蔓蔓、咩咩爱睡懒觉",
+            "lang": "国语"
+        }
+    ],
+    "火": [
+        {
+            "title": "火",
+            "singer": "张惠妹",
+            "lang": "国语"
+        }
+    ],
+    "老公天下第一": [
+        {
+            "title": "老公天下第一",
+            "singer": "禤道秒",
+            "lang": "国语"
+        }
+    ],
+    "你要跳舞吗": [
+        {
+            "title": "你要跳舞吗",
+            "singer": "新裤子",
+            "lang": "国语"
+        }
+    ],
+    "七月上": [
+        {
+            "title": "七月上",
+            "singer": "Jam",
+            "lang": "国语"
+        }
+    ],
+    "常回家看看": [
+        {
+            "title": "常回家看看",
+            "singer": "耿宁",
+            "lang": "国语"
+        }
+    ],
+    "天路": [
+        {
+            "title": "天路",
+            "singer": "巴桑",
+            "lang": "国语"
+        }
+    ],
+    "跳楼机": [
+        {
+            "title": "跳楼机",
+            "singer": "LBl利比",
+            "lang": "国语"
+        }
+    ],
+    "无法原谅": [
+        {
+            "title": "无法原谅",
+            "singer": "李佳璐",
+            "lang": "国语"
+        }
+    ],
+    "野狼disco": [
+        {
+            "title": "野狼disco",
+            "singer": "宝石Gem",
+            "lang": "国语"
+        }
+    ],
+    "High歌": [
+        {
+            "title": "High歌",
+            "singer": "黄龄",
+            "lang": "国语"
+        }
+    ],
+    "愛言葉Ⅱ": [
+        {
+            "title": "愛言葉Ⅱ",
+            "singer": "DECO*27/初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "愛言葉Ⅲ": [
+        {
+            "title": "愛言葉Ⅲ",
+            "singer": "DECO*27/初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "好きな人がいること": [
+        {
+            "title": "好きな人がいること",
+            "singer": "JY",
+            "lang": "日语"
+        }
+    ],
+    "茜さす": [
+        {
+            "title": "茜さす",
+            "chs": "夕晖",
+            "singer": "Aimer",
+            "lang": "日语"
+        }
+    ],
+    "Yellow": [
+        {
+            "title": "Yellow",
+            "singer": "神山羊",
+            "lang": "日语"
         }
     ]
 }
