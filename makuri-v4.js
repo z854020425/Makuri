@@ -17,7 +17,8 @@ const AUTHORS_SIM = {
 	'蝴蝶谷逸_': '蝴蝶谷逸',
 	'真栗栗录播组': '录播组',
 	'麻糕Mago0': '麻 糕',
-	'真栗': '真 栗'
+	'真栗': '真 栗',
+	'长风longwind': '长 风'
 }
 
 
@@ -422,7 +423,7 @@ class DataLoader{
 				else{
 					console.error(`${item} error`);	
 					continue;
-				}
+				}	
 
 			}
 			// bvid = item[0] === '' ? bvid : item[0].match(/BV[0-9a-zA-Z]{10}/)[0];
@@ -436,9 +437,11 @@ class DataLoader{
 
 			title = item[5];
 			tags = item.length >= 7 ? item[6].split(' ').filter(x => x!= '') : [];
-			singer - item.length >= 8 ? item[7] : null;
+			singer = item.length >= 8 && item[7] !== "" ? item[7] : null;
 			href_raw = `https://www.bilibili.com/video/${bvid}/?t=${in_pt}&p=${page.substring(1)}`;
 			href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${page.substring(1)}&high_quality=1&autoplay=1`;
+			if(title == '勇气')
+				console.log(singer, date)
 			this.add_song({
 				'title': title,
 				'date': date,
@@ -498,6 +501,13 @@ class DataLoader{
 			if(this.songs_info[title].length == 1){
 				singer = singer ?? this.songs_info[title][0]['singer'];
 				lang = lang ?? this.songs_info[title][0]['lang'];
+			}else if(singer !== null && lang === null){
+				this.songs_info[title].forEach(info => {
+					if(info['singer'] == singer){
+						lang = info['lang'];
+						return;
+					}
+				});
 			}else{
 				singer = 'TBD.';
 				lang = 'TBD.';
@@ -532,19 +542,52 @@ class DataLoader{
 			'out_pt': out_pt ?? duration
 		});
 	}
-	sort_songs(){
+	async sort_songs(){
 		this.ordered_songs.clear();
 		Object.keys(this.songs)
 		.sort((x1, x2) => x1.localeCompare(x2, 'zh-Hans-CN'))
 		.forEach(title => {
 			this.ordered_songs[title] = this.songs[title].sort((x1, x2) => -x1['date'].localeCompare(x2['date'], 'zh-Hans-CN'));
 		});
+
+		const hidden_song_list = await fetch('./assets/jsons/song_list.json')
+		.then(response => {
+			if(!response.ok){
+				throw Error('song_list.json Error');
+			}
+			return response.json();
+		})
+		.then(data => {
+			const song_list = new Set(data);
+			const hidden_song_list = Object.keys(this.songs).reduce((res, title) => {
+				if(title.indexOf('（') != -1){
+					return res;					
+				}
+				if(title.indexOf('+') != -1){
+					return res;					
+				}
+				if(song_list.has(title)){
+					return res;
+				}
+				res.push(title);
+				return res;
+			}, []);
+			return hidden_song_list;
+		})
+		.catch(error => console.error(error));
+		console.log(hidden_song_list);
+
 		Object.keys(this.ordered_songs).forEach(title => {
+			const isHidden = hidden_song_list.includes(title);
 			this.ordered_songs[title].forEach((item, idx) => {
 				this.ordered_songs[title][idx]['mingap'] = this.ordered_songs[title][0]['gap'];
 				this.ordered_songs[title][idx]['totalnum'] = this.ordered_songs[title].length;
-			})
+				this.ordered_songs[title][idx]['hidden'] = isHidden;
+			});
+
 		})
+
+
 		this.songs = {};
 	}
 	get uncollected_songs(){
@@ -712,7 +755,7 @@ class VirtualList{
 		this.cnt_clips = cnt_clips;
 
 		let rect = div_container_wrapper.getClientRects()[0];
-		this.height_visible = (window.innerHeight - rect.y) * 0.95 / this.rem2px_rate;
+		this.height_visible = (window.innerHeight - rect.y) * 0.98 / this.rem2px_rate;
 		div_container_wrapper.style.height = `${this.height_visible}rem`;
 		div_container.style.height = `${this.height_visible}rem`;
 
@@ -774,7 +817,8 @@ class VirtualList{
 			this.touch_dragging = true;
 		};
 		const func_touchmove = (e)=>{
-			if(!this?.touch_dragging)
+			console.log('move')
+			if(this?.touch_dragging !== true)
 				return;
 			if(this?.start_scroll_top === null || this?.touch_start_y === null)
 				return;
@@ -798,7 +842,7 @@ class VirtualList{
 				this.last_timestamp = now;
 			}
 			// 连续滑动小trick
-			if(delta_y != 0 && this.cur_ele && !this.cur_ele.classList.contains('temp_hidden')){
+			if(delta_y !== 0 && this.cur_ele && !this.cur_ele.classList.contains('temp_hidden')){
 				this.cur_ele.style.display = 'hidden';
 				this.cur_ele.classList.add('temp_hidden');
 				document.body.appendChild(this.cur_ele);
@@ -843,8 +887,8 @@ class VirtualList{
 	add_styles(){
 		Utils.add_styles([
 			'body{margin:0; padding:0; overflow:hidden;}',
-			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent); width:62rem; max-width:92vw; margin:auto; z-index:10; position:relative;}',
-			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.6rem);}',
+			'#vl_container_wrapper{display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg, transparent, rgb(255 255 255 / 80%) 1.5rem, transparent); width:62rem; max-width:92vw; margin:auto; z-index:10; position:relative; user-select:none;}',
+			'#vl_headers{display:flex; flex-direction:row; font-weight:bolder; width:60rem; max-width:90vw; text-align:center; transform:translateX(-0.6rem); }',
 			'.header_title{width:35%;}',
 			'.header_date{width:13%;}',
 			'.header_length{width:6.5%;}',
@@ -867,7 +911,7 @@ class VirtualList{
 			'.info_date:hover{font-weight:bolder;}',
 			'.info_link{text-decoration:none; color:brown; cursor:pointer}',
 			'.info_length{width:10%; color:green; min-width:fit-content;}',
-			'.info_singer{width:20%; color:orange; min-width:fit-content;}',
+			'.info_singer{width:20%; color:orange; min-width:fit-content; user-select:text;}',
 			'.info_lang{width:10%; color:grey; min-width:fit-content;}',
 			'.info_tags{width:40%; display:flex; justify-content:Wflex-start;}',
 			'.info_tag{margin:0px 0.125rem; padding:0px 0.125rem; border:0.125rem dashed gray; border-radius:40% 0%; background:lightyellow; color:blue; min-width:fit-content;}',
@@ -886,14 +930,14 @@ class VirtualList{
 			'span.儿歌{color:green}',
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 
-			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column; user-select:none;}',
-			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; margin:0.2rem 1.5rem; text-shadow:none; -webkit-text-stroke:0.15rem #00dfc89c; position:relative;}',
+			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column; user-select:none; margin-bottom:0.2rem;}',
+			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; text-shadow:none; -webkit-text-stroke:0.15rem #00dfc89c; position:relative;}',
 			'.cnt_songs::after, .cnt_clips::after{content:attr(data-text);position:absolute; left:0; top:0; -webkit-text-stroke:initial;}'
 		]);
 	}
 	update_visible_height(){
 		let rect = this.div_container_wrapper.getClientRects()[0];
-		this.height_visible = (window.innerHeight - rect.y) * 0.95 / this.rem2px_rate;
+		this.height_visible = (window.innerHeight - rect.y) * 0.98 / this.rem2px_rate;
 		this.div_container.style.height = `${this.height_visible}rem`;
 		this.div_container_wrapper.style.height = `${this.height_visible}rem`;
 		// console.log(this.height_visible);
@@ -1093,6 +1137,11 @@ class VirtualList{
 		else
 			end = this.bisect_right(this.positions, this.positions[start] + this.height_visible - this.rem_item) - 1;
 		this.render_visible_rows(start, end);
+	}
+	toTop(){
+		if(!this.div_container)
+			return;
+		this.div_container.scroll(0, 0);
 	}
 }
 
@@ -1491,7 +1540,7 @@ class SearchBox{
 	mount(){
 		Utils.add_styles([
 			'.div_search{display:flex; justify-content:center; z-index:10; position:relative;}',
-			'.hidden{display:none}',
+			// '.hidden{display:none}',
 			'.input_search{min-width:15rem; margin:0 0.5rem; border-radius:0.7rem; outline:0.15rem solid #80808091; padding-inline:1rem; border:none; transition:0.3s;}',
 			'.input_search:hover{outline:2px solid skyblue}',
 			'.input_search:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue;}',
@@ -1500,46 +1549,54 @@ class SearchBox{
 			'.div_search a:hover{opacity:1; border:0.2rem solid skyblue; color:skyblue; box-shadow:0 0 0.8rem skyblue;}',
 			'#select_presets option{font-family:Arial,sans-serif; font-weight:500;}',
 			'#select_presets{border-radius:0.7rem; outline:0.15rem solid #80808091; padding-inline:0.2rem; border:none; transition:0.3s;}',
-			'#select_presets:hover{outline:0.15rem solid skyblue; color:skyblue}',
-			'#select_presets:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue; color:CornflowerBlue; font-weight:600;}',
-			'#select_presets:focus option{font-weight:600;}'
+			'#select_presets:hover{outline:0.15rem solid skyblue;}',
+			'#select_presets:focus{outline:2px solid CornflowerBlue; box-shadow:0 0 0.8rem CornflowerBlue;}',
+			'#select_presets:focus option{font-weight:600;}',
+			'#select_presets option.recent{color:red}',
+			'#select_presets option.hidden{color:orangered}',
+			'#select_presets option.single{color:tomato}',
+			'#select_presets option.singer{color:orange}',
+			'#select_presets option.lang{color:grey}',
+			'#select_presets option.special{color:ForestGreen}',
+			'#select_presets option.gap{color:#00a6ed}',
 		]);
 		let div_search = Utils.create('div', ['div_search'], {});
 		document.querySelector('#vl_container_wrapper').insertAdjacentElement('beforebegin', div_search);
 
 		let select = Utils.create('select', [], {'id':'select_presets'});
-		let items = new Map([
-			['🌟 ALL 🌟', ''],
-			['⁺✞ʚ 🌰 ɞ✟₊', '-谭姐 -姨妈'],
-			['最近 N 首', 'gap:<=32/365'],
-			['周杰伦 专场', 'singer:周杰伦 -半首'],
-			['邓紫棋 专场', 'singer:邓紫棋 -半首'],
-			['王心凌 专场', 'singer:王心凌 -半首'],
-			['梁静茹 专场', 'singer:梁静茹 -半首'],
-			['孙燕姿 专场', 'singer:孙燕姿 -半首'],
-			['张韶涵 专场', 'singer:张韶涵 -半首'],
-			['陶喆 专场', 'singer:陶喆 -半首'],
-			['王菲 专场', 'singer:王菲 -半首'],
-			['初音ミク 专场', 'singer:初音 -半首'],
-			['谭姐 专场', 'title:谭姐'],
-			['日语 专场', 'lang:日语'],
-			['韩语 专场', 'lang:韩语'],
-			['英语 专场', 'lang:英语'],
-			['粤语 专场', 'lang:粤语'],
-			['👶儿歌👶 专场', 'tag:儿歌'],
-			['❤️情人节❤️ 专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25'],
-			['🎀COS🎀 专场', 'tag:cos'],
-			['🍺干杯🍺 专场', 'date:22-03-28|23-09-06|25-01-01|24-12-31'],
-			['孤品 专场', 'totalNum:==1 -+ -（'], 
-			['距最近收录已有1️⃣年', 'minGap:>=1 -+'],
-			['距最近收录已有2️⃣年', 'minGap:>=2 -+'],
-			['距最近收录已有3️⃣年', 'minGap:>=3 -+'],
-			['距最近收录已有4️⃣年', 'minGap:>=4 -+'],
-			['2021精选(蝴蝶谷逸_)', 'tag:2021精选'],
-		]);
-		Array.from(items.entries()).forEach((entry) => {
-			let [text, value] =[...entry];
-			let opt = Utils.create('option', [], {});
+		let items = [
+			['🌟 ALL 🌟', '', 'normal'],
+			['⁺✞ʚ 🌰 ɞ✟₊', '-谭姐 -姨妈', 'normal'],
+			['最近 N 首', 'gap:<=32/365', 'recent'],
+			['隐藏 歌单', 'hidden:===true', 'hidden'],
+			['孤品 歌单', 'totalNum:==1 -+ -（', 'single'], 
+			['周杰伦 专场', 'singer:周杰伦 -半首', 'singer'],
+			['邓紫棋 专场', 'singer:邓紫棋 -半首', 'singer'],
+			['王心凌 专场', 'singer:王心凌 -半首', 'singer'],
+			['梁静茹 专场', 'singer:梁静茹 -半首', 'singer'],
+			['孙燕姿 专场', 'singer:孙燕姿 -半首', 'singer'],
+			['张韶涵 专场', 'singer:张韶涵 -半首', 'singer'],
+			['陶喆 专场', 'singer:陶喆 -半首', 'singer'],
+			['王菲 专场', 'singer:王菲 -半首', 'singer'],
+			['初音ミク 专场', 'singer:初音 -半首', 'singer'],
+			['谭姐 专场', 'title:谭姐', 'singer'],
+			['日语 专场', 'lang:日语', 'lang'],
+			['韩语 专场', 'lang:韩语', 'lang'],
+			['英语 专场', 'lang:英语', 'lang'],
+			['粤语 专场', 'lang:粤语', 'lang'],
+			['儿歌👶专场', 'tag:儿歌', 'special'],
+			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
+			['COS🎀专场', 'tag:cos', 'special'],
+			['干杯🍺专场', 'date:22-03-28|23-09-06|25-01-01|24-12-31', 'special'],
+			['2021精选(蝴蝶谷逸_)', 'tag:2021精选', 'special'],
+			['距最近收录已有1️⃣年', 'minGap:>=1 -+', 'gap'],
+			['距最近收录已有2️⃣年', 'minGap:>=2 -+', 'gap'],
+			['距最近收录已有3️⃣年', 'minGap:>=3 -+', 'gap'],
+			['距最近收录已有4️⃣年', 'minGap:>=4 -+', 'gap'],
+		];
+		items.forEach(item => {
+			let [text, value, class_name] =[...item];
+			let opt = Utils.create('option', [class_name], {});
 			opt.text = text;
 			opt.value = value;
 			select.appendChild(opt);
@@ -1549,6 +1606,7 @@ class SearchBox{
 				this.inp_search.value = e.target.value;
 			}
 			this.search_timer(e);
+			this.vl.toTop();
 		})
 		div_search.appendChild(select);
 		this.select_search = select;
@@ -1562,6 +1620,7 @@ class SearchBox{
 			}
 			// this.search_timer(e);
 			search_debounce(e);
+			this.vl.toTop();
 		});
 		inp.addEventListener('search', (e) => {
 			if(this?.select_search) {
@@ -1569,11 +1628,13 @@ class SearchBox{
 			}
 			// this.search_timer(e);
 			search_debounce(e);
+			this.vl.toTop();
 		});
 		inp.addEventListener('blur', (e)=>{
 			if(this?.select_search)
 				this.select_search.value = e.target.value;
 			search_debounce(e);
+			this.vl.toTop();
 		})
 		this.inp_search = inp;
 		div_search.appendChild(inp);
@@ -1591,7 +1652,7 @@ class SearchBox{
 		if (cache_key != null) return cache_key;
 
 		let _expr = expr.split(':');
-		let all_keys = ['title', 'date', 'tag', 'singer', 'lang', 'author', 'gap', 'mingap', 'totalnum'];
+		let all_keys = ['title', 'date', 'tag', 'singer', 'lang', 'author', 'gap', 'mingap', 'totalnum', 'hidden'];
 
 		let ret_keys = new Set();
 		if (_expr.length == 1){
@@ -1622,7 +1683,7 @@ class SearchBox{
 			[keys, vals] = [...this.get_keys_vals(expr)];
 			// console.log(keys, vals)
 			let is_dateRange = keys.length == 1 && keys[0] == 'date' ? true : false;
-			let is_eval = keys.length == 1 && ['gap', 'mingap', 'totalnum'].includes(keys[0]) ? true : false;
+			let is_eval = keys.length == 1 && ['gap', 'mingap', 'totalnum', 'hidden'].includes(keys[0]) ? true : false;
 
 			let attrs = keys.map(key => (item?.[key] ?? '').toString().toLowerCase());
 			return vals.some(val => {
@@ -1997,7 +2058,7 @@ class Drawers{
 				video.currentTime = 0;
 				video.play();
 			}
-			this.vl.div_container.scroll(0, 0);
+			this.vl.toTop();
 
 			// if(this?.signature){
 			// 	this.signature.hidden();
@@ -2091,12 +2152,11 @@ class Introduction{
 			this.div_container = div_container;
 		}
 
-		if(!disappear)
-			return;
-		this.timeout = setTimeout(() => {
-			this.clear();
-			this?.vl.update_visible_height();
-		}, 39.4 * 500);
+		if(show_intro && disappear)
+			this.timeout = setTimeout(() => {
+				this.clear();
+				this?.vl.update_visible_height();
+			}, 39.4 * 500);
 	}
 }
 
@@ -2269,7 +2329,8 @@ function main(){
 		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
 		['json2songs_timer', './assets/jsons/橙光游戏.json', '橙光游戏'],
-		['json2songs_timer', './南夕君cC.json', '南夕君cC']
+		['json2songs_timer', './南夕君cC.json', '南夕君cC'],
+		['json2songs_timer', './长风longwind.json', '长风longwind']
 	]
 	// load_args.forEach(args => {
 	// 	loader?.[args[0]](loader.load_data(args[1]) ?? '', video_author=args[2]);
@@ -2302,6 +2363,7 @@ function main(){
 
 		const search_box = new SearchBox(vl, loader.ordered_songs);
 		const drawers = new Drawers(new_win, vl);
+		vl.update_visible_height();
 		return drawers;
 	})
 	.then((drawers) => {
