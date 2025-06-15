@@ -13,12 +13,12 @@ function keepAliveBySilentAudio(){
 }
 keepAliveBySilentAudio();
 
-const AUTHORS_SIM = {
-	'蝴蝶谷逸_': '蝴蝶谷逸',
-	'真栗栗录播组': '录播组',
-	'麻糕Mago0': '麻 糕',
-	'真栗': '真 栗',
-	'长风longwind': '长 风'
+const AUTHORS_INFO = {
+	'蝴蝶谷逸_': ['蝴蝶谷逸',],
+	'真栗栗录播组': ['录播组',],
+	'麻糕Mago0': ['麻 糕',],
+	'真栗': ['真 栗',],
+	'长风longwind': ['长 风', ],
 }
 
 
@@ -924,6 +924,7 @@ class VirtualList{
 			'span.Monedula{color:AliceBlue;background:darkgray}',
 			'span.麻糕Mago0{background:linear-gradient(170deg,skyblue,snow); color:#7d645d; text-shadow:0 0 0.2rem pink; -webkit-text-stroke:0.04rem #7d645d;}',
 			'span.橙光游戏{color:orangered; text-shadow:0 0 2px green}',
+			'span.长风longwind{color:black; background-image:linear-gradient(to bottom, Khaki, snow, Khaki); font-weight:600;}',
 			'span.BAN{color:red; font-weight:bold; text-decoration:line-through;}',
 			'span.cos{color:gold; font-weight:bold; text-shadow:0 0 0.3rem #533806; background:#819cea;}',
 			'span.面白い{color:purple; font-weight:bold;}',
@@ -1117,8 +1118,8 @@ class VirtualList{
 			row_infos.append(info_lang);
 			// tags
 			info_tags = Utils.create('div', ['info_tags'], {});
-			span = Utils.create('span', ['info_author', 'info_tag', author], {'title': author});
-			span.innerText = Utils.pretty_str(AUTHORS_SIM?.[author] ?? author, 6);;
+			span = Utils.create('span', ['info_author', 'info_tag', author], {'title': `@${author}`});
+			span.innerText = Utils.pretty_str(AUTHORS_INFO?.[author]?.[0] ?? author, 6);;
 			info_tags.appendChild(span);
 			tags.forEach(tag => {
 				span = Utils.create('span', ['info_tag', tag], {});
@@ -1641,7 +1642,17 @@ class SearchBox{
 
 		let a = Utils.create('a', ['link_guide'], {});
 		a.innerText = '?';
-		a.title = '常规搜索：xxxx yyyy\n排除搜索：-xxxx\n并列搜索：xxxx|yyyy\n定类搜索：title/date/singer/lang/tag/author/gap:xxxx\n限定日期：date:xx-xx-xx~yy-yy-yy\n限定间隔：gap:(==|>|<|>=|<=|!=)ff\n组合搜索：参考预设'
+		a.title = [
+			'常规搜索：x1 x2',
+			'排除搜索：-x',
+			'并列搜索：x1|x2',
+			'定类搜索：title/date/singer/lang/tag/author/gap:x',
+			'限定日期：date:y1-m1-d1[~y2-m2-d2]',
+			'限定间隔：gap:(==|>|<|>=|<=|!=)x',
+			'最小间隔：mingap:(==|>|<|>=|<=|!=)x',
+			'隐藏歌曲(makuri.live未收录)：hidden:===true',
+			'组合搜索：参考预设',
+		].join('\n');
 		a.addEventListener('click', e => {
 			 window.open('https://www.bilibili.com/video/BV1StEPzsEbK/');
 		})
@@ -2324,7 +2335,8 @@ function main(){
 		['json2songs_timer', './assets/jsons/麻糕Mago0.json', '麻糕Mago0'],
 		['json2songs_timer', './assets/jsons/Monedula.json', 'Monedula'],
 		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸_'],
-		['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
+		['csv2songs_timer', './assets/csvs/薯片水獭_无弹幕.csv', '薯片水獭'],
+		// ['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
 		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '真栗栗录播组'],
 		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
