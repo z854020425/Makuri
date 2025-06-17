@@ -105,7 +105,7 @@ class Utils{
 	static pretty_str(str, n=25){
 		if (str == null)
 			return;
-		const reg = /[\u4E00-\u9FFF\u3400-\u4DBF\U00020000-\U0002A6DF\U0002A700-\U0002B73F\U0002B740-\U0002B81F\U0002B820-\U0002CEAF\U0002CEB0-\U0002EBEF\U00030000-\U0003134F\U00031350-\U000323AF\U0002EBF0-\U0002EE5F\U0002F800-\U0002FA1F\uF900-\uFAFF\u2F00-\u2FDF\u2E80-\u2EFF\u31C0-\u31EF\u2FF0-\u2FFF]/;
+		const reg = /[\u4E00-\u9FFF\u3400-\u4DBF\U00020000-\U0002A6DF\U0002A700-\U0002B73F\U0002B740-\U0002B81F\U0002B820-\U0002CEAF\U0002CEB0-\U0002EBEF\U00030000-\U0003134F\U00031350-\U000323AF\U0002EBF0-\U0002EE5F\U0002F800-\U0002FA1F\uF900-\uFAFF\u2F00-\u2FDF\u2E80-\u2EFF\u31C0-\u31EF\u2FF0-\u2FFF\u31F0-\u31FF\u3040-\u309F\u30A0-\u30FF]/;
 		let cnt = 0;
 		for(let i = 0; i < str.length; i++){
 			cnt += reg.test(str[i]) ? 1.5 : 1;
@@ -205,7 +205,9 @@ class Utils{
 
 
 class Notification{
-	constructor(){
+	constructor(lr=null){
+		this.lr = lr ?? 'right'
+		console.log(this.lr)
 		this.timeouts = [];
 		this.max_num = 8;
 		this.mount();
@@ -219,6 +221,11 @@ class Notification{
 			'.notification span{color:DarkGoldenRod; font-size:1.2rem; text-align:center;}'
 		]);
 		const div = Utils.create('div', [], {'id': 'div_notify'});
+		if(this.lr == 'left'){
+			div.style.left = '3rem';
+		}else{
+			div.style.right = '3rem';
+		}
 		document.body.appendChild(div);
 		this.div = div;
 	}
@@ -241,9 +248,9 @@ class Notification{
 
 
 class ClipBoard{
-	constructor(){
+	constructor(lr=null){
 		this.copy = this.copy_new;
-		this.notification = new Notification();
+		this.notification = new Notification(lr);
 	}
 	copy_new(text){
 		navigator.clipboard.writeText(text)
@@ -361,11 +368,11 @@ class DataLoader{
 				});
 				return;
 			}
-			let part;
+			let part, _date;
 			Object.keys(parts).forEach(p => {
 				part = parts[p]?.['part'];
 				title = parts[p]?.['title'];
-				date = parts[p]?.['date'] ?? date;
+				_date = parts[p]?.['date'] ?? date;
 				title = parts[p]?.['title'];
 				length = parts[p]?.['length'];
 				singer = parts[p]?.['singer'];
@@ -383,7 +390,7 @@ class DataLoader{
 				href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${part}&high_quality=1&autoplay=1`;
 				this.add_song({
 					'title': title,
-					'date': date,
+					'date': _date,
 					'href':href,
 					'href_raw': href_raw,
 					'length': length,
@@ -745,6 +752,9 @@ class VirtualList{
 
 		window.addEventListener('wheel', (e)=>{
 			e.stopPropagation()
+			if(e.target.classList.contains('uncollect_item')){
+				return;
+			}
 			this.div_container.scrollBy(0, e.deltaY );
 		});
 		this.init_touch();
@@ -1173,7 +1183,7 @@ class SocialPlatforms{
 			},{
 				'name': '网易云音乐',
 				'icon': 'https://s1.music.126.net/style/favicon.ico?v20180823',
-				'href': 'https://music.163.com/#/artist?id=12127825',
+				'href': 'https://music.163.com/#/user/home?id=83229229',
 				'color': 'rgb(211,0,26)'
 			},{
 				'name': '小红书',
@@ -1615,13 +1625,24 @@ class SearchBox{
 
 		let inp = Utils.create('input', ['input_search'], {'type': 'search', 'placeholder': '搜索'});
 		const search_debounce = Utils.debounce(this.search_timer.bind(this), 200);
-		inp.addEventListener('keyup', (e) => {
+		inp.addEventListener('input', (e) => {
+			if(this?.is_composition ?? false){
+				return;
+			}
 			if(this?.select_search) {
 				this.select_search.value = e.target.value;
 			}
 			// this.search_timer(e);
 			search_debounce(e);
 			this.vl.toTop();
+		});
+		inp.addEventListener('compositionstart', (e) => {
+			this.is_composition = true;
+		});
+		inp.addEventListener('compositionend', (e) => {
+			this.is_composition = false;
+			search_debounce(e);
+			this.vl.toTop();			
 		});
 		inp.addEventListener('search', (e) => {
 			if(this?.select_search) {
@@ -1631,12 +1652,12 @@ class SearchBox{
 			search_debounce(e);
 			this.vl.toTop();
 		});
-		inp.addEventListener('blur', (e)=>{
-			if(this?.select_search)
-				this.select_search.value = e.target.value;
-			search_debounce(e);
-			this.vl.toTop();
-		})
+		// inp.addEventListener('blur', (e)=>{
+		// 	if(this?.select_search)
+		// 		this.select_search.value = e.target.value;
+		// 	search_debounce(e);
+		// 	this.vl.toTop();
+		// })
 		this.inp_search = inp;
 		div_search.appendChild(inp);
 
@@ -2316,8 +2337,74 @@ class Signature{
 	}
 }
 
+class Uncollect{
+	constructor(songs){
+		this.songs = songs;
+		this.clipboard = new ClipBoard('left');
 
-function main(){
+		this.add_styles();
+		// this.
+		this.mount();
+	}
+	add_styles(){
+		Utils.add_styles([
+			'div.uncollect_container{position: absolute; top:0; right:2.1rem; width:15rem; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; text-align:center; z-index:10; font-family:微软雅黑, sans-serif;}',
+			'div.uncollect_body{overflow-y:scroll; position:relative; width:100%;}',
+			'div.uncollected_song::before{content:""; background:#ffefd7e6; width:90%; height:1.15rem; position:absolute; left:0.5rem; z-index:-1; border:0.1rem solid #f99e73; border-radius:1rem;}',
+			'div.uncollect_header, div.uncollected_song{width:100%; height:fit-content; background-image:linear-gradient(180deg, #f7b6c1b3 50%, #f4f45fb0 70%, white 90%); font-weight:bolder; font-size:1.1rem; color:transparent; background-clip:text; -webkit-text-stroke:0.03rem #ee4949e8; cursor:pointer; user-select:none; margin:0.1rem 0;}',
+			'div.uncollect_header{filter:contrast(0.1); user-select:none; font-size:1.2rem; -webkit-text-stroke:0.03rem #ff0000;}',
+		]);
+	}
+	mount(){
+		this.container = Utils.create('div', ['uncollect_item', 'uncollect_container'], {});
+		document.body.appendChild(this.container);
+
+		this.header = Utils.create('div', ['uncollect_item', 'uncollect_header'], {'title': '未收录歌曲'});
+		this.header.textContent = `▼ 未收录(${this.songs.length})`;
+		this.container.appendChild(this.header);
+
+		this.header.addEventListener('click', (e) => {
+			if(!(this?.expanded ?? false)){
+				this.show();
+				this.expanded = true;
+				this.header.textContent = `未收录(${this.songs.length}) ▲`;
+				this.header.style.filter = 'contrast(1)';
+			}else{
+				this.hidden();
+				this.expanded = false;
+				this.header.textContent = `▼ 未收录(${this.songs.length})`;
+				this.header.style.filter = 'contrast(0.1)';
+			}
+		})
+
+
+	}
+	show(){
+		const fragment = document.createDocumentFragment();
+		this.body = Utils.create('div', ['uncollect_item', 'uncollect_body'], {});
+		fragment.appendChild(this.body);
+		this.songs.forEach(title => {
+			const song = Utils.create('div', ['uncollect_item', 'uncollected_song'], {'title': title});
+			song.textContent = Utils.pretty_str(title, 14);
+			song.setAttribute('titleraw', title);
+			this.body.appendChild(song);
+		});
+		this.container.appendChild(fragment);
+		this.body.addEventListener('click', (e) => {
+			if(!e.target.classList.contains('uncollected_song'))
+				return;
+			this.clipboard.copy(e.target.getAttribute('titleraw'));
+		})
+
+	}
+	hidden(){
+		this.body.remove();
+		this.body = null;
+	}
+}
+
+
+async function main(){
 	const introduction = new Introduction();
 	const social_platforms = new SocialPlatforms();
 	const img_rb = new Image_RB('./assets/imgs/sleep.webp');
@@ -2355,7 +2442,7 @@ function main(){
 		})
 		.catch(error => console.error(error))
 	);
-	Promise.all(data_processors)
+	await Promise.all(data_processors)
 	.then(() => {
 		loader.sort_songs();
 		console.log(Object.keys(loader.ordered_songs).length);
@@ -2385,5 +2472,7 @@ function main(){
 		const signature = new Signature();
 		drawers.set_signature(signature);
 	});
+	new Uncollect(loader.uncollected_songs);
+
 }
 main();
