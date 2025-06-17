@@ -2350,8 +2350,8 @@ class Uncollect{
 		Utils.add_styles([
 			'div.uncollect_container{position: absolute; top:0; right:2.1rem; width:15rem; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; text-align:center; z-index:10; font-family:微软雅黑, sans-serif;}',
 			'div.uncollect_body{overflow-y:scroll; position:relative; width:100%;}',
-			'div.uncollected_song::before{content:""; background:#ffefd7e6; width:90%; height:1.15rem; position:absolute; left:0.5rem; z-index:-1; border:0.1rem solid #f99e73; border-radius:1rem;}',
-			'div.uncollect_header, div.uncollected_song{width:100%; height:fit-content; background-image:linear-gradient(180deg, #f7b6c1b3 50%, #f4f45fb0 70%, white 90%); font-weight:bolder; font-size:1.1rem; color:transparent; background-clip:text; -webkit-text-stroke:0.03rem #ee4949e8; cursor:pointer; user-select:none; margin:0.1rem 0;}',
+			'div.uncollected_song::before{content:""; background:#ffefd7e6; width:90%; height:1.3rem; position:absolute; left:0.5rem; z-index:-1; border:0.1rem solid #f99e73; border-radius:1rem;}',
+			'div.uncollect_header, div.uncollected_song{width:100%; height:fit-content; background-image:linear-gradient(180deg, #f7b6c1b3 50%, #f4f45fb0 70%, white 90%); font-weight:bolder; font-size:1.1rem; color:transparent; background-clip:text; -webkit-text-stroke:0.03rem #ee4949e8; cursor:pointer; user-select:none; margin:0.05rem 0;}',
 			'div.uncollect_header{filter:contrast(0.1); user-select:none; font-size:1.2rem; -webkit-text-stroke:0.03rem #ff0000;}',
 		]);
 	}
