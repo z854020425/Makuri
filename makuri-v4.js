@@ -141,8 +141,8 @@ class Utils{
 			styles = styles.join('\n');
 		}
 		const ele = document.createElement('style');
-		ele.innerText = styles;
-		document.head.appendChild(ele);
+		document.head.appendChild(ele)
+		ele.textContent = styles;
 	}
 	static create(tag_name, class_names=[], attrs={}){
 		const ele = document.createElement(tag_name);
@@ -528,8 +528,11 @@ class DataLoader{
 		gap = gap / 365 / 24 / 60 / 60 / 1000;
 		let percent = 1 - Math.min(6, gap) / 6 * (1 - 0.15);
 
+		let title_wospace = title_chs ? `${title.toLowerCase()}|${title_chs.toLowerCase()}` : title.toLowerCase();
+		title_wospace = title_wospace.replace(/\s/g, '');
+
 		this.songs[title].push({
-			'title': title_chs ? `${title.toLowerCase()}|${title_chs.toLowerCase()}` : title.toLowerCase(),
+			'title': title_wospace,
 			'title_raw': title,
 			'title_chs': title_chs,
 			'date': '▶ ' + Utils.pretty_date(date),
@@ -699,11 +702,11 @@ class VirtualList{
 		else
 			document.querySelector('#intro_container, h1').insertAdjacentElement('afterend', div_cnts);
 		const cnt_songs = Utils.create('div', ['cnt_songs'], {});
-		cnt_songs.innerText = '已收录歌曲 {0} 首';
+		cnt_songs.innerText = '已收录歌曲 0 首';
 		cnt_songs.setAttribute('data-text', cnt_songs.innerText);
 		div_cnts.appendChild(cnt_songs);
 		const cnt_clips = Utils.create('div', ['cnt_clips'], {});
-		cnt_clips.innerText = '已收录切片 {0} 枚';
+		cnt_clips.innerText = '已收录切片 0 枚';
 		cnt_clips.setAttribute('data-text', cnt_clips.innerText);
 		div_cnts.appendChild(cnt_clips);
 		this.cnt_songs = cnt_songs;
@@ -816,6 +819,7 @@ class VirtualList{
 			if(this?.touch_dragging === true)
 				return;
 
+
 			this.touch_start_y = e.touches[0].clientY;
 			this.start_scroll_top = this.div_container.scrollTop;
 			this.last_scroll_up = this.div_container.scrollTop;
@@ -824,7 +828,7 @@ class VirtualList{
 				cancelAnimationFrame(this.animation_frame);
 				this.animation_frame = null;
 			}
-			this.touch_dragging = true;
+			this.touch_dragging = true;			
 		};
 		const func_touchmove = (e)=>{
 			console.log('move')
@@ -832,6 +836,7 @@ class VirtualList{
 				return;
 			if(this?.start_scroll_top === null || this?.touch_start_y === null)
 				return;
+
 			if(['group_title', 'info_date', 'info_link', 'info_length', 'info_singer', 'info_lang', 'info_tag', 'info_tags'].some(x => e.target.classList.contains(x)))
 				this.cur_ele = e.target;
 			const y = e.touches[0].clientY;
@@ -1577,7 +1582,7 @@ class SearchBox{
 		let select = Utils.create('select', [], {'id':'select_presets'});
 		let items = [
 			['🌟 ALL 🌟', '', 'normal'],
-			['⁺✞ʚ 🌰 ɞ✟₊', '-谭姐 -姨妈', 'normal'],
+			['⁺✞ʚ 🌰 ɞ✟₊', 'author:真栗 author:-录播 author:-希望', 'normal'],
 			['最近 N 首', 'gap:<=32/365', 'recent'],
 			['隐藏 歌单', 'hidden:===true', 'hidden'],
 			['孤品 歌单', 'totalNum:==1 -+ -（', 'single'], 
@@ -1595,6 +1600,7 @@ class SearchBox{
 			['韩语 专场', 'lang:韩语', 'lang'],
 			['英语 专场', 'lang:英语', 'lang'],
 			['粤语 专场', 'lang:粤语', 'lang'],
+			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚', 'special'],
 			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
 			['COS🎀专场', 'tag:cos', 'special'],
@@ -1675,7 +1681,7 @@ class SearchBox{
 			'组合搜索：参考预设',
 		].join('\n');
 		a.addEventListener('click', e => {
-			 window.open('https://www.bilibili.com/video/BV1StEPzsEbK/');
+			 window.open('https://space.bilibili.com/326803565/lists/4728248?type=series');
 		})
 		div_search.appendChild(a);
 	}
@@ -2348,7 +2354,7 @@ class Uncollect{
 	}
 	add_styles(){
 		Utils.add_styles([
-			'div.uncollect_container{position: absolute; top:0; right:2.1rem; width:15rem; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; text-align:center; z-index:10; font-family:微软雅黑, sans-serif;}',
+			'div.uncollect_container{position: absolute; top:0; right:2.1rem; width:15rem; height:1.5rem; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; text-align:center; z-index:10; font-family:微软雅黑, sans-serif; transition:1s}',
 			'div.uncollect_body{overflow-y:scroll; position:relative; width:100%;}',
 			'div.uncollected_song::before{content:""; background:#ffefd7e6; width:90%; height:1.3rem; position:absolute; left:0.5rem; z-index:-1; border:0.1rem solid #f99e73; border-radius:1rem;}',
 			'div.uncollect_header, div.uncollected_song{width:100%; height:fit-content; background-image:linear-gradient(180deg, #f7b6c1b3 50%, #f4f45fb0 70%, white 90%); font-weight:bolder; font-size:1.1rem; color:transparent; background-clip:text; -webkit-text-stroke:0.03rem #ee4949e8; cursor:pointer; user-select:none; margin:0.05rem 0;}',
@@ -2356,11 +2362,11 @@ class Uncollect{
 		]);
 	}
 	mount(){
-		this.container = Utils.create('div', ['uncollect_item', 'uncollect_container'], {});
+		this.container = Utils.create('div', ['uncollect_container'], {});
 		document.body.appendChild(this.container);
 
 		this.header = Utils.create('div', ['uncollect_item', 'uncollect_header'], {'title': '未收录歌曲'});
-		this.header.textContent = `▼ 未收录(${this.songs.length})`;
+		this.header.textContent = `未收录(${this.songs.length}) ▼`;
 		this.container.appendChild(this.header);
 
 		this.header.addEventListener('click', (e) => {
@@ -2369,11 +2375,13 @@ class Uncollect{
 				this.expanded = true;
 				this.header.textContent = `未收录(${this.songs.length}) ▲`;
 				this.header.style.filter = 'contrast(1)';
+				this.container.style.height = '100vh';
 			}else{
 				this.hidden();
 				this.expanded = false;
-				this.header.textContent = `▼ 未收录(${this.songs.length})`;
+				this.header.textContent = `未收录(${this.songs.length}) ▼`;
 				this.header.style.filter = 'contrast(0.1)';
+				this.container.style.height = '1.5rem';
 			}
 		})
 
