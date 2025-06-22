@@ -3197,7 +3197,7 @@
         "link": "https://www.bilibili.com/video/BV1Qu4m1F77u/",
         "length": "01:15:53",
         "bvid": "BV1Qu4m1F77u",
-        "date": "2024-04-22",
+        "date": "2024-04-21",
         "parts": {
             "p1": {
                 "part": 1,
@@ -3533,7 +3533,7 @@
         "link": "https://www.bilibili.com/video/BV1Nm411C7Jv/",
         "length": "32:43",
         "bvid": "BV1Nm411C7Jv",
-        "date": "2024-3-26",
+        "date": "2024-03-27",
         "parts": {
             "p1": {
                 "part": 1,
@@ -4306,7 +4306,7 @@
         "link": "https://www.bilibili.com/video/BV1z7421N7JF/",
         "length": "52:10",
         "bvid": "BV1z7421N7JF",
-        "date": "2022-02-04",
+        "date": "2024-02-04",
         "parts": {
             "p1": {
                 "part": 1,
@@ -4370,7 +4370,7 @@
             },
             "p13": {
                 "part": 13,
-                "title": "青い空に出逢えた",
+                "title": "空",
                 "length": "04:49"
             },
             "p14": {
@@ -4981,7 +4981,7 @@
         "link": "https://www.bilibili.com/video/BV1994y1g7hX/",
         "length": "41:32",
         "bvid": "BV1994y1g7hX",
-        "date": "2024-01-04",
+        "date": "2024-01-03",
         "parts": {
             "p1": {
                 "part": 1,
@@ -5739,7 +5739,7 @@
         "link": "https://www.bilibili.com/video/BV1rN4y1S7EE/",
         "length": "01:00:03",
         "bvid": "BV1rN4y1S7EE",
-        "date": "2023-11-06",
+        "date": "2023-11-05",
         "parts": {
             "p1": {
                 "part": 1,
@@ -6122,7 +6122,7 @@
         "link": "https://www.bilibili.com/video/BV1BN4y1r7x2/",
         "length": "01:21:07",
         "bvid": "BV1BN4y1r7x2",
-        "date": "2023-10-23",
+        "date": "2023-10-22",
         "parts": {
             "p1": {
                 "part": 1,
@@ -6306,72 +6306,86 @@
             "p15": {
                 "part": 15,
                 "title": "第一天",
-                "length": "04:07"
+                "length": "04:07",
+                "date": "2023-10-18"
             },
             "p16": {
                 "part": 16,
                 "title": "睫毛弯弯",
-                "length": "03:47"
+                "length": "03:47",
+                "date": "2023-10-18"
             },
             "p17": {
                 "part": 17,
                 "title": "亲爱的，那不是爱情",
-                "length": "03:57"
+                "length": "03:57",
+                "date": "2023-10-18"
             },
             "p18": {
                 "part": 18,
                 "title": "心墙",
-                "length": "03:41"
+                "length": "03:41",
+                "date": "2023-10-18"
             },
             "p19": {
                 "part": 19,
                 "title": "爱你不是两三天",
-                "length": "04:13"
+                "length": "04:13",
+                "date": "2023-10-18"
             },
             "p20": {
                 "part": 20,
                 "title": "迷迭香",
-                "length": "04:22"
+                "length": "04:22",
+                "date": "2023-10-18"
             },
             "p21": {
                 "part": 21,
                 "title": "喜欢你",
-                "length": "04:08"
+                "length": "04:08",
+                "date": "2023-10-18"
             },
             "p22": {
                 "part": 22,
                 "title": "小幸运",
-                "length": "04:25"
+                "length": "04:25",
+                "date": "2023-10-18"
             },
             "p23": {
                 "part": 23,
                 "title": "Letting Go",
-                "length": "04:26"
+                "length": "04:26",
+                "date": "2023-10-18"
             },
             "p24": {
                 "part": 24,
                 "title": "一直很安静",
-                "length": "03:38"
+                "length": "03:38",
+                "date": "2023-10-18"
             },
             "p25": {
                 "part": 25,
                 "title": "心做し",
-                "length": "04:29"
+                "length": "04:29",
+                "date": "2023-10-18"
             },
             "p26": {
                 "part": 26,
                 "title": "心动",
-                "length": "04:17"
+                "length": "04:17",
+                "date": "2023-10-18"
             },
             "p27": {
                 "part": 27,
                 "title": "矛盾",
-                "length": "04:32"
+                "length": "04:32",
+                "date": "2023-10-18"
             },
             "p28": {
                 "part": 28,
                 "title": "园游会",
-                "length": "03:14"
+                "length": "03:14",
+                "date": "2023-10-18"
             }
         }
     },
@@ -6943,7 +6957,7 @@
         "link": "https://www.bilibili.com/video/BV1aK4y1w73H/",
         "length": "48:21",
         "bvid": "BV1aK4y1w73H",
-        "date": "2023-09-21",
+        "date": "2023-09-20",
         "parts": {
             "p1": {
                 "part": 1,
@@ -8141,7 +8155,8 @@
             "p19": {
                 "part": 19,
                 "title": "我是一只鱼",
-                "length": "03:20"
+                "length": "03:20",
+                "date": "2023-07-27"
             },
             "p20": {
                 "part": 20,
@@ -8151,42 +8166,50 @@
             "p21": {
                 "part": 21,
                 "title": "愛唄~since 2007~",
-                "length": "03:52"
+                "length": "03:52",
+                "date": "2023-07-27"
             },
             "p22": {
                 "part": 22,
                 "title": "欧皇",
-                "length": "02:20"
+                "length": "02:20",
+                "date": "2023-07-27"
             },
             "p23": {
                 "part": 23,
                 "title": "非酋",
-                "length": "02:45"
+                "length": "02:45",
+                "date": "2023-07-27"
             },
             "p24": {
                 "part": 24,
                 "title": "带我走",
-                "length": "04:57"
+                "length": "04:57",
+                "date": "2023-07-27"
             },
             "p25": {
                 "part": 25,
                 "title": "看月亮爬上来",
-                "length": "02:50"
+                "length": "02:50",
+                "date": "2023-07-27"
             },
             "p26": {
                 "part": 26,
                 "title": "甜甜的",
-                "length": "04:04"
+                "length": "04:04",
+                "date": "2023-07-27"
             },
             "p27": {
                 "part": 27,
                 "title": "告白",
-                "length": "03:52"
+                "length": "03:52",
+                "date": "2023-07-27"
             },
             "p28": {
                 "part": 28,
                 "title": "单向箭头",
-                "length": "04:16"
+                "length": "04:16",
+                "date": "2023-07-27"
             }
         }
     },
@@ -9898,7 +9921,7 @@
         "link": "https://www.bilibili.com/video/BV1Pz4y1z7DE/",
         "length": "01:13:08",
         "bvid": "BV1Pz4y1z7DE",
-        "date": "2023-05-30",
+        "date": "2023-05-28",
         "parts": {
             "p1": {
                 "part": 1,
@@ -10392,7 +10415,7 @@
         "link": "https://www.bilibili.com/video/BV1kz4y1a7F8/",
         "length": "59:55",
         "bvid": "BV1kz4y1a7F8",
-        "date": "2023-05-08",
+        "date": "2023-05-07",
         "parts": {
             "p1": {
                 "part": 1,
@@ -10481,21 +10504,21 @@
         "link": "https://www.bilibili.com/video/BV19T411b7pm/",
         "length": "03:03",
         "bvid": "BV19T411b7pm",
-        "date": "2023-05-06"
+        "date": "2023-05-05"
     },
     "BV16L411a7ma": {
         "title": "简单爱",
         "link": "https://www.bilibili.com/video/BV16L411a7ma/",
         "length": "04:15",
         "bvid": "BV16L411a7ma",
-        "date": "2023-05-06"
+        "date": "2023-05-05"
     },
     "BV1SP411y7Es": {
         "title": "樱花草",
         "link": "https://www.bilibili.com/video/BV1SP411y7Es/",
         "length": "04:16",
         "bvid": "BV1SP411y7Es",
-        "date": "2023-05-06"
+        "date": "2023-05-05"
     },
     "BV1ek4y1j7QX": {
         "title": "【真栗 2023-05-04 斗鱼直播歌切】我的衣服里能变出原味鸡",
@@ -10576,57 +10599,67 @@
         "link": "https://www.bilibili.com/video/BV1JT411h7Bh/",
         "length": "57:22",
         "bvid": "BV1JT411h7Bh",
-        "date": "2023-04-29",
+        "date": "2023-04-30",
         "parts": {
             "p1": {
                 "part": 1,
                 "title": "一个人的北京",
-                "length": "04:47"
+                "length": "04:47",
+                "date": "2023-04-28"
             },
             "p2": {
                 "part": 2,
                 "title": "勇气大爆发",
-                "length": "02:55"
+                "length": "02:55",
+                "date": "2023-04-28"
             },
             "p3": {
                 "part": 3,
                 "title": "加油鸭",
-                "length": "01:47"
+                "length": "01:47",
+                "date": "2023-04-28"
             },
             "p4": {
                 "part": 4,
                 "title": "普通朋友",
-                "length": "04:05"
+                "length": "04:05",
+                "date": "2023-04-29"
             },
             "p5": {
                 "part": 5,
                 "title": "願い~あの頃のキミへ~",
-                "length": "05:16"
+                "length": "05:16",
+                "date": "2023-04-29"
             },
             "p6": {
                 "part": 6,
                 "title": "雨爱",
-                "length": "03:57"
+                "length": "03:57",
+                "date": "2023-04-29"
             },
             "p7": {
                 "part": 7,
                 "title": "阿司匹林",
-                "length": "02:55"
+                "length": "02:55",
+                "date": "2023-04-29"
             },
             "p8": {
                 "part": 8,
                 "title": "golden hour",
-                "length": "03:04"
+                "length": "03:04",
+                "date": "2023-04-29"
             },
             "p9": {
                 "part": 9,
                 "title": "天堂",
-                "length": "03:29"
+                "length": "03:29",
+                "date": "2023-04-29"
             },
             "p10": {
                 "part": 10,
                 "title": "恋愛サーキュレーション",
                 "length": "01:46",
+                "date": "2023-04-29",
                 "tags": [
                     "腾格尔版"
                 ]
@@ -10634,12 +10667,14 @@
             "p11": {
                 "part": 11,
                 "title": "One more time One more chance",
-                "length": "05:09"
+                "length": "05:09",
+                "date": "2023-04-29"
             },
             "p12": {
                 "part": 12,
                 "title": "勾指起誓",
-                "length": "02:42"
+                "length": "02:42",
+                "date": "2023-04-29"
             },
             "p13": {
                 "part": 13,
