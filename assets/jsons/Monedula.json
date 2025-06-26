@@ -5959,7 +5959,7 @@
         "link": "https://www.bilibili.com/video/BV11G411C7ma/",
         "length": "57:55",
         "bvid": "BV11G411C7ma",
-        "date": "2022-10-29",
+        "date": "2023-10-29",
         "parts": {
             "p1": {
                 "part": 1,
@@ -6009,32 +6009,38 @@
             "p10": {
                 "part": 10,
                 "title": "Trust You",
-                "length": "04:36"
+                "length": "04:36",
+                "date": "2023-10-30"
             },
             "p11": {
                 "part": 11,
                 "title": "ドラえもんのうた",
-                "length": "02:54"
+                "length": "02:54",
+                "date": "2023-10-30"
             },
             "p12": {
                 "part": 12,
                 "title": "For You",
-                "length": "03:37"
+                "length": "03:37",
+                "date": "2023-10-30"
             },
             "p13": {
                 "part": 13,
                 "title": "愛してる",
-                "length": "04:58"
+                "length": "04:58",
+                "date": "2023-10-30"
             },
             "p14": {
                 "part": 14,
                 "title": "すずめ",
-                "length": "03:18"
+                "length": "03:18",
+                "date": "2023-10-30"
             },
             "p15": {
                 "part": 15,
                 "title": "ラブレターのかわりにこの诗を.",
-                "length": "04:32"
+                "length": "04:32",
+                "date": "2023-10-30"
             }
         }
     },
@@ -10786,132 +10792,158 @@
             "p1": {
                 "part": 1,
                 "title": "枫",
-                "length": "04:13"
+                "length": "04:13",
+                "date": "2023-03-29"
             },
             "p2": {
                 "part": 2,
                 "title": "让风告诉你",
-                "length": "03:42"
+                "length": "03:42",
+                "date": "2023-03-29"
             },
             "p3": {
                 "part": 3,
                 "title": "就是爱",
-                "length": "03:43"
+                "length": "03:43",
+                "date": "2023-03-29"
             },
             "p4": {
                 "part": 4,
                 "title": "靠近一点点",
-                "length": "03:39"
+                "length": "03:39",
+                "date": "2023-03-29"
             },
             "p5": {
                 "part": 5,
                 "title": "シルエット",
-                "length": "03:19"
+                "length": "03:19",
+                "date": "2023-03-29"
             },
             "p6": {
                 "part": 6,
                 "title": "勾指起誓",
-                "length": "02:48"
+                "length": "02:48",
+                "date": "2023-03-29"
             },
             "p7": {
                 "part": 7,
                 "title": "来不及",
-                "length": "04:08"
+                "length": "04:08",
+                "date": "2023-03-29"
             },
             "p8": {
                 "part": 8,
                 "title": "多远都要在一起",
-                "length": "03:34"
+                "length": "03:34",
+                "date": "2023-03-29"
             },
             "p9": {
                 "part": 9,
                 "title": "我会自己上厕所",
-                "length": "01:34"
+                "length": "01:34",
+                "date": "2023-03-29"
             },
             "p10": {
                 "part": 10,
                 "title": "带我去很远地方",
-                "length": "03:47"
+                "length": "03:47",
+                "date": "2023-03-29"
             },
             "p11": {
                 "part": 11,
                 "title": "遇见",
-                "length": "03:19"
+                "length": "03:19",
+                "date": "2023-03-29"
             },
             "p12": {
                 "part": 12,
                 "title": "克卜勒",
-                "length": "03:54"
+                "length": "03:54",
+                "date": "2023-03-29"
             },
             "p13": {
                 "part": 13,
                 "title": "一路向北",
-                "length": "04:14"
+                "length": "04:14",
+                "date": "2023-03-29"
             },
             "p14": {
                 "part": 14,
                 "title": "tomorrow",
-                "length": "03:20"
+                "length": "03:20",
+                "date": "2023-03-29"
             },
             "p15": {
                 "part": 15,
                 "title": "Time after time～花舞う街で～",
-                "length": "03:36"
+                "length": "03:36",
+                "date": "2023-03-26"
             },
             "p16": {
                 "part": 16,
                 "title": "光と影のロマン",
-                "length": "04:32"
+                "length": "04:32",
+                "date": "2023-03-26"
             },
             "p17": {
                 "part": 17,
                 "title": "運命のルーレット廻して",
-                "length": "03:40"
+                "length": "03:40",
+                "date": "2023-03-26"
             },
             "p18": {
                 "part": 18,
                 "title": "明天你好",
-                "length": "04:01"
+                "length": "04:01",
+                "date": "2023-03-26"
             },
             "p19": {
                 "part": 19,
                 "title": "隐形的翅膀",
-                "length": "03:20"
+                "length": "03:20",
+                "date": "2023-03-26"
             },
             "p20": {
                 "part": 20,
                 "title": "路过人间",
-                "length": "03:53"
+                "length": "03:53",
+                "date": "2023-03-26"
             },
             "p21": {
                 "part": 21,
                 "title": "打ち上げ花火",
-                "length": "04:33"
+                "length": "04:33",
+                "date": "2023-03-26"
             },
             "p22": {
                 "part": 22,
                 "title": "Letting Go",
-                "length": "04:14"
+                "length": "04:14",
+                "date": "2023-03-26"
             },
             "p23": {
                 "part": 23,
                 "title": "社畜少女",
-                "length": "03:26"
+                "length": "03:26",
+                "date": "2023-03-26"
             },
             "p24": {
                 "part": 24,
                 "title": "すずめ",
-                "length": "03:50"
+                "length": "03:50",
+                "date": "2023-03-26"
             },
             "p25": {
                 "part": 25,
                 "title": "Me Me She",
-                "length": "04:29"
+                "length": "04:29",
+                "date": "2023-03-26"
             },
             "p26": {
                 "part": 26,
                 "title": "慢慢喜欢你",
-                "length": "03:35"
+                "length": "03:35",
+                "date": "2023-03-26"
             }
         }
     },
@@ -10974,7 +11006,7 @@
         "link": "https://www.bilibili.com/video/BV1wg4y1s7ae/",
         "length": "38:14",
         "bvid": "BV1wg4y1s7ae",
-        "date": "2023-03-24",
+        "date": "2023-03-22",
         "parts": {
             "p1": {
                 "part": 1,
@@ -11277,7 +11309,7 @@
         "link": "https://www.bilibili.com/video/BV1s84y1A7Dk/",
         "length": "01:16:46",
         "bvid": "BV1s84y1A7Dk",
-        "date": "2023-03-13",
+        "date": "2023-03-12",
         "parts": {
             "p1": {
                 "part": 1,
@@ -11708,7 +11740,7 @@
         "link": "https://www.bilibili.com/video/BV1ej411F7m4/",
         "length": "41:50",
         "bvid": "BV1ej411F7m4",
-        "date": "2023-02-27",
+        "date": "2023-02-26",
         "parts": {
             "p1": {
                 "part": 1,
@@ -11927,7 +11959,10 @@
             "p11": {
                 "part": 11,
                 "title": "你就不要想起我",
-                "length": "04:16"
+                "length": "04:16",
+                "tags": [
+                    "嗦粉"
+                ]
             },
             "p12": {
                 "part": 12,
