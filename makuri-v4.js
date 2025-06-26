@@ -528,7 +528,7 @@ class DataLoader{
 		gap = gap / 365 / 24 / 60 / 60 / 1000;
 		let percent = 1 - Math.min(6, gap) / 6 * (1 - 0.15);
 
-		let title_wospace = title_chs ? `${title.toLowerCase()}|${title_chs.toLowerCase()}` : title.toLowerCase();
+		let title_wospace = title_chs ? `"${title.toLowerCase()}"|"${title_chs.toLowerCase()}"` : `"${title.toLowerCase()}"`;
 		title_wospace = title_wospace.replace(/\s/g, '');
 
 		this.songs[title].push({
@@ -544,7 +544,8 @@ class DataLoader{
 			'lang': lang,
 			'tags': tags,
 			'tag': tag,
-			'author': author,
+			'author': `"${author}"`,
+			'_author': author,
 			'is_clip': true,
 			'is_song': is_song,
 			'gap': gap.toString(),
@@ -1046,7 +1047,7 @@ class VirtualList{
 		let info_date, info_link, info_length, info_singer, info_lang, info_tags, span;
 		// console.log(this.clips_arr.slice(start, end))
 		this.clips_arr.slice(start, end).forEach(song => {
-			let title, date, href, length, duration, singer, lang, author, tags, is_seperate, percent;
+			let title, date, href, length, duration, singer, lang, author, _author, tags, is_seperate, percent;
 			title = song?.['title'];
 			date = song?.['date'];
 			href = song?.['href'];
@@ -1055,9 +1056,11 @@ class VirtualList{
 			singer = song?.['singer'] ?? '--';
 			lang = song?.['lang'] ?? '--';
 			author = song?.['author'];
+			_author = song?.['_author'];
 			tags = song?.['tags'];
 			is_seperate = song?.['is_seperate'];
 			percent = song?.['percent'] ?? 1;
+
 
 			let title_raw, title_chs;
 			title_raw = song?.['title_raw'];
@@ -1133,8 +1136,8 @@ class VirtualList{
 			row_infos.append(info_lang);
 			// tags
 			info_tags = Utils.create('div', ['info_tags'], {});
-			span = Utils.create('span', ['info_author', 'info_tag', author], {'title': `@${author}`});
-			span.innerText = Utils.pretty_str(AUTHORS_INFO?.[author]?.[0] ?? author, 6);;
+			span = Utils.create('span', ['info_author', 'info_tag', _author], {'title': `@${_author}`});
+			span.innerText = Utils.pretty_str(AUTHORS_INFO?.[_author]?.[0] ?? _author, 6);;
 			info_tags.appendChild(span);
 			tags.forEach(tag => {
 				span = Utils.create('span', ['info_tag', tag], {});
@@ -1582,7 +1585,7 @@ class SearchBox{
 		let select = Utils.create('select', [], {'id':'select_presets'});
 		let items = [
 			['🌟 ALL 🌟', '', 'normal'],
-			['⁺✞ʚ 🌰 ɞ✟₊', 'author:真栗 author:-录播 author:-希望', 'normal'],
+			['⁺✞ʚ 🌰 ɞ✟₊', 'author:"真栗"', 'normal'],
 			['最近 N 首', 'gap:<=32/365', 'recent'],
 			['隐藏 歌单', 'hidden:===true', 'hidden'],
 			['孤品 歌单', 'totalNum:==1 -+ -（', 'single'], 
@@ -1600,7 +1603,7 @@ class SearchBox{
 			['韩语 专场', 'lang:韩语', 'lang'],
 			['英语 专场', 'lang:英语', 'lang'],
 			['粤语 专场', 'lang:粤语', 'lang'],
-			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚', 'special'],
+			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚|兔子先生|香格里拉|"你"', 'special'],
 			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
 			['COS🎀专场', 'tag:cos', 'special'],
