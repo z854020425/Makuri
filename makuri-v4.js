@@ -1603,7 +1603,7 @@ class SearchBox{
 			['韩语 专场', 'lang:韩语', 'lang'],
 			['英语 专场', 'lang:英语', 'lang'],
 			['粤语 专场', 'lang:粤语', 'lang'],
-			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚|兔子先生|香格里拉|"你"|逍遥叹|"宝贝"', 'special'],
+			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义', 'special'],
 			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
 			['COS🎀专场', 'tag:cos', 'special'],
@@ -2434,11 +2434,14 @@ async function main(){
 		['json2songs_timer', './assets/jsons/Monedula.json', 'Monedula'],
 		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸_'],
 		['csv2songs_timer', './assets/csvs/薯片水獭_无弹幕.csv', '薯片水獭'],
+		['json2songs_timer', './assets/jsons/薯片水獭_无弹幕.json', '薯片水獭'],
 		// ['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
 		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '真栗栗录播组'],
 		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
 		['json2songs_timer', './assets/jsons/橙光游戏.json', '橙光游戏'],
+		['json2songs_timer', './assets/jsons/HK君.json', 'H.K.君'],
+		['json2songs_timer', './assets/jsons/汤h.json', '汤h'],
 		['json2songs_timer', './南夕君cC.json', '南夕君cC'],
 		['json2songs_timer', './长风longwind.json', '长风longwind']
 	]
