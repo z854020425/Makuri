@@ -19,6 +19,7 @@ const AUTHORS_INFO = {
 	'麻糕Mago0': ['麻 糕',],
 	'真栗': ['真 栗',],
 	'长风longwind': ['长 风', ],
+	'BML制作指挥部': ['BML制作',]
 }
 
 
@@ -1603,7 +1604,7 @@ class SearchBox{
 			['韩语 专场', 'lang:韩语', 'lang'],
 			['英语 专场', 'lang:英语', 'lang'],
 			['粤语 专场', 'lang:粤语', 'lang'],
-			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义|Nico', 'special'],
+			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|有可能的夜晚|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义|Nico|銀色飛行船|有梦好甜蜜', 'special'],
 			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
 			['COS🎀专场', 'tag:cos', 'special'],
@@ -1771,8 +1772,9 @@ class SearchBox{
 
 		let vals = values.toLowerCase().split(' ')
 		.filter(val => val != '');
-		vals  = vals.filter((val, idx) => vals.indexOf(val) == idx);
+		vals = vals.filter((val, idx) => vals.indexOf(val) == idx);
 		if (vals.length == 0){
+			sessionStorage.setItem('search_result', JSON.stringify(this.songs));
 			this.vl.load_songs(this.songs);
 			this.vl.init();
 			return;
@@ -2443,7 +2445,8 @@ async function main(){
 		['json2songs_timer', './assets/jsons/HK君.json', 'H.K.君'],
 		['json2songs_timer', './assets/jsons/汤h.json', '汤h'],
 		['json2songs_timer', './南夕君cC.json', '南夕君cC'],
-		['json2songs_timer', './长风longwind.json', '长风longwind']
+		['json2songs_timer', './长风longwind.json', '长风longwind'],
+		['json2songs_timer', './assets/jsons/BML制作指挥部.json', 'BML制作指挥部']
 	]
 	// load_args.forEach(args => {
 	// 	loader?.[args[0]](loader.load_data(args[1]) ?? '', video_author=args[2]);
