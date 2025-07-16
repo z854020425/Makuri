@@ -2445,8 +2445,7 @@ async function main(){
 		['json2songs_timer', './assets/jsons/HK君.json', 'H.K.君'],
 		['json2songs_timer', './assets/jsons/汤h.json', '汤h'],
 		['json2songs_timer', './南夕君cC.json', '南夕君cC'],
-		['json2songs_timer', './长风longwind.json', '长风longwind'],
-		['json2songs_timer', './assets/jsons/BML制作指挥部.json', 'BML制作指挥部']
+		['json2songs_timer', './长风longwind.json', '长风longwind']
 	]
 	// load_args.forEach(args => {
 	// 	loader?.[args[0]](loader.load_data(args[1]) ?? '', video_author=args[2]);
