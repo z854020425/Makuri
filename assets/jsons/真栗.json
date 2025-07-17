@@ -1,4 +1,11 @@
 {
+    "BV1cBuhzcEEz": {
+        "title": "勇敢的羁绊",
+        "link": "https://www.bilibili.com/video/BV1cBuhzcEEz/",
+        "length": "03:00",
+        "bvid": "BV1cBuhzcEEz",
+        "date": "2025-07-17"
+    },
     "BV1aeKRzgEah": {
         "title": "b r o k e n",
         "link": "https://www.bilibili.com/video/BV1aeKRzgEah/",
@@ -550,7 +557,10 @@
         "link": "https://www.bilibili.com/video/BV1e94y1i7fh/",
         "length": "04:01",
         "bvid": "BV1e94y1i7fh",
-        "date": "2023-07-22"
+        "date": "2023-07-22",
+        "tags": [
+            "BML2023"
+        ]
     },
     "BV198411D7mq": {
         "title": "星光",
@@ -1091,14 +1101,32 @@
         "link": "https://www.bilibili.com/video/BV1KJ411C7Yh/",
         "length": "04:40",
         "bvid": "BV1KJ411C7Yh",
-        "date": "2020-01-24"
+        "date": "2020-01-24",
+        "tags": [
+            "2020拜年祭"
+        ]
     },
     "BV1NJ411v7Ke": {
         "title": "钢铁直男",
         "link": "https://www.bilibili.com/video/BV1NJ411v7Ke/",
         "length": "04:11",
         "bvid": "BV1NJ411v7Ke",
-        "date": "2019-12-08"
+        "date": "2019-12-08",
+        "tags": [
+            "BML2019"
+        ]
+    },
+    "BV17J411M77U": {
+        "title": "愛言葉",
+        "link": "https://www.bilibili.com/video/BV17J411M77U/",
+        "length": "02:35",
+        "bvid": "BV17J411M77U",
+        "date": "2019-09-28",
+        "in_pt": "17:38",
+        "out_pt": "20:13",
+        "tags": [
+            "BML2019"
+        ]
     },
     "BV1Q4411f7Yo": {
         "title": "勾指起誓",
@@ -1203,7 +1231,11 @@
         "link": "https://www.bilibili.com/video/BV1Tx411c7y6/",
         "length": "04:03",
         "bvid": "BV1Tx411c7y6",
-        "date": "2013-02-06"
+        "date": "2013-02-06",
+        "tags": [
+            "合唱",
+            "2013拜年祭"
+        ]
     },
     "BV1kx411F7dk": {
         "title": "トゥインクル",
