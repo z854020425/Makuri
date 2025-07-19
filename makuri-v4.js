@@ -19,7 +19,8 @@ const AUTHORS_INFO = {
 	'麻糕Mago0': ['麻 糕',],
 	'真栗': ['真 栗',],
 	'长风longwind': ['长 风', ],
-	'BML制作指挥部': ['BML制作',]
+	'BML制作指挥部': ['BML制作',],
+	'启墨_jusTicevil': ['启 墨']
 }
 
 
@@ -365,11 +366,12 @@ class DataLoader{
 					'tags': tags,
 					'author': video_author,
 					'duration': duration,
+					'in_pt': in_pt,
 					'out_pt': out_pt
 				});
 				return;
 			}
-			let part, _date;
+			let part, _date, _tags;
 			Object.keys(parts).forEach(p => {
 				part = parts[p]?.['part'];
 				title = parts[p]?.['title'];
@@ -378,7 +380,7 @@ class DataLoader{
 				length = parts[p]?.['length'];
 				singer = parts[p]?.['singer'];
 				lang = parts[p]?.['lang'];
-				tags = parts[p]?.['tags'] ?? [];
+				_tags = tags.concat(parts[p]?.['tags'] ?? []);
 				in_pt = parts[p]?.['in_pt'];
 				out_pt = parts[p]?.['out_pt'];
 
@@ -397,9 +399,10 @@ class DataLoader{
 					'length': length,
 					'singer': singer,
 					'lang': lang,
-					'tags': tags,
+					'tags': _tags,
 					'author': video_author,
 					'duration': duration,
+					'in_pt': in_pt,
 					'out_pt': out_pt
 				});
 				return;
@@ -463,12 +466,13 @@ class DataLoader{
 				'author': video_author,
 				'is_clip': true,
 				'is_seperate': tags.includes('follow'),
+				'in_pt': in_pt,
 				'out_pt': out_pt
 			});
 		}
 	}
 	add_song(item){
-		let title, date, href, href_raw, length, singer, lang, tags, author, duration, out_pt;
+		let title, date, href, href_raw, length, singer, lang, tags, author, duration, in_pt, out_pt;
 		title = item?.['title'];
 		date = item?.['date'];
 		href = item?.['href'];
@@ -479,6 +483,7 @@ class DataLoader{
 		tags = item?.['tags'];
 		author = item?.['author'];
 		duration = item?.['duration'];
+		in_pt = item?.['in_pt'];
 		out_pt = item?.['out_pt'];
 		title = item?.['title'];
 		if(!(title in this.songs))
@@ -551,6 +556,7 @@ class DataLoader{
 			'is_song': is_song,
 			'gap': gap.toString(),
 			'percent': percent,
+			'in_pt': in_pt ?? 0,
 			'out_pt': out_pt ?? duration
 		});
 	}
@@ -2438,6 +2444,7 @@ async function main(){
 		['csv2songs_timer', './assets/csvs/薯片水獭_无弹幕.csv', '薯片水獭'],
 		['json2songs_timer', './assets/jsons/薯片水獭_无弹幕.json', '薯片水獭'],
 		// ['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
+		['json2songs_timer', './assets/jsons/真栗栗录播组.json', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '真栗栗录播组'],
 		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
@@ -2445,7 +2452,8 @@ async function main(){
 		['json2songs_timer', './assets/jsons/HK君.json', 'H.K.君'],
 		['json2songs_timer', './assets/jsons/汤h.json', '汤h'],
 		['json2songs_timer', './南夕君cC.json', '南夕君cC'],
-		['json2songs_timer', './长风longwind.json', '长风longwind']
+		['json2songs_timer', './长风longwind.json', '长风longwind'],
+		['json2songs_timer', './assets/jsons/启墨_jusTicevil.json', '启墨_jusTicevil'],
 	]
 	// load_args.forEach(args => {
 	// 	loader?.[args[0]](loader.load_data(args[1]) ?? '', video_author=args[2]);
