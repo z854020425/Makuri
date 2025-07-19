@@ -5816,9 +5816,10 @@
             "lang": "日语"
         }
     ],
-    "Cagayake!girls": [
+    "Cagayake!GIRLS": [
         {
-            "title": "Cagayake!girls",
+            "title": "Cagayake!GIRLS",
+            "chs": "闪耀吧！女孩",
             "singer": "樱高轻音部",
             "lang": "日语"
         }
@@ -6189,9 +6190,9 @@
             "lang": "日语"
         }
     ],
-    "Listen！！": [
+    "Listen!!": [
         {
-            "title": "Listen！！",
+            "title": "Listen!!",
             "singer": "樱高轻音部",
             "lang": "日语"
         }
@@ -8603,6 +8604,13 @@
             "lang": "国语"
         }
     ],
+    "走过咖啡屋": [
+        {
+            "title": "走过咖啡屋",
+            "singer": "千百惠",
+            "lang": "国语"
+        }
+    ],
     "愛言葉Ⅱ": [
         {
             "title": "愛言葉Ⅱ",
@@ -8685,6 +8693,44 @@
             "chs": "花瓣的游行",
             "singer": "Aimer",
             "lang": "日语"
+        }
+    ],
+    "HEART": [
+        {
+            "title": "HEART",
+            "singer": "大塚愛",
+            "lang": "日语"
+        }
+    ],
+    "glow": [
+        {
+            "title": "glow",
+            "chs": "昏红",
+            "singer": "keeno/初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "パズルガール": [
+        {
+            "title": "パズルガール",
+            "chs": "拼图女孩",
+            "singer": "とあ/初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "ハートビート・フロムユー": [
+        {
+            "title": "ハートビート・フロムユー",
+            "chs": "Heartbeat From You",
+            "singer": "TOKOTOKO(西沢さんP)/初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "五块钱的伞": [
+        {
+            "title": "五块钱的伞",
+            "singer": "ChiliChill",
+            "lang": "国语"
         }
     ]
 }

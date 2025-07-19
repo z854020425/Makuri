@@ -1,0 +1,25 @@
+{
+    "BV1kX4y1J7sv": {
+        "title": "『BW2023』UP主舞台 录屏回放",
+        "link": "https://www.bilibili.com/video/BV1kX4y1J7sv/",
+        "bvid": "BV1kX4y1J7sv",
+        "date": "2023-07-21",
+        "tags": [
+            "BW2023"
+        ],
+        "parts": {
+            "p1": {
+                "part": 3,
+                "title": "扉をあけて",
+                "in_pt": "23:08",
+                "out_pt": "27:40"
+            },
+            "p2": {
+                "part": 3,
+                "title": "運命のルーレット廻して",
+                "in_pt": "27:55",
+                "out_pt": "31:36"
+            }
+        }
+    }
+}
