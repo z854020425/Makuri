@@ -5715,13 +5715,6 @@
             "lang": "日语"
         }
     ],
-    "愛唄": [
-        {
-            "title": "愛唄",
-            "singer": "高桥李依",
-            "lang": "日语"
-        }
-    ],
     "Bad Apple": [
         {
             "title": "Bad Apple",
@@ -5782,6 +5775,7 @@
     "創聖のアクエリオン": [
         {
             "title": "創聖のアクエリオン",
+            "chs": "创圣大天使",
             "singer": "AKINO",
             "lang": "日语"
         }
@@ -8775,9 +8769,30 @@
     "Blue Moon": [
         {
             "title": "Blue Moon",
-            "chs": "蓝色月亮",
+            "chs": "蓝月",
             "singer": "水树奈奈",
             "lang": "日语"
+        }
+    ],
+    "Angel": [
+        {
+            "title": "Angel",
+            "singer": "陶喆",
+            "lang": "国语"
+        }
+    ],
+    "珠玉": [
+        {
+            "title": "珠玉",
+            "singer": "单依纯",
+            "lang": "国语"
+        }
+    ],
+    "麦恩莉": [
+        {
+            "title": "麦恩莉",
+            "singer": "方大同",
+            "lang": "国语"
         }
     ]
 }
