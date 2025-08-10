@@ -6947,7 +6947,7 @@
     "ツキアカリのミチシルベ": [
         {
             "title": "ツキアカリのミチシルベ",
-            "chs": "月光的路标",
+            "chs": "月光的指引",
             "singer": "stereopony",
             "lang": "日语"
         }
@@ -8774,6 +8774,13 @@
             "lang": "日语"
         }
     ],
+    "Memories": [
+        {
+            "title": "Memories",
+            "singer": "大槻真希",
+            "lang": "日语"
+        }
+    ],
     "Angel": [
         {
             "title": "Angel",
@@ -8793,6 +8800,14 @@
             "title": "麦恩莉",
             "singer": "方大同",
             "lang": "国语"
+        }
+    ],
+    "보여줄게": [
+        {
+            "title": "보여줄게",
+            "chs": "给你看",
+            "singer": "Ailee",
+            "lang": "韩语"
         }
     ]
 }
