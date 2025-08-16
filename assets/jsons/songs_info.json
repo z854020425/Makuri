@@ -8774,6 +8774,13 @@
             "lang": "日语"
         }
     ],
+    "Breaking Up Is Hard To Do": [
+        {
+            "title": "Breaking Up Is Hard To Do",
+            "singer": "Aimer",
+            "lang": "日语"
+        }
+    ],
     "Memories": [
         {
             "title": "Memories",
@@ -8808,6 +8815,27 @@
             "chs": "给你看",
             "singer": "Ailee",
             "lang": "韩语"
+        }
+    ],
+    "Stay With Me": [
+        {
+            "title": "Stay With Me",
+            "singer": "朴灿烈、Punch",
+            "lang": "韩语"
+        }
+    ],
+    "Let Her Go": [
+        {
+            "title": "Let Her Go",
+            "singer": "Passenger",
+            "lang": "英语"
+        }
+    ],
+    "宴席": [
+        {
+            "title": "宴席",
+            "singer": "真栗",
+            "lang": "国语"
         }
     ]
 }
