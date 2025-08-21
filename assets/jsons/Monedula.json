@@ -861,7 +861,7 @@
             },
             "p18": {
                 "part": 18,
-                "title": "Little star",
+                "title": "Little Star",
                 "length": "03:24"
             }
         }
@@ -4042,7 +4042,7 @@
             },
             "p24": {
                 "part": 24,
-                "title": "Little star",
+                "title": "Little Star",
                 "length": "03:32",
                 "date": "2024-02-28"
             }
@@ -9129,7 +9129,7 @@
             },
             "p14": {
                 "part": 14,
-                "title": "Little star",
+                "title": "Little Star",
                 "length": "03:27"
             },
             "p15": {
@@ -12136,7 +12136,7 @@
             },
             "p8": {
                 "part": 8,
-                "title": "My Answer",
+                "title": "你的答案",
                 "length": "04:48"
             },
             "p9": {
@@ -14343,7 +14343,8 @@
             "p6": {
                 "part": 6,
                 "title": "月光",
-                "length": "04:49"
+                "length": "04:49",
+                "singer": "金弦"
             },
             "p7": {
                 "part": 7,

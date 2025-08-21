@@ -5608,9 +5608,9 @@
             "lang": "韩语"
         }
     ],
-    "Little star": [
+    "Little Star": [
         {
-            "title": "Little star",
+            "title": "Little Star",
             "singer": "Standing Egg",
             "lang": "韩语"
         }
@@ -8636,9 +8636,9 @@
             "lang": "日语"
         }
     ],
-    "Yellow": [
+    "YELLOW": [
         {
-            "title": "Yellow",
+            "title": "YELLOW",
             "singer": "神山羊",
             "lang": "日语"
         }
@@ -8788,6 +8788,14 @@
             "lang": "日语"
         }
     ],
+    "終わりの世界から": [
+        {
+            "title": "終わりの世界から",
+            "chs": "始于终焉世界",
+            "singer": "麻枝准×やなぎなぎ",
+            "lang": "日语"
+        }
+    ],
     "Angel": [
         {
             "title": "Angel",
@@ -8831,11 +8839,60 @@
             "lang": "英语"
         }
     ],
+    "Good Time": [
+        {
+            "title": "Good Time",
+            "singer": "Carly Rae Jepsen、Owl City",
+            "lang": "英语"
+        }
+    ],
     "宴席": [
         {
             "title": "宴席",
             "singer": "真栗",
             "lang": "国语"
+        }
+    ],
+    "April Encounter": [
+        {
+            "title": "April Encounter",
+            "singer": "很美味",
+            "lang": "国语"
+        }
+    ],
+    "Always Online": [
+        {
+            "title": "Always Online",
+            "singer": "林俊杰",
+            "lang": "国语"
+        }
+    ],
+    "新地球": [
+        {
+            "title": "新地球",
+            "singer": "林俊杰",
+            "lang": "国语"
+        }
+    ],
+    "爱情讯息": [
+        {
+            "title": "爱情讯息",
+            "singer": "郭静",
+            "lang": "国语"
+        }
+    ],
+    "Teardrops on My Guitar": [
+        {
+            "title": "Teardrops on My Guitar",
+            "singer": "Taylor Swift",
+            "lang": "英语"
+        }
+    ],
+    "Remember Me": [
+        {
+            "title": "Remember Me",
+            "singer": "Miguel、Natalia Lafourcade",
+            "lang": "英语"
         }
     ]
 }
