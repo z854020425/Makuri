@@ -604,7 +604,7 @@
     "超能力": [
         {
             "title": "超能力",
-            "singer": "邓紫棋",
+            "singer": "小缘",
             "lang": "国语"
         }
     ],
@@ -6574,7 +6574,7 @@
     "心做し": [
         {
             "title": "心做し",
-            "chs": "心理作用",
+            "chs": "无心/心理作用",
             "singer": "蝶々P/GUMI",
             "lang": "日语"
         }
@@ -7909,6 +7909,7 @@
     "星の唄": [
         {
             "title": "星の唄",
+            "chs": "星之歌",
             "singer": "初音ミク",
             "lang": "日语"
         }
@@ -8881,6 +8882,13 @@
             "lang": "国语"
         }
     ],
+    "忘记时间": [
+        {
+            "title": "忘记时间",
+            "singer": "胡歌",
+            "lang": "国语"
+        }
+    ],
     "Teardrops on My Guitar": [
         {
             "title": "Teardrops on My Guitar",
@@ -8893,6 +8901,30 @@
             "title": "Remember Me",
             "singer": "Miguel、Natalia Lafourcade",
             "lang": "英语"
+        }
+    ],
+    "ワールドイズマイン": [
+        {
+            "title": "ワールドイズマイン",
+            "chs": "世界第一公主殿下",
+            "singer": "初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "上弦の月": [
+        {
+            "title": "上弦の月",
+            "chs": "上弦之月",
+            "singer": "KAITO",
+            "lang": "日语"
+        }
+    ],
+    "愛のメロディー": [
+        {
+            "title": "愛のメロディー",
+            "chs": "爱的旋律",
+            "singer": "KOKIA",
+            "lang": "日语"
         }
     ]
 }

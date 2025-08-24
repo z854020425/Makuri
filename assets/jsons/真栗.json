@@ -1,4 +1,11 @@
 {
+    "BV1PYeJzwEEH": {
+        "title": "淋雨一直走",
+        "link": "https://www.bilibili.com/video/BV1PYeJzwEEH/",
+        "length": "03:24",
+        "bvid": "BV1PYeJzwEEH",
+        "date": "2025-08-24"
+    },
     "BV1ARYvzuEXx": {
         "title": "宴席",
         "link": "https://www.bilibili.com/video/BV1ARYvzuEXx/",
@@ -11,7 +18,10 @@
         "link": "https://www.bilibili.com/video/BV1PqhAzCE9Z/",
         "length": "04:39",
         "bvid": "BV1PqhAzCE9Z",
-        "date": "2025-07-31"
+        "date": "2025-07-31",
+        "tags": [
+            "生日作"
+        ]
     },
     "BV1cBuhzcEEz": {
         "title": "勇敢的羁绊",
@@ -233,7 +243,10 @@
         "link": "https://www.bilibili.com/video/BV1zT421k7GW/",
         "length": "03:36",
         "bvid": "BV1zT421k7GW",
-        "date": "2024-07-31"
+        "date": "2024-07-31",
+        "tags": [
+            "生日作"
+        ]
     },
     "BV1qS411c7QT": {
         "title": "I Really Want to Stay At Your House",
@@ -557,7 +570,10 @@
         "link": "https://www.bilibili.com/video/BV1tj411972R/",
         "length": "04:01",
         "bvid": "BV1tj411972R",
-        "date": "2023-07-31"
+        "date": "2023-07-31",
+        "tags": [
+            "生日作"
+        ]
     },
     "BV1Wk4y137EU": {
         "title": "水龙吟",
@@ -1147,7 +1163,8 @@
         "link": "https://www.bilibili.com/video/BV1Q4411f7Yo/",
         "length": "03:28",
         "bvid": "BV1Q4411f7Yo",
-        "date": "2019-08-01"
+        "date": "2019-08-01",
+        "chs": "生日作"
     },
     "BV12b411n7az": {
         "title": "对你青睐",
@@ -1231,7 +1248,10 @@
         "link": "https://www.bilibili.com/video/BV1ns411f7JZ/",
         "length": "04:28",
         "bvid": "BV1ns411f7JZ",
-        "date": "2013-07-31"
+        "date": "2013-07-31",
+        "tags": [
+            "生日作"
+        ]
     },
     "BV1cs411f7UH": {
         "title": "愛言葉",
@@ -1284,7 +1304,10 @@
         "link": "https://www.bilibili.com/video/BV1Gx411F7H2/",
         "length": "05:07",
         "bvid": "BV1Gx411F7H2",
-        "date": "2012-07-31"
+        "date": "2012-07-31",
+        "tags": [
+            "生日作"
+        ]
     },
     "BV1gx411F7a7": {
         "title": "君が好き",
