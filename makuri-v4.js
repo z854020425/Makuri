@@ -952,7 +952,7 @@ class VirtualList{
 			'span.cos{color:gold; font-weight:bold; text-shadow:0 0 0.3rem #533806; background:#819cea;}',
 			'span.面白い{color:purple; font-weight:bold;}',
 			'span.儿歌{color:green}',
-			'span.Monedula{color:AliceBlue;background:darkgray}',
+			'span.生日作{background-image:linear-gradient(to right, #b187e49e, #ed9696ba, #f5902187); color: #f51c42; -webkit-text-stroke:0.03rem #f51c42; text-shadow: 0px 1px 4px #ed6e96;}',
 
 			'.div_cnts{display:flex; justify-content:center; align-items:center; flex-direction:column; user-select:none; margin-bottom:0.2rem;}',
 			'.cnt_songs, .cnt_clips{color:DeepSkyBlue; font-weight:bolder; font-size:1.2rem; text-shadow:0 0 6px DarkTurquoise, 0 0 2px purple; text-shadow:none; -webkit-text-stroke:0.15rem #00dfc89c; position:relative;}',
@@ -1610,7 +1610,7 @@ class SearchBox{
 			['韩语 专场', 'lang:韩语', 'lang'],
 			['英语 专场', 'lang:英语', 'lang'],
 			['粤语 专场', 'lang:粤语', 'lang'],
-			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|"有可能的夜晚"|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义|Nico|銀色飛行船|有梦好甜蜜', 'special'],
+			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|"有可能的夜晚"|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义|Nico|銀色飛行船|"有梦好甜蜜"', 'special'],
 			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
 			['COS🎀专场', 'tag:cos', 'special'],
