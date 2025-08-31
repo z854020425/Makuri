@@ -451,8 +451,7 @@ class DataLoader{
 			singer = item.length >= 8 && item[7] !== "" ? item[7] : null;
 			href_raw = `https://www.bilibili.com/video/${bvid}/?t=${in_pt}&p=${page.substring(1)}`;
 			href = `https://www.bilibili.com/blackboard/player.html?bvid=${bvid}&t=${in_pt}&p=${page.substring(1)}&high_quality=1&autoplay=1`;
-			if(title == '勇气')
-				console.log(singer, date)
+
 			this.add_song({
 				'title': title,
 				'date': date,
@@ -1695,6 +1694,19 @@ class SearchBox{
 		})
 		div_search.appendChild(a);
 	}
+	load_history(){
+		function inner(inp_search){
+			let search_timestamp = sessionStorage.getItem('search_timestamp');
+			let search_content = sessionStorage.getItem('search_content') ?? '';
+			if(search_timestamp === null || Date.now() - parseInt(search_timestamp) > 5 * 60 * 1000){
+				return;
+			}
+
+			inp_search.value = search_content;
+			inp_search.dispatchEvent(new Event('input', {bubbles:true}));
+		}
+		setTimeout(() => {inner(this.inp_search)}, 100);
+	}
 	get_keys_vals(expr){
 		let cache_key = this.cache_kv.get(expr);
 		if (cache_key != null) return cache_key;
@@ -1765,6 +1777,9 @@ class SearchBox{
 		console.time('search');
 		// console.log(this);
 		let ret = this.search(e);
+		let value = e.target.value;
+		sessionStorage.setItem('search_content', value);
+		sessionStorage.setItem('search_timestamp', Date.now());
 		console.timeEnd('search');
 		return ret;
 	}
@@ -1814,7 +1829,7 @@ class SearchBox{
 		if (e.target.value != values) {
 			return;
 		}
-		// console.log(new_songs);
+		console.log(this.songs, new_songs);
 		sessionStorage.setItem('search_result', JSON.stringify(new_songs));
 		this.vl.load_songs(new_songs);
 		this.vl.init();
@@ -2487,6 +2502,7 @@ async function main(){
 		const search_box = new SearchBox(vl, loader.ordered_songs);
 		const drawers = new Drawers(new_win, vl);
 		vl.update_visible_height();
+		search_box.load_history();
 		return drawers;
 	})
 	.then((drawers) => {
