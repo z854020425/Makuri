@@ -7069,7 +7069,7 @@
     "プライド革命": [
         {
             "title": "プライド革命",
-            "chs": "自豪革命",
+            "chs": "自尊心革命",
             "singer": "CHiCO with HoneyWorks",
             "lang": "日语"
         }
@@ -9060,6 +9060,14 @@
             "title": "バニラソルト",
             "chs": "香草盐",
             "singer": "堀江由衣",
+            "lang": "日语"
+        }
+    ],
+    "アイラビューアイニジュー": [
+        {
+            "title": "アイラビューアイニジュー",
+            "chs": "I Love You I Need You",
+            "singer": "KEI/初音ミク",
             "lang": "日语"
         }
     ]
