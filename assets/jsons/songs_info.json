@@ -9070,5 +9070,29 @@
             "singer": "KEI/初音ミク",
             "lang": "日语"
         }
+    ],
+    "初めての恋が終わる時": [
+        {
+            "title": "初めての恋が終わる時",
+            "chs": "初恋终结之时",
+            "singer": "初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "계륵": [
+        {
+            "title": "계륵",
+            "chs": "鸡肋",
+            "singer": "Stella Jang",
+            "lang": "韩语"
+        }
+    ],
+    "THE RED HOOD": [
+        {
+            "title": "THE RED HOOD",
+            "chs": "小红帽",
+            "singer": "DJERV",
+            "lang": "英语"
+        }
     ]
 }
