@@ -5626,6 +5626,7 @@
     "TiAmo": [
         {
             "title": "TiAmo",
+            "chs": "我爱你",
             "singer": "T-ara",
             "lang": "韩语"
         }
@@ -8002,13 +8003,6 @@
             "lang": "韩语"
         }
     ],
-    "By my side": [
-        {
-            "title": "By my side",
-            "singer": "Radwimps",
-            "lang": "英语"
-        }
-    ],
     "Come Back To Me": [
         {
             "title": "Come Back To Me",
@@ -9129,6 +9123,14 @@
             "lang": "日语"
         }
     ],
+    "セーラー服を脱がさないで": [
+        {
+            "title": "セーラー服を脱がさないで",
+            "chs": "不要脱人家的水手服啦",
+            "singer": "小猫俱乐部",
+            "lang": "日语"
+        }
+    ],
     "痛快": [
         {
             "title": "痛快",
@@ -9140,6 +9142,68 @@
         {
             "title": "FANCY",
             "singer": "TWICE",
+            "lang": "韩语"
+        }
+    ],
+    "Senorita": [
+        {
+            "title": "Senorita",
+            "singer": "(G)I-DLE",
+            "lang": "韩语"
+        }
+    ],
+    "LATATA": [
+        {
+            "title": "LATATA",
+            "singer": "(G)I-DLE",
+            "lang": "韩语"
+        }
+    ],
+    "옥탑방": [
+        {
+            "title": "옥탑방",
+            "chs": "屋塔房",
+            "singer": "N.Flying",
+            "lang": "韩语"
+        }
+    ],
+    "귀를 기울이면": [
+        {
+            "title": "귀를 기울이면",
+            "chs": "侧耳倾听/LOVE WHISPER",
+            "singer": "GFRIEND",
+            "lang": "韩语"
+        }
+    ],
+    "오늘부터 우리는": [
+        {
+            "title": "오늘부터 우리는",
+            "chs": "今天开始我们/Me Gustas Tu",
+            "singer": "GFRIEND",
+            "lang": "韩语"
+        }
+    ],
+    "유리구슬": [
+        {
+            "title": "유리구슬",
+            "chs": "玻璃珠/Glass Bead",
+            "singer": "GFRIEND",
+            "lang": "韩语"
+        }
+    ],
+    "짧은 치마": [
+        {
+            "title": "짧은 치마",
+            "chs": "短裙/Miniskirt",
+            "singer": "AOA",
+            "lang": "韩语"
+        }
+    ],
+    "사뿐사뿐": [
+        {
+            "title": "사뿐사뿐",
+            "chs": "猫步轻俏",
+            "singer": "AOA",
             "lang": "韩语"
         }
     ],
