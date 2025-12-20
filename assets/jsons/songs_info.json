@@ -5756,7 +5756,7 @@
     "Beautiful World": [
         {
             "title": "Beautiful World",
-            "singer": "宇田多光",
+            "singer": "宇多田光",
             "lang": "日语"
         }
     ],
@@ -6269,7 +6269,7 @@
     "One Last Kiss": [
         {
             "title": "One Last Kiss",
-            "singer": "宇田多光",
+            "singer": "宇多田光",
             "lang": "日语"
         }
     ],
@@ -6657,7 +6657,7 @@
         {
             "title": "桜流し",
             "chs": "樱花流逝",
-            "singer": "宇田多光",
+            "singer": "宇多田光",
             "lang": "日语"
         }
     ],
@@ -7253,7 +7253,7 @@
     "Prisoner Of Love": [
         {
             "title": "Prisoner Of Love",
-            "singer": "宇田多光",
+            "singer": "宇多田光",
             "lang": "英语"
         }
     ],
@@ -8006,7 +8006,7 @@
     "Come Back To Me": [
         {
             "title": "Come Back To Me",
-            "singer": "UTADA",
+            "singer": "宇多田光",
             "lang": "英语"
         }
     ],
@@ -9128,6 +9128,30 @@
             "title": "セーラー服を脱がさないで",
             "chs": "不要脱人家的水手服啦",
             "singer": "小猫俱乐部",
+            "lang": "日语"
+        }
+    ],
+    "プレパレード": [
+        {
+            "title": "プレパレード",
+            "chs": "恋爱预演",
+            "singer": "钉宫理惠、堀江由衣、喜多村英梨",
+            "lang": "日语"
+        }
+    ],
+    "チルノのパーフェクトさんすう教室": [
+        {
+            "title": "チルノのパーフェクトさんすう教室",
+            "chs": "琪露诺的完美算术教室",
+            "singer": "IOSYS",
+            "lang": "日语"
+        }
+    ],
+    "ウラオモテ・フォーチュン": [
+        {
+            "title": "ウラオモテ・フォーチュン/uraomote fortune",
+            "chs": "表里不一·幸运",
+            "singer": "小泽亚李",
             "lang": "日语"
         }
     ],
