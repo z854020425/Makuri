@@ -447,6 +447,7 @@ class DataLoader{
 			// console.log(in_pt, out_pt, length, duration)
 
 			title = item[5];
+			title = title.replace(/\\u002C/g, ',');
 			tags = item.length >= 7 ? item[6].split(' ').filter(x => x!= '') : [];
 			singer = item.length >= 8 && item[7] !== "" ? item[7] : null;
 			href_raw = `https://www.bilibili.com/video/${bvid}/?t=${in_pt}&p=${page.substring(1)}`;
@@ -1359,6 +1360,7 @@ class Cursor{
 			let scale = this.points[idx]?.['scale'] ?? 1;
 			// console.log(scale)
 			let span = Utils.create('span', ['point'], {});
+			span.classList.add('cursor_point');
 			// span.style.setProperty('--i', idx);
 			span.style.left = x * 0.275 + 'rem';
 			span.style.top  = y * 0.275 + 'rem';
@@ -1595,6 +1597,7 @@ class SearchBox{
 			['最近 N 首', 'gap:<=32/365', 'recent'],
 			['隐藏 歌单', 'hidden:===true', 'hidden'],
 			['孤品 歌单', 'totalNum:==1 -+ -（', 'single'], 
+			['常驻 歌单', 'totalNum:>=20 -+ -（', 'single'], 
 			['周杰伦 专场', 'singer:周杰伦 -半首', 'singer'],
 			['邓紫棋 专场', 'singer:邓紫棋 -半首', 'singer'],
 			['王心凌 专场', 'singer:王心凌 -半首', 'singer'],
@@ -1603,15 +1606,15 @@ class SearchBox{
 			['张韶涵 专场', 'singer:张韶涵 -半首', 'singer'],
 			['陶喆 专场', 'singer:陶喆 -半首', 'singer'],
 			['王菲 专场', 'singer:王菲 -半首', 'singer'],
-			['初音ミク 专场', 'singer:初音 -半首', 'singer'],
+			['Vocaloid 专场', 'singer:初音|镜音|GUMI|洛天依|乐正绫 -半首', 'singer'],
 			['谭姐 专场', 'title:谭姐', 'singer'],
 			['日语 专场', 'lang:日语', 'lang'],
 			['韩语 专场', 'lang:韩语', 'lang'],
 			['英语 专场', 'lang:英语', 'lang'],
 			['粤语 专场', 'lang:粤语', 'lang'],
-			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|"有可能的夜晚"|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义|Nico|銀色飛行船|"有梦好甜蜜"', 'special'],
-			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['情人节❤️专场', 'date:05-20|02-14|03-14|24-08-10|23-08-22|21-08-14|20-08-25', 'special'],
+			['晚安🌛专场', 'title:晚安喵|今晩はお月さん|Littlestar|"有可能的夜晚"|兔子先生|香格里拉|"你"|"宝贝"|"ルル"|旅行的意义|Nico|銀色飛行船|"有梦好甜蜜"|LostStars|少しだけ長い冬休み', 'special'],
+			['儿歌👶专场', 'tag:儿歌', 'special'],
 			['COS🎀专场', 'tag:cos', 'special'],
 			['干杯🍺专场', 'date:22-03-28|23-09-06|25-01-01|24-12-31', 'special'],
 			['2021精选(蝴蝶谷逸_)', 'tag:2021精选', 'special'],
@@ -1983,7 +1986,7 @@ class Drawers{
 	async draw_cursor(){
 		if(!this?.cursor)
 			return;
-		const num = 7
+		const num = 8;
 		console.log(this.cursor_idx);
 		const idx = (this?.cursor_idx ?? 0 + 1) % num + 1;
 		this.cursor_idx = idx;
@@ -2328,7 +2331,8 @@ class Signature{
 	}
 	async show(){
 		const paths = this.paths;
-		const speed = 200;
+		// const speed = 200;
+		const speed = 300;
 		this.drawing = true;
 		const draw = async(start, end, times, stroke='#000') => {
 			let path, length;
@@ -2457,9 +2461,9 @@ async function main(){
 		['json2songs_timer', './assets/jsons/Monedula.json', 'Monedula'],
 		['json2songs_timer', './assets/jsons/蝴蝶谷逸_.json', '蝴蝶谷逸_'],
 		['csv2songs_timer', './assets/csvs/薯片水獭_无弹幕.csv', '薯片水獭'],
-		['json2songs_timer', './assets/jsons/薯片水獭_无弹幕.json', '薯片水獭'],
+		// ['json2songs_timer', './assets/jsons/薯片水獭_无弹幕.json', '薯片水獭'],
 		// ['csv2songs_timer', './assets/csvs/薯片水獭.csv', '薯片水獭'],
-		['json2songs_timer', './assets/jsons/真栗栗录播组.json', '真栗栗录播组'],
+		// ['json2songs_timer', './assets/jsons/真栗栗录播组.json', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/真栗栗录播组_Clean.csv', '真栗栗录播组'],
 		['csv2songs_timer', './真栗栗录播组_Selfuse.csv', '真栗栗录播组'],
 		['csv2songs_timer', './assets/csvs/希望小紫真栗永远健康.csv', '希望小紫真栗永远健康'],
