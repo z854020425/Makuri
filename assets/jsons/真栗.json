@@ -1,4 +1,11 @@
 {
+    "BV1JGvoB5E7N": {
+        "title": "欧若拉",
+        "link": "https://www.bilibili.com/video/BV1JGvoB5E7N/",
+        "length": "02:33",
+        "bvid": "BV1JGvoB5E7N",
+        "date": "2026-01-02"
+    },
     "BV1j6B9BuEFY": {
         "title": "寂寞的人伤心的歌",
         "link": "https://www.bilibili.com/video/BV1j6B9BuEFY/",
@@ -1157,6 +1164,16 @@
         "bvid": "BV1Nv411H73c",
         "date": "2021-06-28"
     },
+    "BV1VX4y1A7Z9": {
+        "title": "キセキ",
+        "link": "https://www.bilibili.com/video/BV1VX4y1A7Z9/",
+        "length": "04:33",
+        "bvid": "BV1VX4y1A7Z9",
+        "date": "2021-06-16",
+        "tags": [
+            "合唱"
+        ]
+    },
     "BV1XQ4y197KE": {
         "title": "大喜",
         "link": "https://www.bilibili.com/video/BV1XQ4y197KE/",
@@ -1184,6 +1201,16 @@
         "length": "04:55",
         "bvid": "BV1FN411d7dc",
         "date": "2021-02-11"
+    },
+    "BV1mr4y1P7df": {
+        "title": "若",
+        "link": "https://www.bilibili.com/video/BV1mr4y1P7df/",
+        "length": "03:58",
+        "bvid": "BV1mr4y1P7df",
+        "date": "2021-02-11",
+        "tags": [
+            "合唱"
+        ]
     },
     "BV1gz4y1U7E5": {
         "title": "いつも何度でも",
@@ -1238,7 +1265,10 @@
         "link": "https://www.bilibili.com/video/BV1Ka4y1i7Z2/",
         "length": "03:46",
         "bvid": "BV1Ka4y1i7Z2",
-        "date": "2020-05-06"
+        "date": "2020-05-06",
+        "tags": [
+            "合唱"
+        ]
     },
     "BV1i741167PT": {
         "title": "横竖撇点折",
@@ -1301,6 +1331,26 @@
         "bvid": "BV18b41117KQ",
         "date": "2019-02-18"
     },
+    "BV1YW411E7Hp": {
+        "title": "SI・RI・TO・RI",
+        "link": "https://www.bilibili.com/video/BV1YW411E7Hp/",
+        "length": "02:49",
+        "bvid": "BV1YW411E7Hp",
+        "date": "2018-02-12",
+        "tags": [
+            "合唱"
+        ]
+    },
+    "BV1ux411j7SW": {
+        "title": "燃尽人间色",
+        "link": "https://www.bilibili.com/video/BV1ux411j7SW/",
+        "length": "04:35",
+        "bvid": "BV1ux411j7SW",
+        "date": "2017-11-04",
+        "tags": [
+            "合唱"
+        ]
+    },
     "BV14x41167Jb": {
         "title": "もしも一人残されて、世界が嘘じゃないなら",
         "link": "https://www.bilibili.com/video/BV14x41167Jb/",
@@ -1322,6 +1372,16 @@
         "bvid": "BV1Ns411i7xa",
         "date": "2016-07-05"
     },
+    "BV18s411Q7CX": {
+        "title": "春風のシンフォニー",
+        "link": "https://www.bilibili.com/video/BV18s411Q7CX/",
+        "length": "04:39",
+        "bvid": "BV18s411Q7CX",
+        "date": "2016-03-10",
+        "tags": [
+            "合唱"
+        ]
+    },
     "BV1cs411976G": {
         "title": "心拍数♯0822",
         "link": "https://www.bilibili.com/video/BV1cs411976G/",
@@ -1329,12 +1389,54 @@
         "bvid": "BV1cs411976G",
         "date": "2016-02-14"
     },
+    "BV14s411S7vu": {
+        "title": "Connecting",
+        "link": "https://www.bilibili.com/video/BV14s411S7vu/",
+        "length": "05:01",
+        "bvid": "BV14s411S7vu",
+        "date": "2015-07-22",
+        "tags": [
+            "合唱"
+        ]
+    },
+    "BV1Ys411S738": {
+        "title": "letter song",
+        "link": "https://www.bilibili.com/video/BV1Ys411S738/",
+        "length": "05:38",
+        "bvid": "BV1Ys411S738",
+        "date": "2015-07-20",
+        "tags": [
+            "合唱"
+        ]
+    },
     "BV1Qs411S7TK": {
         "title": "春に一番近い街",
         "link": "https://www.bilibili.com/video/BV1Qs411S7TK/",
         "length": "04:43",
         "bvid": "BV1Qs411S7TK",
         "date": "2015-03-21"
+    },
+    "BV1Ex411A7rG": {
+        "title": "Smiling",
+        "link": "https://www.bilibili.com/video/BV1Ex411A7rG/",
+        "length": "04:59",
+        "bvid": "BV1Ex411A7rG",
+        "date": "2015-01-31",
+        "tags": [
+            "合唱"
+        ]
+    },
+    "BV1jx411N7yQ": {
+        "title": "金曜日のおはよう",
+        "link": "https://www.bilibili.com/video/BV1jx411N7yQ/",
+        "length": "",
+        "bvid": "BV1jx411N7yQ",
+        "date": "2014-12-26",
+        "in_pt": "00:00",
+        "out_pt": "03:57",
+        "tags": [
+            "合唱"
+        ]
     },
     "BV1Kx411N7nh": {
         "title": "shake it!",
@@ -1350,12 +1452,34 @@
         "bvid": "BV1nx411K7Bs",
         "date": "2014-08-30"
     },
+    "BV1Tx411K7Zi": {
+        "title": "secret base~君がくれたもの~",
+        "link": "https://www.bilibili.com/video/BV1Tx411K7Zi/",
+        "length": "06:01",
+        "bvid": "BV1Tx411K7Zi",
+        "date": "2014-08-21",
+        "tags": [
+            "合唱"
+        ]
+    },
     "BV1Ax411T7SN": {
         "title": "福寿草",
         "link": "https://www.bilibili.com/video/BV1Ax411T7SN/",
         "length": "04:38",
         "bvid": "BV1Ax411T7SN",
         "date": "2014-05-18"
+    },
+    "BV11s411f7o9": {
+        "title": "singasong",
+        "link": "https://www.bilibili.com/video/BV11s411f7o9/",
+        "length": "",
+        "bvid": "BV11s411f7o9",
+        "date": "2013-08-23",
+        "in_pt": "00:09",
+        "out_pt": "06:12",
+        "tags": [
+            "合唱"
+        ]
     },
     "BV1Bs411f7Ww": {
         "title": "柒寒",

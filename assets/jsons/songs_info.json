@@ -6238,9 +6238,9 @@
             "lang": "日语"
         }
     ],
-    "No！ Thank you！": [
+    "NO, Thank You!": [
         {
-            "title": "No！ Thank you！",
+            "title": "NO, Thank You!",
             "singer": "樱高轻音部",
             "lang": "日语"
         }
@@ -6999,9 +6999,9 @@
             "lang": "日语"
         }
     ],
-    "バイ・マイ・サイ": [
+    "バイ・マイ・サイド": [
         {
-            "title": "バイ・マイ・サイ",
+            "title": "バイ・マイ・サイド",
             "chs": "在我身边",
             "singer": "RADWIMPS",
             "lang": "日语"
@@ -7149,13 +7149,6 @@
         {
             "title": "Enchanted",
             "singer": "Taylor Swift",
-            "lang": "英语"
-        }
-    ],
-    "Echo": [
-        {
-            "title": "Echo",
-            "singer": "+α/あるふぁきゅん。",
             "lang": "英语"
         }
     ],
@@ -8586,6 +8579,7 @@
     "好きな人がいること": [
         {
             "title": "好きな人がいること",
+            "chs": "有喜欢的人了",
             "singer": "JY",
             "lang": "日语"
         }
@@ -8631,7 +8625,7 @@
     "独りんぼエンヴィ": [
         {
             "title": "独りんぼエンヴィ",
-            "chs": "孑然炉火",
+            "chs": "孑然妒火",
             "singer": "初音ミク",
             "lang": "日语"
         }
@@ -9171,6 +9165,44 @@
             "chs": "初音未来的消失",
             "singer": "初音ミク",
             "lang": "日语"
+        }
+    ],
+    "夢と葉桜": [
+        {
+            "title": "夢と葉桜",
+            "chs": "梦与叶樱",
+            "singer": "初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "delicious": [
+        {
+            "title": "delicious",
+            "singer": "初音ミク",
+            "lang": "日语"
+        }
+    ],
+    "ハンマーを電波ソングにしてみた": [
+        {
+            "title": "ハンマーを電波ソングにしてみた",
+            "chs": "锤子电波之歌",
+            "singer": "Kana",
+            "lang": "日语"
+        }
+    ],
+    "ひまわりの約束": [
+        {
+            "title": "ひまわりの約束",
+            "chs": "向日葵的约定",
+            "singer": "秦基博",
+            "lang": "日语"
+        }
+    ],
+    "ECHO": [
+        {
+            "title": "ECHO",
+            "singer": "GUMI",
+            "lang": "英语"
         }
     ],
     "痛快": [
