@@ -9151,9 +9151,9 @@
             "lang": "日语"
         }
     ],
-    "片翼の鸟": [
+    "片翼の鳥": [
         {
-            "title": "片翼の鸟",
+            "title": "片翼の鳥",
             "chs": "片翼之鸟",
             "singer": "志方あきこ",
             "lang": "日语"
@@ -9195,6 +9195,13 @@
             "title": "ひまわりの約束",
             "chs": "向日葵的约定",
             "singer": "秦基博",
+            "lang": "日语"
+        }
+    ],
+    "Magic of Love": [
+        {
+            "title": "Magic of Love",
+            "singer": "Perfume",
             "lang": "日语"
         }
     ],
