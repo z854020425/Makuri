@@ -5970,7 +5970,7 @@
             "title": "輝夜の城で踊りたい",
             "chs": "欲于辉夜之城起舞",
             "singer": "赵露思",
-            "lang": "μ's"
+            "lang": "日语"
         }
     ],
     "Irony": [
@@ -9356,6 +9356,126 @@
             "title": "Give Me Something (for Arknights Endfield)",
             "singer": "OneRepublic",
             "lang": "英语"
+        }
+    ],
+    "一叶": [
+        {
+            "title": "一叶",
+            "singer": "阿屈",
+            "lang": "国语"
+        }
+    ],
+    "Dear D": [
+        {
+            "title": "Dear D",
+            "singer": "项睿娴",
+            "lang": "国语"
+        }
+    ],
+    "归期": [
+        {
+            "title": "归期",
+            "singer": "钱润玉",
+            "lang": "国语"
+        }
+    ],
+    "爱一点": [
+        {
+            "title": "爱一点",
+            "singer": "莫艳琳",
+            "lang": "国语"
+        }
+    ],
+    "不凡": [
+        {
+            "title": "不凡",
+            "singer": "王铮亮",
+            "lang": "国语"
+        }
+    ],
+    "临水照花": [
+        {
+            "title": "临水照花",
+            "singer": "天时",
+            "lang": "国语"
+        }
+    ],
+    "炉心融解": [
+        {
+            "title": "炉心融解",
+            "singer": "镜音铃",
+            "lang": "日语"
+        }
+    ],
+    "献向镜水的月光 Song to the Mirrored Moon": [
+        {
+            "title": "献向镜水的月光 Song to the Mirrored Moon",
+            "singer": "真栗",
+            "lang": "--"
+        }
+    ],
+    "爱拼才会赢": [
+        {
+            "title": "爱拼才会赢",
+            "singer": "叶启田",
+            "lang": "国语"
+        }
+    ],
+    "广寒宫": [
+        {
+            "title": "广寒宫",
+            "singer": "花僮",
+            "lang": "国语"
+        }
+    ],
+    "微信爱": [
+        {
+            "title": "微信爱",
+            "singer": "陈玉建、陈美惠",
+            "lang": "国语"
+        }
+    ],
+    "不潮不用花钱": [
+        {
+            "title": "不潮不用花钱",
+            "singer": "林俊杰",
+            "lang": "国语"
+        }
+    ],
+    "爱错": [
+        {
+            "title": "爱错",
+            "singer": "王力宏",
+            "lang": "国语"
+        }
+    ],
+    "心跳": [
+        {
+            "title": "心跳",
+            "singer": "王力宏",
+            "lang": "国语"
+        }
+    ],
+    "决胜时刻丨Dare to Win": [
+        {
+            "title": "决胜时刻丨Dare to Win",
+            "singer": "RO姬、初音未来",
+            "lang": "国语 日语"
+        }
+    ],
+    "那个女孩": [
+        {
+            "title": "那个女孩",
+            "singer": "陶喆",
+            "lang": "国语"
+        }
+    ],
+    "欲望に満ちた青年団": [
+        {
+            "title": "欲望に満ちた青年団",
+            "chs": "欲望满满的青年团",
+            "singer": "ONE OK ROCK",
+            "lang": "日语"
         }
     ]
 }
