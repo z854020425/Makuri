@@ -184,11 +184,27 @@ class Utils{
 		console.log(cookies_str)
 		document.cookie = cookies_str;
 	}
-	static get_storage(key){
+	static get_localstorage(key){
 		return localStorage.getItem(String(key));
 	}
-	static set_storage(key, val){
-		localStorage.setItem(String(key), String(val));
+	static set_localstorage(key, val){
+		try{
+			localStorage.setItem(String(key), String(val));
+		}
+		catch{
+			console.warn('local storage full.')
+		}
+	}
+	static get_sessionstorage(key){
+		return sessionStorage.getItem(String(key));
+	}
+	static set_sessionstorage(key, val){
+		try{
+			sessionStorage.setItem(String(key), String(val));
+		}
+		catch{
+			console.warn('local storage full.')
+		}
 	}
 	static sleep(ms){
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -620,7 +636,7 @@ class DataLoader{
 
 class NewWindow{
 	constructor(){
-		this.play_foreground = Utils.get_storage('play_foreground') == 'true' ? true : false;
+		this.play_foreground = Utils.get_localstorage('play_foreground') == 'true' ? true : false;
 		this.window = null;
 		this.timeout_close = null;
 	}
@@ -674,7 +690,7 @@ class NewWindow{
 		if(flag == this.play_foreground)
 			return;
 		this.play_foreground = flag;
-		Utils.set_storage('play_foreground', flag);
+		Utils.set_localstorage('play_foreground', flag);
 	}
 }
 
@@ -1316,7 +1332,7 @@ class Cursor{
 		});
 	}
 	get_path(){
-		let cursor_idx = Utils.get_storage('cursor_idx');
+		let cursor_idx = Utils.get_localstorage('cursor_idx');
 		if(!cursor_idx || cursor_idx === 'NaN'){
 			this.cursor_idx = null;
 			return './assets/jsons/points.json';
@@ -1564,7 +1580,7 @@ class Cursor2{
 class SearchBox{
 	constructor(vl, songs){
 		this.songs = songs;
-		sessionStorage.setItem('search_result', JSON.stringify(songs));
+		Utils.set_sessionstorage('search_result', JSON.stringify(songs));
 		this.vl = vl;
 		this.cache_kv = new LRUCache(20);
 		this.cache_search = new LRUCache(50);
@@ -1711,8 +1727,8 @@ class SearchBox{
 	}
 	load_history(){
 		function inner(inp_search){
-			let search_timestamp = sessionStorage.getItem('search_timestamp');
-			let search_content = sessionStorage.getItem('search_content') ?? '';
+			let search_timestamp = Utils.get_sessionstorage('search_timestamp');
+			let search_content = Utils.get_sessionstorage('search_content') ?? '';
 			if(search_timestamp === null || Date.now() - parseInt(search_timestamp) > 5 * 60 * 1000){
 				return;
 			}
@@ -1793,8 +1809,8 @@ class SearchBox{
 		// console.log(this);
 		let ret = this.search(e);
 		let value = e.target.value;
-		sessionStorage.setItem('search_content', value);
-		sessionStorage.setItem('search_timestamp', Date.now());
+		Utils.set_sessionstorage('search_content', value);
+		Utils.set_sessionstorage('search_timestamp', Date.now());
 		console.timeEnd('search');
 		return ret;
 	}
@@ -1810,7 +1826,7 @@ class SearchBox{
 		.filter(val => val != '');
 		vals = vals.filter((val, idx) => vals.indexOf(val) == idx);
 		if (vals.length == 0){
-			sessionStorage.setItem('search_result', JSON.stringify(this.songs));
+			Utils.set_sessionstorage('search_result', JSON.stringify(this.songs));
 			this.vl.load_songs(this.songs);
 			this.vl.init();
 			return;
@@ -1845,7 +1861,7 @@ class SearchBox{
 			return;
 		}
 		console.log(this.songs, new_songs);
-		sessionStorage.setItem('search_result', JSON.stringify(new_songs));
+		Utils.set_sessionstorage('search_result', JSON.stringify(new_songs));
 		this.vl.load_songs(new_songs);
 		this.vl.init();
 	}
@@ -1878,7 +1894,7 @@ class Drawers{
 	}
 	set_cursor(cursor){
 		this.cursor = cursor;
-		this.cursor_idx = Utils.get_storage('cursor_idx') ?? 2;
+		this.cursor_idx = Utils.get_localstorage('cursor_idx') ?? 2;
 	}
 	set_signature(signature){
 		this.signature = signature;
@@ -2003,7 +2019,7 @@ class Drawers{
 		const idx = (this?.cursor_idx ?? 0 + 1) % num + 1;
 		this.cursor_idx = idx;
 		console.log(document.cookie);
-		Utils.set_storage('cursor_idx', idx);
+		Utils.set_localstorage('cursor_idx', idx);
 		console.log(document.cookie);
 		this.cursor.update_points(`./assets/jsons/points${idx}.json`);
 	}
@@ -2161,10 +2177,10 @@ class Introduction{
 		h1.style.cursor = 'pointer';
 		h1.addEventListener('click', (e)=>{
 			if(this?.div_container){
-				Utils.set_storage('show_intro', false);
+				Utils.set_localstorage('show_intro', false);
 				this.clear();
 			} else {
-				Utils.set_storage('show_intro', true);
+				Utils.set_localstorage('show_intro', true);
 			}
 				this.mount();
 			this?.vl.update_visible_height();
@@ -2199,7 +2215,7 @@ class Introduction{
 		}
 	}
 	mount(disappear=false){
-		const show_intro = Utils.get_storage('show_intro') === 'false' ? false : true;
+		const show_intro = Utils.get_localstorage('show_intro') === 'false' ? false : true;
 		if(show_intro){
 			const div_container = Utils.create('div', [], {'id': 'intro_container'});
 			document.body.querySelector('h1').insertAdjacentElement('afterend', div_container);
