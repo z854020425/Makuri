@@ -9533,5 +9533,40 @@
             "singer": "imase",
             "lang": "日语"
         }
+    ],
+    "关于你": [
+        {
+            "title": "关于你",
+            "singer": "姚晓棠",
+            "lang": "国语"
+        }
+    ],
+    "定玄": [
+        {
+            "title": "定玄",
+            "singer": "黄霄雲",
+            "lang": "国语"
+        }
+    ],
+    "突然的自我": [
+        {
+            "title": "突然的自我",
+            "singer": "黄小琥",
+            "lang": "国语"
+        }
+    ],
+    "云·原神": [
+        {
+            "title": "云·原神",
+            "singer": "鹿喑、多多poi",
+            "lang": "国语"
+        }
+    ],
+    "Sea of Remnants": [
+        {
+            "title": "Sea of Remnants",
+            "singer": "Alan Walker、张韶涵",
+            "lang": "英语"
+        }
     ]
 }

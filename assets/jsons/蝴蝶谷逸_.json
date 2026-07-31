@@ -71,7 +71,10 @@
             "p7": {
                 "part": 7,
                 "title": "君が生まれた日",
-                "length": "03:32"
+                "length": "03:32",
+                "tags": [
+                    "LYB生快"
+                ]
             },
             "p8": {
                 "part": 8,
@@ -3782,7 +3785,10 @@
             "p2": {
                 "part": 2,
                 "title": "君が生まれた日",
-                "length": "03:27"
+                "length": "03:27",
+                "tags": [
+                    "潜水猫生快"
+                ]
             },
             "p3": {
                 "part": 3,
@@ -7039,7 +7045,10 @@
             "p3": {
                 "part": 3,
                 "title": "君が生まれた日",
-                "length": "03:28"
+                "length": "03:28",
+                "tags": [
+                    "Noel生快"
+                ]
             },
             "p4": {
                 "part": 4,
@@ -11500,7 +11509,10 @@
         "link": "https://www.bilibili.com/video/BV11y4y1M7Fd/",
         "length": "03:33",
         "bvid": "BV11y4y1M7Fd",
-        "date": "2021-07-05"
+        "date": "2021-07-05",
+        "tags": [
+            "彪酱生快"
+        ]
     },
     "BV1ho4y1C7LJ": {
         "title": "下雨天",
@@ -14505,7 +14517,8 @@
             "p3": {
                 "part": 3,
                 "title": "勇气",
-                "length": "04:07"
+                "length": "04:07",
+                "singer": "棉子"
             },
             "p4": {
                 "part": 4,
