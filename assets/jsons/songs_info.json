@@ -9562,10 +9562,74 @@
             "lang": "国语"
         }
     ],
+    "昨夜风今宵月": [
+        {
+            "title": "昨夜风今宵月",
+            "singer": "陈卓璇",
+            "lang": "国语"
+        }
+    ],
+    "天空天空": [
+        {
+            "title": "天空天空",
+            "singer": "刘思鉴",
+            "lang": "国语"
+        }
+    ],
+    "耻辱柱": [
+        {
+            "title": "耻辱柱",
+            "singer": "刘思鉴",
+            "lang": "国语"
+        }
+    ],
+    "爱里": [
+        {
+            "title": "爱里",
+            "singer": "单依纯",
+            "lang": "国语"
+        }
+    ],
+    "少年": [
+        {
+            "title": "少年",
+            "singer": "梦然",
+            "lang": "国语"
+        }
+    ],
+    "苦茶": [
+        {
+            "title": "苦茶",
+            "singer": "棒棒堂、黑涩会美眉",
+            "lang": "国语"
+        }
+    ],
+    "奇妙的约会": [
+        {
+            "title": "奇妙的约会",
+            "singer": "洪钟",
+            "lang": "国语"
+        }
+    ],
+    "Mirairo Rider": [
+        {
+            "title": "Mirairo Rider",
+            "singer": "佐佐木李子",
+            "lang": "日语"
+        }
+    ],
     "Sea of Remnants": [
         {
             "title": "Sea of Remnants",
             "singer": "Alan Walker、张韶涵",
+            "lang": "英语"
+        }
+    ],
+    "Only By Chasing the Wind": [
+        {
+            "title": "Only By Chasing the Wind",
+            "chs": "唯有追赶风的方向",
+            "singer": "Chevy",
             "lang": "英语"
         }
     ]
